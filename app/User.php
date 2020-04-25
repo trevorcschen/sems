@@ -36,4 +36,25 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function AdminCommunities()
+    {
+        return $this->hasMany('App\Community');
+    }
+
+    /**
+     * The communities that the user joined.
+     */
+    public function communities()
+    {
+        return $this->belongsToMany('App\Community');
+    }
+
+    /**
+     * Get the events joined by the users.
+     */
+    public function events()
+    {
+        return $this->belongsToMany('App\Event');
+    }
 }
