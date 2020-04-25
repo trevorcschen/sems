@@ -27,8 +27,25 @@ Laravel has the most extensive and thorough [documentation](https://laravel.com/
 
 If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
+## Installation Guide
 
+**Install XAMPP**
+
+[https://www.apachefriends.org/download.html](https://www.apachefriends.org/download.html)
+
+**Install Composer**
+
+[https://getcomposer.org/](https://getcomposer.org/)
+
+**Install Git SCM**
+
+[https://git-scm.com/](https://git-scm.com/)
+
+**Install Laravel**
+
+`composer global require laravel/installer`
+
+## Laravel Sponsors
 We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
 - **[Vehikl](https://vehikl.com/)**
