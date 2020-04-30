@@ -16,3 +16,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::delete('/users/destroy/many/{ids}', 'UserController@destroyMany')->name('users.destroyMany');
+Route::resource('users', 'UserController');;
+
+Route::resource('communities','CommunityController');
+
