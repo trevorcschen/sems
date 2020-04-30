@@ -1,7 +1,11 @@
 image: php:latest
+services:
+  - postgres:latest
+
 before_script:
   - apt-get update -qq
   - apt-get install -y -qq git
+
 phpunit tests:
   stage: test
   script:
@@ -13,6 +17,7 @@ phpunit tests:
     - vendor/bin/phpunit tests
   only:
     - master
+
 deploy to heroku:
   stage: deploy
   script:
