@@ -5,7 +5,6 @@ services:
 before_script:
   - apt-get update -qq
   - apt-get install -y -qq git
-  - docker-php-ext-install pgsql
 
 phpunit tests:
   stage: test
@@ -14,7 +13,6 @@ phpunit tests:
     - php composer.phar install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
     - cp .env.example .env
     - php artisan key:generate
-    - php artisan migrate:fresh --force
     - vendor/bin/phpunit tests
   only:
     - master
