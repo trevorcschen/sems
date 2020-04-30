@@ -32,10 +32,6 @@ phpunit tests:
     - php composer.phar install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
     - cp .env.gitlab-ci .env
     - php artisan key:generate
-    - php artisan cache:clear
-    - php artisan config:clear
-    - php artisan route:clear
-    - php artisan view:clear
     - php artisan migrate:fresh --force
     - vendor/bin/phpunit tests
   only:
