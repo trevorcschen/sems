@@ -29,7 +29,7 @@ phpunit tests:
   script:
     - curl -sS https://getcomposer.org/installer | php
     - php composer.phar install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
-    - cp .env.example .env
+    - cp .env.gitlab-ci .env
     - php artisan key:generate
     - php artisan migrate:refresh --force
     - vendor/bin/phpunit tests
