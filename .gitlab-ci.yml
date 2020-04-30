@@ -9,7 +9,7 @@ phpunit tests:
     - php composer.phar install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
     - cp .env.example .env
     - php artisan key:generate
-    - php artisan migrate
+    - php artisan migrate:fresh --force
     - vendor/bin/phpunit tests
   only:
     - master
