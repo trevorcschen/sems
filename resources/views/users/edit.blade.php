@@ -68,9 +68,11 @@
                                             <div class="form-group row">
                                                 <label class="col-3 col-form-label">Full Name</label>
                                                 <div class="col-9">
-                                                    <input class="form-control @error('name') is-invalid @enderror" name="name" type="text" placeholder="Full Name" value="{{ $user->name }}">
+                                                    <input class="form-control @error('name') is-invalid @enderror"
+                                                           name="name" type="text" placeholder="Full Name"
+                                                           value="{{ $user->name }}">
                                                     @error('name')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             </div>
@@ -81,13 +83,14 @@
                                                         <div class="input-group-prepend"><span
                                                                 class="input-group-text"><i
                                                                     class="la la-at"></i></span></div>
-                                                        <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                                        <input type="email"
+                                                               class="form-control @error('email') is-invalid @enderror"
                                                                name="email"
                                                                placeholder="Email"
                                                                value="{{ $user->email }}"
                                                                aria-describedby="basic-addon1">
                                                         @error('email')
-                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                        <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>
                                                 </div>
@@ -95,40 +98,52 @@
                                             <div class="form-group row">
                                                 <label class="col-3 col-form-label">Student ID</label>
                                                 <div class="col-9">
-                                                    <input class="form-control @error('student_id') is-invalid @enderror" name="student_id" type="text" placeholder="P18000000" value="{{ $user->student_id }}">
+                                                    <input
+                                                        class="form-control @error('student_id') is-invalid @enderror"
+                                                        name="student_id" type="text" placeholder="P18000000"
+                                                        value="{{ $user->student_id }}">
                                                     @error('student_id')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-3 col-form-label">IC Number</label>
                                                 <div class="col-9">
-                                                    <input class="form-control @error('ic_number') is-invalid @enderror" name="ic_number" type="text" id="kt_inputmask_4" value="{{ $user->ic_number }}">
+                                                    <input class="form-control @error('ic_number') is-invalid @enderror"
+                                                           name="ic_number" type="text" id="kt_inputmask_4"
+                                                           value="{{ $user->ic_number }}">
                                                     @error('ic_number')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-3 col-form-label">Phone Number</label>
                                                 <div class="col-9">
-                                                    <input class="form-control @error('phone_number') is-invalid @enderror" name="phone_number" type="text" value="{{ $user->phone_number }}">
+                                                    <input
+                                                        class="form-control @error('phone_number') is-invalid @enderror"
+                                                        name="phone_number" type="text"
+                                                        value="{{ $user->phone_number }}">
                                                     @error('phone_number')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             </div>
-                                            <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+                                            <div
+                                                class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
                                             <div class="kt-section kt-section--last">
                                                 <div class="kt-section__body">
-                                                    <h3 class="kt-section__title kt-section__title-lg">Email Verification:</h3>
+                                                    <h3 class="kt-section__title kt-section__title-lg">Email
+                                                        Verification:</h3>
                                                     <div class="form-group row">
                                                         <label class="col-3 col-form-label">Email verified</label>
                                                         <div class="col-9">
                                                             <div class="kt-checkbox-single">
                                                                 <label class="kt-checkbox">
-                                                                    <input type="checkbox" name="email_verified" {{ $user->email_verified_at ? 'checked' : '' }} > Email is verified.
+                                                                    <input type="checkbox"
+                                                                           name="email_verified" {{ $user->email_verified_at ? 'checked' : '' }} >
+                                                                    Email is verified.
                                                                     <span></span>
                                                                 </label>
                                                             </div>
@@ -158,8 +173,8 @@
     <script src="{{ asset('assets/js/pages/crud/forms/widgets/input-mask.js') }}" type="text/javascript"></script>
 
     <script>
-        $(document).ready(function(){
-            $("#save-btn").click(function(){
+        $(document).ready(function () {
+            $("#save-btn").click(function () {
                 $("#user-form").submit(); // Submit the form
             });
         });

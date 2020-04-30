@@ -8,7 +8,8 @@
 @section('subheader-action', 'List')
 
 @section('pagevendorsstyles')
-    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet"
+          type="text/css"/>
 @endsection
 
 @section('content')
@@ -68,7 +69,8 @@
             </div>
             <div class="kt-portlet__body">
                 <!--begin: Selected Rows Group Action Form -->
-                <div class="kt-form kt-form--label-align-right kt-margin-t-20 collapse" id="kt_datatable_group_action_form">
+                <div class="kt-form kt-form--label-align-right kt-margin-t-20 collapse"
+                     id="kt_datatable_group_action_form">
                     <div class="row align-items-center">
                         <div class="col-xl-12">
                             <div class="kt-form__group kt-form__group--inline">
@@ -78,7 +80,10 @@
                                 </div>
                                 <div class="kt-form__control">
                                     <div class="btn-toolbar">
-                                        <button class="btn btn-sm btn-danger" type="button" data-toggle="modal" data-target="#kt_modal_fetch_id_server">Delete Selected Records</button>                                    </div>
+                                        <button class="btn btn-sm btn-danger" type="button" data-toggle="modal"
+                                                data-target="#kt_modal_fetch_id_server">Delete Selected Records
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -115,7 +120,8 @@
         </div>
     </div>
     <!--begin::Modal-->
-    <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -140,7 +146,8 @@
     <!--end::Modal-->
 
     <!--begin::Modal-->
-    <div class="modal fade" id="kt_modal_fetch_id_server" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="kt_modal_fetch_id_server" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -177,13 +184,13 @@
 @section('pagescripts')
     <script>
         "use strict";
-        var KTDatatablesSearchOptionsColumnSearch = function() {
+        var KTDatatablesSearchOptionsColumnSearch = function () {
 
-            $.fn.dataTable.Api.register('column().title()', function() {
+            $.fn.dataTable.Api.register('column().title()', function () {
                 return $(this.header()).text().trim();
             });
 
-            var initTable1 = function() {
+            var initTable1 = function () {
                 var table = $('#user_table').DataTable({
                     responsive: true,
                     dom: "<'row'<'col-sm-12 text-center'B>>\
@@ -193,11 +200,11 @@
                     processing: true,
                     serverSide: true,
                     buttons: ['copy', 'csv', 'excel'
-                    ,  {
-                        extend : 'pdfHtml5',
-                        orientation : 'landscape',
-                        pageSize : 'A4',
-                    } , 'print'],
+                        , {
+                            extend: 'pdfHtml5',
+                            orientation: 'landscape',
+                            pageSize: 'A4',
+                        }, 'print'],
                     ajax: {
                         url: '{{ route('users.index') }}',
                         headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
@@ -213,7 +220,7 @@
                         {data: 'id', responsivePriority: -1},
                     ],
                     order: [[1, "desc"]],
-                    headerCallback: function(thead, data, start, end, display) {
+                    headerCallback: function (thead, data, start, end, display) {
                         thead.getElementsByTagName('th')[0].innerHTML = '\
                     <label class="kt-checkbox kt-checkbox--single kt-checkbox--solid">\
                         <input type="checkbox" value="" class="kt-group-checkable">\
@@ -226,7 +233,7 @@
                             width: '30px',
                             className: 'dt-right',
                             orderable: false,
-                            render: function(data, type, full, meta) {
+                            render: function (data, type, full, meta) {
                                 return '\
                         <label class="kt-checkbox kt-checkbox--single kt-checkbox--solid">\
                             <input type="checkbox" value="' + data + '" class="kt-checkable">\
@@ -238,11 +245,11 @@
                             targets: -1,
                             title: 'Actions',
                             orderable: false,
-                            render: function(data, type, full, meta) {
+                            render: function (data, type, full, meta) {
                                 var editURL = '{{ route('users.edit', ':data') }}';
                                 var showURL = '{{ route('users.show', ':data') }}';
-                                editURL = editURL.replace(':data',data);
-                                showURL = showURL.replace(':data',data);
+                                editURL = editURL.replace(':data', data);
+                                showURL = showURL.replace(':data', data);
 
                                 return '\
                                     <span class="dropdown">\
@@ -261,7 +268,7 @@
                         },
                         {
                             targets: 6,
-                            render: function(data, type, full, meta) {
+                            render: function (data, type, full, meta) {
                                 var status = {
                                     0: {'title': 'Unverified', 'class': ' kt-badge--danger'},
                                     1: {'title': 'Verified', 'class': ' kt-badge--success'},
@@ -273,11 +280,11 @@
                             },
                         },
                     ],
-                    initComplete: function() {
+                    initComplete: function () {
                         var thisTable = this;
                         var rowFilter = $('<tr class="filter"></tr>').appendTo($(table.table().header()));
 
-                        this.api().columns().every(function() {
+                        this.api().columns().every(function () {
                             var column = this;
                             var input;
 
@@ -297,7 +304,7 @@
                                     };
                                     input = $('<select class="form-control form-control-sm form-filter kt-input" title="Select" data-col-index="' + column.index() + '">\
 										<option value="">Select</option></select>');
-                                    column.data().unique().sort().each(function(d, j) {
+                                    column.data().unique().sort().each(function (d, j) {
                                         $(input).append('<option value="' + d + '">' + status[d].title + '</option>');
                                     });
                                     break;
@@ -319,28 +326,27 @@
 
                                     $('<th>').append(search).append(reset).appendTo(rowFilter);
 
-                                    $(search).on('click', function(e) {
+                                    $(search).on('click', function (e) {
                                         e.preventDefault();
                                         var params = {};
-                                        $(rowFilter).find('.kt-input').each(function() {
+                                        $(rowFilter).find('.kt-input').each(function () {
                                             var i = $(this).data('col-index');
                                             if (params[i]) {
                                                 params[i] += '|' + $(this).val();
-                                            }
-                                            else {
+                                            } else {
                                                 params[i] = $(this).val();
                                             }
                                         });
-                                        $.each(params, function(i, val) {
+                                        $.each(params, function (i, val) {
                                             // apply search params to datatable
                                             table.column(i).search(val ? val : '', false, false);
                                         });
                                         table.table().draw();
                                     });
 
-                                    $(reset).on('click', function(e) {
+                                    $(reset).on('click', function (e) {
                                         e.preventDefault();
-                                        $(rowFilter).find('.kt-input').each(function(i) {
+                                        $(rowFilter).find('.kt-input').each(function (i) {
                                             $(this).val('');
                                             table.column($(this).data('col-index')).search('', false, false);
                                         });
@@ -358,7 +364,7 @@
                         var hideSearchColumnResponsive = function () {
                             thisTable.api().columns().every(function () {
                                 var column = this
-                                if(column.responsiveHidden()) {
+                                if (column.responsiveHidden()) {
                                     $(rowFilter).find('th').eq(column.index()).show();
                                 } else {
                                     $(rowFilter).find('th').eq(column.index()).hide();
@@ -373,39 +379,38 @@
                     },
                 });
 
-                table.on('change', '.kt-group-checkable', function() {
+                table.on('change', '.kt-group-checkable', function () {
                     var set = $(this).closest('table').find('td:first-child .kt-checkable');
                     var checked = $(this).is(':checked');
 
-                    $(set).each(function() {
+                    $(set).each(function () {
                         if (checked) {
                             $(this).prop('checked', true);
                             $(this).closest('tr').addClass('active');
-                        }
-                        else {
+                        } else {
                             $(this).prop('checked', false);
                             $(this).closest('tr').removeClass('active');
                         }
                     });
                 });
 
-                table.on('change', 'tbody tr .kt-checkbox', function() {
+                table.on('change', 'tbody tr .kt-checkbox', function () {
                     $(this).parents('tr').toggleClass('active');
                 });
 
-                table.on('change', '.kt-group-checkable, tbody tr .kt-checkbox', function(e) {
-                        var checkedNodes = table.rows('.active').nodes();
-                        console.log(checkedNodes)
-                        var count = checkedNodes.length;
-                        $('#kt_datatable_selected_number').html(count);
-                        if (count > 0) {
-                            $('#kt_datatable_group_action_form').collapse('show');
-                        } else {
-                            $('#kt_datatable_group_action_form').collapse('hide');
-                        }
-                    });
+                table.on('change', '.kt-group-checkable, tbody tr .kt-checkbox', function (e) {
+                    var checkedNodes = table.rows('.active').nodes();
+                    console.log(checkedNodes)
+                    var count = checkedNodes.length;
+                    $('#kt_datatable_selected_number').html(count);
+                    if (count > 0) {
+                        $('#kt_datatable_group_action_form').collapse('show');
+                    } else {
+                        $('#kt_datatable_group_action_form').collapse('hide');
+                    }
+                });
 
-                $('#kt_modal_fetch_id_server').on('show.bs.modal', function(e) {
+                $('#kt_modal_fetch_id_server').on('show.bs.modal', function (e) {
                     var ids = [];
                     $(".kt-checkable:checked").each(function () {
                         ids.push($(this).attr('value'));
@@ -423,20 +428,20 @@
                     url = url.replace(':ids', ids);
                     $(this).find('form').attr('action', url);
 
-                }).on('hide.bs.modal', function(e) {
+                }).on('hide.bs.modal', function (e) {
                     $(e.target).find('.kt-datatable_selected_ids').empty();
                 });
 
             };
 
             return {
-                init: function() {
+                init: function () {
                     initTable1();
                 }
             };
         }();
 
-        jQuery(document).ready(function() {
+        jQuery(document).ready(function () {
             KTDatatablesSearchOptionsColumnSearch.init();
         });
 

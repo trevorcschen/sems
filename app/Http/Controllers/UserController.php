@@ -20,7 +20,7 @@ class UserController extends Controller
             return datatables()->of(User::all())
                 ->removeColumn('email_verified_at')
                 ->addColumn('email_verified', function ($user) {
-                    return $user->email_verified_at ?  '1' : '0';
+                    return $user->email_verified_at ? '1' : '0';
                 })
                 ->toJson();
         }
@@ -41,7 +41,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -80,13 +80,13 @@ class UserController extends Controller
 //        $user->assignRole($request->input('roles'));
 
         return redirect()->route('users.index')
-            ->withSuccess('User <strong>' .$user->name . '</strong> created successfully.');
+            ->withSuccess('User <strong>' . $user->name . '</strong> created successfully.');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\User  $user
+     * @param \App\User $user
      * @return \Illuminate\Http\Response
      */
     public function show(User $user)
@@ -97,7 +97,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\User  $user
+     * @param \App\User $user
      * @return \Illuminate\Http\Response
      */
     public function edit(User $user)
@@ -108,18 +108,18 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
+     * @param \Illuminate\Http\Request $request
+     * @param \App\User $user
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user)
     {
         $request->validate([
             'name' => 'bail|required|string',
-            'email' => 'bail|required|email|unique:users,email,'.$user->id,
-            'student_id' => 'bail|required|alpha_num|unique:users,student_id,'.$user->id,
-            'ic_number' => 'bail|required|unique:users,ic_number,'.$user->id,
-            'phone_number' => 'bail|required|numeric|unique:users,phone_number,'.$user->id,
+            'email' => 'bail|required|email|unique:users,email,' . $user->id,
+            'student_id' => 'bail|required|alpha_num|unique:users,student_id,' . $user->id,
+            'ic_number' => 'bail|required|unique:users,ic_number,' . $user->id,
+            'phone_number' => 'bail|required|numeric|unique:users,phone_number,' . $user->id,
 //            'roles' => 'bail|required|exists:roles,id',
         ]);
 
@@ -145,13 +145,13 @@ class UserController extends Controller
 //        $user->assignRole($request->input('roles'));
 
         return redirect()->route('users.index')
-            ->withSuccess('User <strong>' .$user->name . '</strong> updated successfully.');
+            ->withSuccess('User <strong>' . $user->name . '</strong> updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\User  $user
+     * @param \App\User $user
      * @return \Illuminate\Http\Response
      */
     public function destroy(User $user)
@@ -159,7 +159,7 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('users.index')
-            ->withSuccess('User <strong>' .$user->name . '</strong> deleted successfully.');
+            ->withSuccess('User <strong>' . $user->name . '</strong> deleted successfully.');
     }
 
     /**
@@ -169,16 +169,16 @@ class UserController extends Controller
      */
     public function destroyMany($ids)
     {
-        $userIds = explode(",",$ids);
+        $userIds = explode(",", $ids);
 
         $deleteSuccess = User::destroy($userIds);
 
-        if($deleteSuccess) {
+        if ($deleteSuccess) {
             return redirect()->route('users.index')
-                ->withSuccess('Users <strong>' .implode(", ", $userIds). '</strong> deleted successfully.');
+                ->withSuccess('Users <strong>' . implode(", ", $userIds) . '</strong> deleted successfully.');
         } else {
             return redirect()->route('users.index')
-                ->with('errors', 'Users <strong>' .implode(", ", $userIds). '</strong> failed to delete.');
+                ->with('errors', 'Users <strong>' . implode(", ", $userIds) . '</strong> failed to delete.');
         }
     }
 }

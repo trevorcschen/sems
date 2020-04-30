@@ -46,7 +46,8 @@
                                 <span class="kt-hidden-mobile">Back</span>
                             </a>
                             <div class="btn-group">
-                                <a href="{{ route('users.edit', $user)  }}" type="button" class="btn btn-brand" id="save-btn">
+                                <a href="{{ route('users.edit', $user)  }}" type="button" class="btn btn-brand"
+                                   id="save-btn">
                                     <i class="la la-edit"></i>
                                     <span class="kt-hidden-mobile">Edit</span>
                                 </a>
@@ -66,7 +67,8 @@
                                             <div class="form-group row">
                                                 <label class="col-3 col-form-label">Full Name</label>
                                                 <div class="col-9">
-                                                    <input class="form-control" name="name" type="text" placeholder="Full Name" value="{{ $user->name }}" disabled>
+                                                    <input class="form-control" name="name" type="text"
+                                                           placeholder="Full Name" value="{{ $user->name }}" disabled>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -87,31 +89,39 @@
                                             <div class="form-group row">
                                                 <label class="col-3 col-form-label">Student ID</label>
                                                 <div class="col-9">
-                                                    <input class="form-control" name="student_id" type="text" placeholder="P18000000" value="{{ $user->student_id }}" disabled>
+                                                    <input class="form-control" name="student_id" type="text"
+                                                           placeholder="P18000000" value="{{ $user->student_id }}"
+                                                           disabled>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-3 col-form-label">IC Number</label>
                                                 <div class="col-9">
-                                                    <input class="form-control" name="ic_number" type="text" id="kt_inputmask_4" value="{{ $user->ic_number }}" disabled>
+                                                    <input class="form-control" name="ic_number" type="text"
+                                                           id="kt_inputmask_4" value="{{ $user->ic_number }}" disabled>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
                                                 <label class="col-3 col-form-label">Phone Number</label>
                                                 <div class="col-9">
-                                                    <input class="form-control" name="phone_number" type="text" value="{{ $user->phone_number }}" disabled>
+                                                    <input class="form-control" name="phone_number" type="text"
+                                                           value="{{ $user->phone_number }}" disabled>
                                                 </div>
                                             </div>
-                                            <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+                                            <div
+                                                class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
                                             <div class="kt-section kt-section--last">
                                                 <div class="kt-section__body">
-                                                    <h3 class="kt-section__title kt-section__title-lg">Email Verification:</h3>
+                                                    <h3 class="kt-section__title kt-section__title-lg">Email
+                                                        Verification:</h3>
                                                     <div class="form-group row">
                                                         <label class="col-3 col-form-label">Email verified</label>
                                                         <div class="col-9">
                                                             <div class="kt-checkbox-single">
                                                                 <label class="kt-checkbox">
-                                                                    <input type="checkbox" name="email_verified" {{ $user->email_verified_at ? 'checked' : '' }} disabled> Email is verified.
+                                                                    <input type="checkbox" name="email_verified"
+                                                                           {{ $user->email_verified_at ? 'checked' : '' }} disabled>
+                                                                    Email is verified.
                                                                     <span></span>
                                                                 </label>
                                                             </div>
