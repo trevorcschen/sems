@@ -28,7 +28,9 @@ before_script:
 composer:
   stage: build
   script:
-    - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+    - curl -sS https://getcomposer.org/installer | php
+    - php composer.phar self-update
+    - php composer.phar install --no-progress --no-interaction
     - cp .env.gitlab-ci .env
     - php artisan key:generate
     - php artisan migrate:fresh --force
