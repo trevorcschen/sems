@@ -25,19 +25,34 @@ before_script:
     intl
     zip
 
-phpunit tests:
-  stage: test
+composer:
+  stage: build
   script:
-    - curl -sS https://getcomposer.org/installer | php
-    - php composer.phar install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+    - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
     - cp .env.gitlab-ci .env
     - php artisan key:generate
     - php artisan migrate:fresh --force
+  artifacts:
+    expire_in: 1 month
+    paths:
+      - vendor/
+      - .env
+  cache:
+    paths:
+      - vendor/
+  only:
+    - master
+
+phpunit tests:
+  stage: test
+  dependencies:
+    - composer
+  script:
     - vendor/bin/phpunit tests
   only:
     - master
 
-deploy to heroku:
+staging:
   stage: deploy
   script:
     - apt-get install -y ruby
