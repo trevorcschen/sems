@@ -6,6 +6,24 @@ use Illuminate\Database\Eloquent\Model;
 
 class Community extends Model
 {
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'description', 'logo_path', 'user_id',
+    ];
+
+    /**
+     * Get the admin of the community.
+     */
+    public function admin()
+    {
+        return $this->belongsTo('App\User', 'user_id');
+    }
+
     /**
      * Get the users of the community.
      */
@@ -20,13 +38,5 @@ class Community extends Model
     public function events()
     {
         return $this->hasMany('App\Event');
-    }
-
-    /**
-     * Get the admin of the community.
-     */
-    public function admin()
-    {
-        return $this->belongsTo('App\User');
     }
 }

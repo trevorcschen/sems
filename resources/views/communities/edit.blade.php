@@ -5,7 +5,7 @@
 @section('subheader', 'Communities')
 @section('subheader-link', route('communities.index'))
 
-@section('subheader-action', 'Create')
+@section('subheader-action', 'Update')
 
 @section('pagevendorsstyles')
     <link href="{{ asset('assets/plugins/custom/uppy/uppy.bundle.css') }}" rel="stylesheet" type="text/css" />
@@ -41,7 +41,7 @@
                      id="kt_page_portlet">
                     <div class="kt-portlet__head kt-portlet__head--lg">
                         <div class="kt-portlet__head-label">
-                            <h3 class="kt-portlet__head-title">Create New Community
+                            <h3 class="kt-portlet__head-title">Update Community Info
                                 <small>Fill in the details below</small>
                             </h3>
                         </div>
@@ -59,8 +59,9 @@
                         </div>
                     </div>
                     <div class="kt-portlet__body">
-                        <form class="kt-form" id="community-form" action="{{ route('communities.store') }}" method="POST">
+                        <form class="kt-form" id="community-form" action="{{ route('communities.update', $community) }}" method="POST">
                             @csrf
+                            @method('PUT')
                             <div class="row">
                                 <div class="col-xl-2"></div>
                                 <div class="col-xl-8">
@@ -73,7 +74,7 @@
                                                 <div class="col-9">
                                                     <input class="form-control @error('name') is-invalid @enderror"
                                                            name="name" type="text" placeholder="Community Name"
-                                                           value="{{ old('name') }}">
+                                                           value="{{ $community->name }}">
                                                     @error('name')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
@@ -82,7 +83,7 @@
                                             <div class="form-group row">
                                                 <label class="col-3 col-form-label">Description</label>
                                                 <div class="col-9">
-                                                    <textarea class="form-control @error('description') is-invalid @enderror" name="description" rows="3"></textarea>
+                                                    <textarea class="form-control @error('description') is-invalid @enderror" name="description" rows="3">{{ $community->description }}</textarea>
                                                     @error('description')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
@@ -101,7 +102,7 @@
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                     <span class="form-text text-muted">
-                                                        Leave this blank if you do not wish to set the community image.
+                                                        Leave this blank if you want to retain the original community image.
                                                     </span>
                                                     <input type="hidden" name="logo_path" id="logo_path" value="">
                                                 </div>
@@ -114,7 +115,9 @@
                                                         <label class="col-3 col-form-label">Admin</label>
                                                         <div class="col-9">
                                                             <select class="form-control kt-select2 @error('admin') is-invalid @enderror" id="admin-select" name="admin">
-                                                                <option></option>
+                                                                @if($community->admin->exists())
+                                                                    <option value="{{ $community->admin->id }}">{{ $community->admin->name }}</option>
+                                                                @endif
                                                             </select>
                                                             @error('admin')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -137,10 +140,11 @@
     </div>
 @endsection
 
-@section('pagescripts')
-
+@section('pagevendors')
     <script src="{{ asset('assets/plugins/custom/uppy/uppy.bundle.js') }}" type="text/javascript"></script>
+@endsection
 
+@section('pagescripts')
     <script>
         "use strict";
 
@@ -256,7 +260,7 @@
                                 sizeLabel = "MB";
                             }
                         }
-                        $('#logo_path').val(value.response.body.logo_path);
+                        $("#logo_path").val(value.response.body.logo_path);
                         imagePreview += '<div class="kt-uppy__thumbnail-container" data-id="'+value.id+'">'+thumbnail+' <span class="kt-uppy__thumbnail-label">'+value.name+' ('+ Math.round(filesize, 2) +' '+sizeLabel+')</span><span data-id="'+value.id+'" class="kt-uppy__remove-thumbnail"><i class="flaticon2-cancel-music"></i></span></div>';
                     });
 
@@ -295,44 +299,6 @@
             };
         }();
 
-        var KTFormControls = function () {
-            var formValidation = function () {
-                $( "#community-form" ).validate({
-                    rules: {
-                        name: {
-                            required: true,
-                        },
-                        description: {
-                            required: true,
-                        },
-                        admin: {
-                            required: true,
-                        }
-                    },
-                    //display error alert on form submit
-                    invalidHandler: function(event, validator) {
-                        swal.fire({
-                            "title": "",
-                            "text": "There are some errors in your submission. Please correct them.",
-                            "type": "error",
-                            "confirmButtonClass": "btn btn-secondary",
-                        });
-
-                        event.preventDefault();
-                    },
-                    submitHandler: function (form) {
-                        form.submit();
-                    }
-                });
-            }
-
-            return {
-                init: function() {
-                    formValidation();
-                }
-            };
-        }();
-
         KTUtil.ready(function() {
             KTUppy.init();
         });
@@ -343,8 +309,6 @@
             });
 
             Select2.init();
-
-            KTFormControls.init();
         });
 
     </script>

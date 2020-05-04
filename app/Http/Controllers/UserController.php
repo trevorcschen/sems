@@ -14,17 +14,8 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        if ($request->ajax()) {
-            return datatables()->of(User::all())
-                ->removeColumn('email_verified_at')
-                ->addColumn('email_verified', function ($user) {
-                    return $user->email_verified_at ? '1' : '0';
-                })
-                ->toJson();
-        }
-
         return response()->view('users.index');
     }
 
@@ -179,6 +170,31 @@ class UserController extends Controller
         } else {
             return redirect()->route('users.index')
                 ->with('errors', 'Users <strong>' . implode(", ", $userIds) . '</strong> failed to delete.');
+        }
+    }
+
+    public function ajaxIndex(Request $request)
+    {
+        if ($request->ajax()) {
+            return datatables()->of(User::all())
+                ->removeColumn('email_verified_at')
+                ->addColumn('email_verified', function ($user) {
+                    return $user->email_verified_at ? '1' : '0';
+                })
+                ->toJson();
+        }
+    }
+
+    public function ajaxSearch(Request $request)
+    {
+        if($request->has('q')) {
+            $search = $request->input('q');
+
+            $programmes = User::where('name','LIKE',"%$search%")
+                ->orderBy('name', 'desc')
+                ->paginate(5);
+
+            return response()->json($programmes, $status=200, $headers=[], $options=JSON_PRETTY_PRINT);
         }
     }
 }

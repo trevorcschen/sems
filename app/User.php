@@ -37,7 +37,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function AdminCommunities()
+    public function adminCommunities()
     {
         return $this->hasMany('App\Community');
     }

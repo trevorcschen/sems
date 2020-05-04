@@ -1,15 +1,14 @@
 @extends('layouts.default')
 
-@section('title', 'Users')
+@section('title', 'Communities')
 
-@section('subheader', 'Users')
-@section('subheader-link', route('users.index'))
+@section('subheader', 'Communities')
+@section('subheader-link', route('communities.index'))
 
 @section('subheader-action', 'List')
 
 @section('pagevendorsstyles')
-    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet"
-          type="text/css"/>
+    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('content')
@@ -59,7 +58,7 @@
                 <div class="kt-portlet__head-toolbar">
                     <div class="kt-portlet__head-wrapper">
                         <div class="kt-portlet__head-actions">
-                            <a href="{{ route('users.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
+                            <a href="{{ route('communities.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
                                 <i class="la la-plus"></i>
                                 New Record
                             </a>
@@ -90,16 +89,14 @@
                     </div>
                 </div>
                 <!--end: Selected Rows Group Action Form -->
-                <table class="table table-striped- table-bordered table-hover table-checkable" id="user_table">
+                <table class="table table-striped- table-bordered table-hover table-checkable" id="community_table">
                     <thead>
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>Email</th>
-                        <th>Student ID</th>
-                        <th>IC Number</th>
-                        <th>Phone Number</th>
-                        <th>Email Verified</th>
+                        <th>Description</th>
+                        <th>Admin</th>
+                        <th>Founding Date</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -107,11 +104,9 @@
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>Email</th>
-                        <th>Student ID</th>
-                        <th>IC Number</th>
-                        <th>Phone Number</th>
-                        <th>Email Verified</th>
+                        <th>Description</th>
+                        <th>Admin</th>
+                        <th>Founding Date</th>
                         <th>Actions</th>
                     </tr>
                     </tfoot>
@@ -191,7 +186,7 @@
             });
 
             var initTable1 = function () {
-                var table = $('#user_table').DataTable({
+                var table = $('#community_table').DataTable({
                     responsive: true,
                     dom: "<'row'<'col-sm-12 text-center'B>>\
                     <'row'<'col-sm-12'tr>>\
@@ -206,18 +201,16 @@
                             pageSize: 'A4',
                         }, 'print'],
                     ajax: {
-                        url: '{{ route('ajax.users.index') }}',
+                        url: '{{ route('ajax.communities.index') }}',
                         type: "POST",
                         headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
                     },
                     columns: [
                         {data: 'id'},
                         {data: 'name'},
-                        {data: 'email'},
-                        {data: 'student_id'},
-                        {data: 'ic_number'},
-                        {data: 'phone_number'},
-                        {data: 'email_verified'},
+                        {data: 'description'},
+                        {data: 'admin'},
+                        {data: 'created_at', searchable: 'false'},
                         {data: 'id', responsivePriority: -1},
                     ],
                     order: [[1, "desc"]],
@@ -243,13 +236,20 @@
                             },
                         },
                         {
+                            targets: 2,
+                            width: '45%',
+                            render: function (data, type, full, meta) {
+                                return data.length > 200 ? data.substr(0, 200) +' …' : data;
+                            },
+                        },
+                        {
                             targets: -1,
                             title: 'Actions',
                             orderable: false,
                             width: '10%',
                             render: function (data, type, full, meta) {
-                                var editURL = '{{ route('users.edit', ':data') }}';
-                                var showURL = '{{ route('users.show', ':data') }}';
+                                var editURL = '{{ route('communities.edit', ':data') }}';
+                                var showURL = '{{ route('communities.show', ':data') }}';
                                 editURL = editURL.replace(':data', data);
                                 showURL = showURL.replace(':data', data);
 
@@ -268,19 +268,6 @@
                                     </a>';
                             },
                         },
-                        {
-                            targets: 6,
-                            render: function (data, type, full, meta) {
-                                var status = {
-                                    0: {'title': 'Unverified', 'class': ' kt-badge--danger'},
-                                    1: {'title': 'Verified', 'class': ' kt-badge--success'},
-                                };
-                                if (typeof status[data] === 'undefined') {
-                                    return data;
-                                }
-                                return '<span class="kt-badge ' + status[data].class + ' kt-badge--inline kt-badge--pill">' + status[data].title + '</span>';
-                            },
-                        },
                     ],
                     initComplete: function () {
                         var thisTable = this;
@@ -292,23 +279,19 @@
 
                             switch (column.title()) {
                                 case 'Name':
-                                case 'Email':
-                                case 'Student ID':
-                                case 'IC Number':
-                                case 'Phone Number':
+                                case 'Description':
+                                case 'Admin':
                                     input = $('<input type="text" class="form-control form-control-sm form-filter kt-input" data-col-index="' + column.index() + '"/>');
                                     break;
-                                case 'Email Verified':
-                                    var status = {
-                                        0: {'title': 'Unverified', 'class': ' kt-badge--danger'},
-                                        1: {'title': 'Verified', 'class': ' kt-badge--success'},
-                                    };
-                                    input = $('<select class="form-control form-control-sm form-filter kt-input" title="Select" data-col-index="' + column.index() + '">\
-										<option value="">Select</option></select>');
-                                    column.data().unique().sort().each(function (d, j) {
-                                        $(input).append('<option value="' + d + '">' + status[d].title + '</option>');
-                                    });
+                                case 'Founding Date':
+                                    input = $('<div class="input-group pull-right" id="kt_daterangepicker_6">\
+                                <input type="text" class="form-control form-control-sm kt-input" readonly placeholder="Select date range" data-col-index="' + column.index() + '"/>\
+                                    <div class="input-group-append">\
+                                    <span class="input-group-text"><i class="la la-calendar-check-o"></i></span>\
+                                </div>\
+                                </div>');
                                     break;
+
                                 case 'Actions':
                                     var search = $('<button class="btn btn-brand kt-btn btn-sm kt-btn--icon">\
                                                   <span>\
@@ -376,6 +359,29 @@
                         hideSearchColumnResponsive();
                         // recheck on window resize
                         window.onresize = hideSearchColumnResponsive;
+
+                        // predefined ranges
+                        var start = moment().subtract(29, 'days');
+                        var end = moment();
+
+                        $('#kt_daterangepicker_6').daterangepicker({
+                            buttonClasses: ' btn',
+                            applyClass: 'btn-primary',
+                            cancelClass: 'btn-secondary',
+
+                            startDate: start,
+                            endDate: end,
+                            ranges: {
+                                'Today': [moment(), moment()],
+                                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                            }
+                        }, function(start, end, label) {
+                            $('#kt_daterangepicker_6 .form-control').val( start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+                        });
                     },
                 });
 
@@ -400,7 +406,6 @@
 
                 table.on('change', '.kt-group-checkable, tbody tr .kt-checkbox', function (e) {
                     var checkedNodes = table.rows('.active').nodes();
-                    console.log(checkedNodes)
                     var count = checkedNodes.length;
                     $('#kt_datatable_selected_number').html(count);
                     if (count > 0) {
@@ -424,14 +429,13 @@
                     }
                     $(e.target).find('.kt-datatable_selected_ids').append(c);
 
-                    var url = '{{ route("users.destroyMany", ':ids') }}';
+                    var url = '{{ route("communities.destroyMany", ':ids') }}';
                     url = url.replace(':ids', ids);
                     $(this).find('form').attr('action', url);
 
                 }).on('hide.bs.modal', function (e) {
                     $(e.target).find('.kt-datatable_selected_ids').empty();
                 });
-
             };
 
             return {
@@ -446,10 +450,11 @@
         });
 
         $('#modal-delete').on('show.bs.modal', function (e) {
-            var url = '{{ route("users.destroy", ':id') }}';
+            var url = '{{ route("communities.destroy", ':id') }}';
             url = url.replace(':id', $(e.relatedTarget).data('id'));
             $(this).find('form').attr('action', url);
         });
+
 
     </script>
 @endsection

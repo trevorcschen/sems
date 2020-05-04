@@ -122,7 +122,7 @@
                                                 <div class="col-9">
                                                     <input
                                                         class="form-control @error('phone_number') is-invalid @enderror"
-                                                        name="phone_number" type="text"
+                                                        name="phone_number" type="text" placeholder="0123456789"
                                                         value="{{ old('phone_number') }}">
                                                     @error('phone_number')
                                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -133,7 +133,7 @@
                                                 <label class="col-3 col-form-label">Password</label>
                                                 <div class="col-9">
                                                     <input class="form-control @error('password') is-invalid @enderror"
-                                                           name="password" type="password">
+                                                           name="password" id="password" type="password">
                                                     @error('password')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
@@ -194,8 +194,70 @@
     <script>
         $(document).ready(function () {
             $("#save-btn").click(function () {
-                $("#user-form").submit(); // Submit the form
+                $("#user-form").submit();
             });
+        });
+
+
+        var KTFormControls = function () {
+            var formValidation = function () {
+                $( "#user-form" ).validate({
+                    rules: {
+                        name: {
+                            required: true,
+                        },
+                        email: {
+                            required: true,
+                            email: true,
+                        },
+                        student_id: {
+                            required: true,
+                            pattern: '^[P][0-9]{1,8}?$',
+                        },
+                        ic_number: {
+                            required: true,
+                            pattern: '(([[1-9]{2})(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01]))-([0-9]{2})-([0-9]{4})'
+                        },
+                        phone_number: {
+                            required: true,
+                            pattern: '^(01)[0-46-9]*[0-9]{7,8}$'
+                        },
+                        password: {
+                            required: true,
+                            minlength: 16,
+                        },
+                        password_confirmation: {
+                            required: true,
+                            minlength: 16,
+                            equalTo: '#password'
+                        }
+                    },
+                    //display error alert on form submit
+                    invalidHandler: function(event, validator) {
+                        swal.fire({
+                            "title": "",
+                            "text": "There are some errors in your submission. Please correct them.",
+                            "type": "error",
+                            "confirmButtonClass": "btn btn-secondary",
+                        });
+
+                        event.preventDefault();
+                    },
+                    submitHandler: function (form) {
+                        form.submit();
+                    }
+                });
+            }
+
+            return {
+                init: function() {
+                    formValidation();
+                }
+            };
+        }();
+
+        jQuery(document).ready(function() {
+            KTFormControls.init();
         });
     </script>
 @endsection

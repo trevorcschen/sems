@@ -37,7 +37,7 @@
                      id="kt_page_portlet">
                     <div class="kt-portlet__head kt-portlet__head--lg">
                         <div class="kt-portlet__head-label">
-                            <h3 class="kt-portlet__head-title">User ID: {{ $user->id }}
+                            <h3 class="kt-portlet__head-title">{{ $user->name }}
                             </h3>
                         </div>
                         <div class="kt-portlet__head-toolbar">

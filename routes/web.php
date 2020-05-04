@@ -16,9 +16,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::post('files', 'FileController@store')->name('files.store');
+Route::delete('files', 'FileController@destroy')->name('files.destroy');
 
+
+Route::post('/ajax/users/search', 'UserController@ajaxSearch')->name('ajax.users.search');
+Route::post('/ajax/users', 'UserController@ajaxIndex')->name('ajax.users.index');
 Route::delete('/users/destroy/many/{ids}', 'UserController@destroyMany')->name('users.destroyMany');
 Route::resource('users', 'UserController');;
 
+Route::post('/ajax/communities', 'CommunityController@ajaxIndex')->name('ajax.communities.index');
+Route::delete('/communities/destroy/many/{ids}', 'CommunityController@destroyMany')->name('communities.destroyMany');
 Route::resource('communities', 'CommunityController');
 
