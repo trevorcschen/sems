@@ -68,7 +68,7 @@
 <!--end::Global Theme Bundle -->
 
 <!--begin::Page Vendors(used by this page) -->
-@yield('pagevendors')
+@yield('pagevendorsscripts')
 <!--end::Page Vendors -->
 
 <!--begin::Page Scripts(used by this page) -->

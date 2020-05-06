@@ -7,6 +7,9 @@
 
 @section('subheader-action', 'Create')
 
+@section('pagevendorsstyles')
+@endsection
+
 @section('content')
     <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
         <div class="row">
@@ -258,7 +261,7 @@
     </div>
 @endsection
 
-@section('pagevendors')
+@section('pagevendorsscripts')
     <script src="{{ asset('assets/js/pages/crud/forms/widgets/input-mask.js') }}" type="text/javascript"></script>
 @endsection
 

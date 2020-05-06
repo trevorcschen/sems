@@ -7,6 +7,9 @@
 
 @section('subheader-action', 'Update')
 
+@section('pagevendorsstyles')
+@endsection
+
 @section('content')
     <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
         <div class="row">
@@ -72,7 +75,7 @@
                                                            name="name" type="text" placeholder="Full Name"
                                                            value="{{ $user->name }}">
                                                     @error('name')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                        <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             </div>
@@ -90,7 +93,7 @@
                                                                value="{{ $user->email }}"
                                                                aria-describedby="basic-addon1">
                                                         @error('email')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                            <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>
                                                 </div>
@@ -103,7 +106,7 @@
                                                         name="student_id" type="text" placeholder="P18000000"
                                                         value="{{ $user->student_id }}">
                                                     @error('student_id')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                        <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             </div>
@@ -114,7 +117,7 @@
                                                            name="ic_number" type="text" id="kt_inputmask_4"
                                                            value="{{ $user->ic_number }}">
                                                     @error('ic_number')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                        <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             </div>
@@ -126,7 +129,7 @@
                                                         name="phone_number" type="text"
                                                         value="{{ $user->phone_number }}">
                                                     @error('phone_number')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                        <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             </div>
@@ -260,17 +263,12 @@
     </div>
 @endsection
 
-@section('pagescripts')
-
+@section('pagevendorsscripts')
     <script src="{{ asset('assets/js/pages/crud/forms/widgets/input-mask.js') }}" type="text/javascript"></script>
+@endsection
 
+@section('pagescripts')
     <script>
-        $(document).ready(function () {
-            $("#save-btn").click(function () {
-                $("#user-form").submit(); // Submit the form
-            });
-        });
-
         var KTFormControls = function () {
             var formValidation = function () {
                 $( "#user-form" ).validate({
@@ -326,8 +324,12 @@
             };
         }();
 
-        jQuery(document).ready(function() {
-            KTFormControls.init();
+        $(document).ready(function () {
+            $("#save-btn").click(function () {
+                $("#user-form").submit();
+            });
+
+            KTFormControls.init();KTFormControls.init();
         });
     </script>
 @endsection

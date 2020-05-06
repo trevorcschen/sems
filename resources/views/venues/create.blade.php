@@ -101,6 +101,9 @@
     </div>
 @endsection
 
+@section('pagevendorsscripts')
+@endsection
+
 @section('pagescripts')
     <script>
         "use strict";

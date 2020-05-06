@@ -130,13 +130,12 @@
     </div>
 @endsection
 
-@section('pagevendors')
+@section('pagevendorsscripts')
     <script src="{{ asset('assets/plugins/viewerjs/viewer.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/plugins/jquery-viewer/jquery-viewer.min.js') }}" type="text/javascript"></script>
 @endsection
 
 @section('pagescripts')
-
     <script>
         var $image = $('#image');
 

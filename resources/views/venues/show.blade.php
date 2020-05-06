@@ -95,7 +95,7 @@
     </div>
 @endsection
 
-@section('pagevendors')
+@section('pagevendorsscripts')
 @endsection
 
 @section('pagescripts')

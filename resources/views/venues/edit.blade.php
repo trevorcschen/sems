@@ -7,6 +7,9 @@
 
 @section('subheader-action', 'Update')
 
+@section('pagevendorsstyles')
+@endsection
+
 @section('content')
     <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
         <div class="row">
@@ -97,6 +100,9 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('pagevendorsscripts')
 @endsection
 
 @section('pagescripts')

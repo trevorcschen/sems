@@ -140,7 +140,7 @@
     </div>
 @endsection
 
-@section('pagevendors')
+@section('pagevendorsscripts')
     <script src="{{ asset('assets/plugins/custom/uppy/uppy.bundle.js') }}" type="text/javascript"></script>
 @endsection
 

@@ -137,10 +137,11 @@
     </div>
 @endsection
 
-@section('pagescripts')
-
+@section('pagevendorsscripts')
     <script src="{{ asset('assets/plugins/custom/uppy/uppy.bundle.js') }}" type="text/javascript"></script>
+@endsection
 
+@section('pagescripts')
     <script>
         "use strict";
 
