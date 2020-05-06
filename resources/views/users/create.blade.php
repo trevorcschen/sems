@@ -71,7 +71,7 @@
                                                            name="name" type="text" placeholder="Full Name"
                                                            value="{{ old('name') }}">
                                                     @error('name')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                        <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             </div>
@@ -89,7 +89,7 @@
                                                                value="{{ old('email') }}"
                                                                aria-describedby="basic-addon1">
                                                         @error('email')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                            <div class="invalid-feedback">{{ $message }}</div>
                                                         @enderror
                                                     </div>
                                                 </div>
@@ -102,7 +102,7 @@
                                                         name="student_id" type="text" placeholder="P18000000"
                                                         value="{{ old('student_id') }}">
                                                     @error('student_id')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                        <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             </div>
@@ -113,7 +113,7 @@
                                                            name="ic_number" type="text" id="kt_inputmask_4"
                                                            value="{{ old('ic_number') }}">
                                                     @error('ic_number')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                        <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             </div>
@@ -125,7 +125,7 @@
                                                         name="phone_number" type="text" placeholder="0123456789"
                                                         value="{{ old('phone_number') }}">
                                                     @error('phone_number')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                        <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             </div>
@@ -135,7 +135,7 @@
                                                     <input class="form-control @error('password') is-invalid @enderror"
                                                            name="password" id="password" type="password">
                                                     @error('password')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                        <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             </div>
@@ -146,8 +146,79 @@
                                                         class="form-control @error('password_confirmation') is-invalid @enderror"
                                                         name="password_confirmation" type="password">
                                                     @error('password_confirmation')
-                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                        <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+                                            <div class="kt-section kt-section--last">
+                                                <div class="kt-section__body">
+                                                    <h3 class="kt-section__title kt-section__title-lg">User Role Assignment:</h3>
+                                                    <div class="form-group row">
+                                                        <label class="col-3 col-form-label">User Role</label>
+                                                        <div class="col-9">
+                                                            <select class="form-control" name="role">
+                                                                @foreach($roles as $role)
+                                                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+                                            <div class="kt-section kt-section--last">
+                                                <div class="kt-section__body">
+                                                    <h3 class="kt-section__title kt-section__title-lg">User Activation:</h3>
+                                                    <div class="form-group row">
+                                                        <label class="col-3 col-form-label">User Active</label>
+                                                        <div class="col-9">
+                                                            <div class="row">
+                                                                <div class="col-6">
+                                                                    <label class="kt-option">
+                                                                        <span class="kt-option__control">
+                                                                            <span class="kt-radio kt-radio--bold kt-radio--brand">
+                                                                                <input type="radio" name="active" value="1" checked>
+                                                                                <span></span>
+                                                                            </span>
+                                                                        </span>
+                                                                        <span class="kt-option__label">
+                                                                            <span class="kt-option__head">
+                                                                                <span class="kt-option__title">
+                                                                                    Active
+                                                                                </span>
+                                                                            </span>
+                                                                            <span class="kt-option__body">
+                                                                                User is active and can login.
+                                                                            </span>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <label class="kt-option">
+                                                                        <span class="kt-option__control">
+                                                                            <span class="kt-radio kt-radio--bold kt-radio--brand">
+                                                                                <input type="radio" name="active" value="0">
+                                                                                <span></span>
+                                                                            </span>
+                                                                        </span>
+                                                                        <span class="kt-option__label">
+                                                                            <span class="kt-option__head">
+                                                                                <span class="kt-option__title">
+                                                                                    Inactive
+                                                                                </span>
+                                                                            </span>
+                                                                            <span class="kt-option__body">
+                                                                                User is not active and unable to login.
+                                                                            </span>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div
@@ -187,18 +258,12 @@
     </div>
 @endsection
 
-@section('pagescripts')
-
+@section('pagevendors')
     <script src="{{ asset('assets/js/pages/crud/forms/widgets/input-mask.js') }}" type="text/javascript"></script>
+@endsection
 
+@section('pagescripts')
     <script>
-        $(document).ready(function () {
-            $("#save-btn").click(function () {
-                $("#user-form").submit();
-            });
-        });
-
-
         var KTFormControls = function () {
             var formValidation = function () {
                 $( "#user-form" ).validate({
@@ -256,7 +321,11 @@
             };
         }();
 
-        jQuery(document).ready(function() {
+        $(document).ready(function () {
+            $("#save-btn").click(function () {
+                $("#user-form").submit();
+            });
+
             KTFormControls.init();
         });
     </script>

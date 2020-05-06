@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 
 class UserController extends Controller
@@ -26,7 +27,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return response()->view('users.create');
+        $roles = Role::all();
+        return response()->view('users.create', compact('roles'));
     }
 
     /**
@@ -43,8 +45,9 @@ class UserController extends Controller
             'student_id' => 'bail|required|alpha_num|unique:users',
             'ic_number' => 'bail|required|unique:users',
             'phone_number' => 'bail|required|numeric|unique:users',
-            'password' => 'bail|required|min:6|confirmed',
-//            'roles' => 'bail|required|exists:roles,id',
+            'password' => 'bail|required|min:16|confirmed',
+            'role' => 'bail|required|exists:roles,id',
+            'active' => 'bail|required|boolean',
         ]);
 
         if ($request->has('email_verified')) {
@@ -55,6 +58,7 @@ class UserController extends Controller
                 'ic_number' => $request->input('ic_number'),
                 'phone_number' => $request->input('phone_number'),
                 'password' => Hash::make($request->input('password')),
+                'active' => $request->input('active'),
                 'email_verified_at' => now(),
             ]);
         } else {
@@ -65,10 +69,11 @@ class UserController extends Controller
                 'ic_number' => $request->input('ic_number'),
                 'phone_number' => $request->input('phone_number'),
                 'password' => Hash::make($request->input('password')),
+                'active' => $request->input('active'),
             ]);
         }
 
-//        $user->assignRole($request->input('roles'));
+        $user->syncRoles($request->input('role'));
 
         return redirect()->route('users.index')
             ->withSuccess('User <strong>' . $user->name . '</strong> created successfully.');
@@ -93,7 +98,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return response()->view('users.edit', compact('user'));
+        $roles = Role::all('id', 'name');
+        return response()->view('users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -111,8 +117,12 @@ class UserController extends Controller
             'student_id' => 'bail|required|alpha_num|unique:users,student_id,' . $user->id,
             'ic_number' => 'bail|required|unique:users,ic_number,' . $user->id,
             'phone_number' => 'bail|required|numeric|unique:users,phone_number,' . $user->id,
-//            'roles' => 'bail|required|exists:roles,id',
+            'password' => 'bail|nullable|min:16|confirmed',
+            'role' => 'bail|required|exists:roles,id',
+            'active' => 'bail|required|boolean',
         ]);
+
+        $password = empty($request->input('password')) ? $user->password : Hash::make($request->input('password'));
 
         if ($request->has('email_verified')) {
             $user->update([
@@ -121,6 +131,8 @@ class UserController extends Controller
                 'student_id' => $request->input('student_id'),
                 'ic_number' => $request->input('ic_number'),
                 'phone_number' => $request->input('phone_number'),
+                'password' => $password,
+                'active' => $request->input('active'),
                 'email_verified_at' => now(),
             ]);
         } else {
@@ -130,10 +142,12 @@ class UserController extends Controller
                 'student_id' => $request->input('student_id'),
                 'ic_number' => $request->input('ic_number'),
                 'phone_number' => $request->input('phone_number'),
+                'password' => $password,
+                'active' => $request->input('active'),
             ]);
         }
 
-//        $user->assignRole($request->input('roles'));
+        $user->syncRoles($request->input('role'));
 
         return redirect()->route('users.index')
             ->withSuccess('User <strong>' . $user->name . '</strong> updated successfully.');
@@ -178,6 +192,11 @@ class UserController extends Controller
         if ($request->ajax()) {
             return datatables()->of(User::all())
                 ->removeColumn('email_verified_at')
+                ->addColumn('role', function ($user) {
+                    if(!empty($user->getRoleNames())) {
+                        return $user->getRoleNames()[0];
+                    }
+                })
                 ->addColumn('email_verified', function ($user) {
                     return $user->email_verified_at ? '1' : '0';
                 })
@@ -190,11 +209,11 @@ class UserController extends Controller
         if($request->has('q')) {
             $search = $request->input('q');
 
-            $programmes = User::where('name','LIKE',"%$search%")
+            $users = User::where('name','LIKE',"%$search%")
                 ->orderBy('name', 'desc')
                 ->paginate(5);
 
-            return response()->json($programmes, $status=200, $headers=[], $options=JSON_PRETTY_PRINT);
+            return response()->json($users, $status=200, $headers=[], $options=JSON_PRETTY_PRINT);
         }
     }
 }

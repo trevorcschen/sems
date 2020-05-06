@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('ic_number')->unique();
             $table->string('phone_number')->unique();
             $table->string('password');
+            $table->boolean('active')->default(false);
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

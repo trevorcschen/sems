@@ -99,6 +99,8 @@
                         <th>Student ID</th>
                         <th>IC Number</th>
                         <th>Phone Number</th>
+                        <th>Role</th>
+                        <th>Active</th>
                         <th>Email Verified</th>
                         <th>Actions</th>
                     </tr>
@@ -111,6 +113,8 @@
                         <th>Student ID</th>
                         <th>IC Number</th>
                         <th>Phone Number</th>
+                        <th>Role</th>
+                        <th>Active</th>
                         <th>Email Verified</th>
                         <th>Actions</th>
                     </tr>
@@ -217,6 +221,8 @@
                         {data: 'student_id'},
                         {data: 'ic_number'},
                         {data: 'phone_number'},
+                        {data: 'role'},
+                        {data: 'active'},
                         {data: 'email_verified'},
                         {data: 'id', responsivePriority: -1},
                     ],
@@ -270,6 +276,35 @@
                         },
                         {
                             targets: 6,
+                            width: '12%',
+                            render: function (data, type, full, meta) {
+                                var status = {
+                                    'super-admin': {'class': ' kt-badge--brand'},
+                                    'community-admin': {'class': ' kt-badge--danger'},
+                                    'student': {'class': ' kt-badge--success'},
+                                };
+                                if (typeof status[data] === 'undefined') {
+                                    return data;
+                                }
+                                return '<span class="kt-badge ' + status[data].class + ' kt-badge--inline kt-badge--pill">' + data + '</span>';
+                            },
+                        },
+                        {
+                            targets: 7,
+                            width: '10%',
+                            render: function (data, type, full, meta) {
+                                var status = {
+                                    0: {'title': 'Inactive', 'class': ' kt-badge--danger'},
+                                    1: {'title': 'Active', 'class': ' kt-badge--success'},
+                                };
+                                if (typeof status[data] === 'undefined') {
+                                    return data;
+                                }
+                                return '<span class="kt-badge ' + status[data].class + ' kt-badge--inline kt-badge--pill">' + status[data].title + '</span>';
+                            },
+                        },
+                        {
+                            targets: 8,
                             render: function (data, type, full, meta) {
                                 var status = {
                                     0: {'title': 'Unverified', 'class': ' kt-badge--danger'},
@@ -297,6 +332,24 @@
                                 case 'IC Number':
                                 case 'Phone Number':
                                     input = $('<input type="text" class="form-control form-control-sm form-filter kt-input" data-col-index="' + column.index() + '"/>');
+                                    break;
+                                case 'Role':
+                                    input = $('<select class="form-control form-control-sm form-filter kt-input" title="Select" data-col-index="' + column.index() + '">\
+										<option value="">Select</option></select>');
+                                    column.data().unique().sort().each(function (d, j) {
+                                        $(input).append('<option value="' + d + '">' + d + '</option>');
+                                    });
+                                    break;
+                                case 'Active':
+                                    var status = {
+                                        0: {'title': 'Inactive', 'class': ' kt-badge--danger'},
+                                        1: {'title': 'Active', 'class': ' kt-badge--success'},
+                                    };
+                                    input = $('<select class="form-control form-control-sm form-filter kt-input" title="Select" data-col-index="' + column.index() + '">\
+										<option value="">Select</option></select>');
+                                    column.data().unique().sort().each(function (d, j) {
+                                        $(input).append('<option value="' + d + '">' + status[d].title + '</option>');
+                                    });
                                     break;
                                 case 'Email Verified':
                                     var status = {

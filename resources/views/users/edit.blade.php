@@ -130,6 +130,98 @@
                                                     @enderror
                                                 </div>
                                             </div>
+                                            <div class="form-group row">
+                                                <label class="col-3 col-form-label">Password</label>
+                                                <div class="col-9">
+                                                    <input class="form-control @error('password') is-invalid @enderror"
+                                                           name="password" id="password" type="password">
+                                                    @error('password')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-3 col-form-label">Confirm Password</label>
+                                                <div class="col-9">
+                                                    <input
+                                                        class="form-control @error('password_confirmation') is-invalid @enderror"
+                                                        name="password_confirmation" type="password">
+                                                    @error('password_confirmation')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+                                            <div class="kt-section kt-section--last">
+                                                <div class="kt-section__body">
+                                                    <h3 class="kt-section__title kt-section__title-lg">User Role Assignment:</h3>
+                                                    <div class="form-group row">
+                                                        <label class="col-3 col-form-label">User Role</label>
+                                                        <div class="col-9">
+                                                            <select class="form-control" name="role">
+                                                                @foreach($roles as $role)
+                                                                    <option value="{{ $role->id }}" {{ $user->hasRole($role->name) ? 'checked' : '' }}>{{ $role->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+                                            <div class="kt-section kt-section--last">
+                                                <div class="kt-section__body">
+                                                    <h3 class="kt-section__title kt-section__title-lg">User Activation:</h3>
+                                                    <div class="form-group row">
+                                                        <label class="col-3 col-form-label">User Active</label>
+                                                        <div class="col-9">
+                                                            <div class="row">
+                                                                <div class="col-6">
+                                                                    <label class="kt-option">
+                                                                        <span class="kt-option__control">
+                                                                            <span class="kt-radio kt-radio--bold kt-radio--brand">
+                                                                                <input type="radio" name="active" value="1" {{ $user->active ? 'checked' : '' }}>
+                                                                                <span></span>
+                                                                            </span>
+                                                                        </span>
+                                                                        <span class="kt-option__label">
+                                                                            <span class="kt-option__head">
+                                                                                <span class="kt-option__title">
+                                                                                    Active
+                                                                                </span>
+                                                                            </span>
+                                                                            <span class="kt-option__body">
+                                                                                User is active and can login.
+                                                                            </span>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <label class="kt-option">
+                                                                        <span class="kt-option__control">
+                                                                            <span class="kt-radio kt-radio--bold kt-radio--brand">
+                                                                                <input type="radio" name="active" value="0" {{ !$user->active ? 'checked' : '' }}>
+                                                                                <span></span>
+                                                                            </span>
+                                                                        </span>
+                                                                        <span class="kt-option__label">
+                                                                            <span class="kt-option__head">
+                                                                                <span class="kt-option__title">
+                                                                                    Inactive
+                                                                                </span>
+                                                                            </span>
+                                                                            <span class="kt-option__body">
+                                                                                User is not active and unable to login.
+                                                                            </span>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div
                                                 class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
                                             <div class="kt-section kt-section--last">
@@ -177,6 +269,65 @@
             $("#save-btn").click(function () {
                 $("#user-form").submit(); // Submit the form
             });
+        });
+
+        var KTFormControls = function () {
+            var formValidation = function () {
+                $( "#user-form" ).validate({
+                    rules: {
+                        name: {
+                            required: true,
+                        },
+                        email: {
+                            required: true,
+                            email: true,
+                        },
+                        student_id: {
+                            required: true,
+                            pattern: '^[P][0-9]{1,8}?$',
+                        },
+                        ic_number: {
+                            required: true,
+                            pattern: '(([[1-9]{2})(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01]))-([0-9]{2})-([0-9]{4})'
+                        },
+                        phone_number: {
+                            required: true,
+                            pattern: '^(01)[0-46-9]*[0-9]{7,8}$'
+                        },
+                        password: {
+                            minlength: 16,
+                        },
+                        password_confirmation: {
+                            minlength: 16,
+                            equalTo: '#password'
+                        }
+                    },
+                    //display error alert on form submit
+                    invalidHandler: function(event, validator) {
+                        swal.fire({
+                            "title": "",
+                            "text": "There are some errors in your submission. Please correct them.",
+                            "type": "error",
+                            "confirmButtonClass": "btn btn-secondary",
+                        });
+
+                        event.preventDefault();
+                    },
+                    submitHandler: function (form) {
+                        form.submit();
+                    }
+                });
+            }
+
+            return {
+                init: function() {
+                    formValidation();
+                }
+            };
+        }();
+
+        jQuery(document).ready(function() {
+            KTFormControls.init();
         });
     </script>
 @endsection
