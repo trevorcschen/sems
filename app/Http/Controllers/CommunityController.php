@@ -39,6 +39,7 @@ class CommunityController extends Controller
         $request->validate([
             'name' => 'bail|required|string|unique:communities',
             'description' => 'bail|required|string',
+            'fee' => 'bail|required|numeric|min:0',
             'max_members' => 'bail|required|numeric|min:1',
             'logo_path' => 'bail|nullable|string',
             'active' => 'bail|required|boolean',
@@ -49,6 +50,7 @@ class CommunityController extends Controller
             $community = Community::create([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
+                'fee' => $request->input('fee'),
                 'max_members' => $request->input('max_members'),
                 'logo_path' => $request->input('logo_path'),
                 'active' => $request->input('active'),
@@ -58,6 +60,7 @@ class CommunityController extends Controller
             $community = Community::create([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
+                'fee' => $request->input('fee'),
                 'max_members' => $request->input('max_members'),
                 'active' => $request->input('active'),
                 'user_id' => $request->input('admin'),
@@ -109,6 +112,7 @@ class CommunityController extends Controller
         $request->validate([
             'name' => 'bail|required|string|unique:communities,name,' . $community->id,
             'description' => 'bail|required|string',
+            'fee' => 'bail|required|numeric|min:0',
             'max_members' => 'bail|required|numeric|min:1',
             'logo_path' => 'bail|nullable|string',
             'active' => 'bail|required|boolean',
@@ -125,6 +129,7 @@ class CommunityController extends Controller
         $community->update([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
+            'fee' => $request->input('fee'),
             'max_members' => $request->input('max_members'),
             'logo_path' => $logo_path,
             'active' => $request->input('active'),

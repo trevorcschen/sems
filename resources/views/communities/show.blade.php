@@ -60,7 +60,7 @@
                                                 Membership
                                             </div>
                                             <div class="progress" style="height: 5px;width: 100%;">
-                                                <div class="progress-bar kt-bg-success" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="progress-bar kt-bg-success" role="progressbar" style="width: 78%;" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                             <div class="kt-widget__stats">
                                                 78%
@@ -94,7 +94,7 @@
                                     </div>
                                     <div class="kt-widget__details">
                                         <span class="kt-widget__title">Membership Fee</span>
-                                        <span class="kt-widget__value">$249,500</span>
+                                        <span class="kt-widget__value">{{ $community->fee == 0 ? 'Free' :  'RM ' .$community->fee }}</span>
                                     </div>
                                 </div>
                                 <div class="kt-widget__item">
@@ -103,7 +103,7 @@
                                     </div>
                                     <div class="kt-widget__details">
                                         <span class="kt-widget__title">Maximum Members</span>
-                                        <span class="kt-widget__value">249,500</span>
+                                        <span class="kt-widget__value">{{ $community->max_members }}</span>
                                     </div>
                                 </div>
                             </div>

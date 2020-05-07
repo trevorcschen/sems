@@ -107,6 +107,18 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
+                                                <label class="col-3 col-form-label">Membership Fee</label>
+                                                <div class="col-9">
+                                                    <input class="form-control @error('fee') is-invalid @enderror" type="number" name="fee" step="0.01" value="{{ old('fee') }}">
+                                                    @error('fee')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                    <span class="form-text text-muted">
+                                                        Put zero if you want joining fee to be free.
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
                                                 <label class="col-3 col-form-label">Maximum members</label>
                                                 <div class="col-9">
                                                     <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="max_members" value="{{ old('max_members') }}">
@@ -368,6 +380,9 @@
                         description: {
                             required: true,
                         },
+                        fee: {
+                            required: true,
+                        },
                         max_members: {
                             required: true,
                             min: 1,
@@ -408,8 +423,8 @@
                 $("#community-form").submit(); // Submit the form
             });
 
-            Select2.init();
             KTUppy.init();
+            Select2.init();
             KTFormControls.init();
         });
 

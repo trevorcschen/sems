@@ -70,6 +70,24 @@
                                             <h3 class="kt-section__title kt-section__title-lg">Community
                                                 Info:</h3>
                                             <div class="form-group row">
+                                                <label class="col-3 col-form-label">Community Image</label>
+                                                <div class="col-9">
+                                                    <div class="kt-uppy @error('logo_path') is-invalid @enderror" id="kt_uppy_3">
+                                                        <div class="kt-uppy__drag"></div>
+                                                        <div class="kt-uppy__informer"></div>
+                                                        <div class="kt-uppy__progress"></div>
+                                                        <div class="kt-uppy__thumbnails"></div>
+                                                    </div>
+                                                    @error('logo_path')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                    <span class="form-text text-muted">
+                                                        Leave this blank if you want to retain the original community image.
+                                                    </span>
+                                                    <input type="hidden" name="logo_path" id="logo_path" value="">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
                                                 <label class="col-3 col-form-label">Community Name</label>
                                                 <div class="col-9">
                                                     <input class="form-control @error('name') is-invalid @enderror"
@@ -90,21 +108,78 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label class="col-3 col-form-label">Community Image</label>
+                                                <label class="col-3 col-form-label">Membership Fee</label>
                                                 <div class="col-9">
-                                                    <div class="kt-uppy @error('logo_path') is-invalid @enderror" id="kt_uppy_3">
-                                                        <div class="kt-uppy__drag"></div>
-                                                        <div class="kt-uppy__informer"></div>
-                                                        <div class="kt-uppy__progress"></div>
-                                                        <div class="kt-uppy__thumbnails"></div>
-                                                    </div>
-                                                    @error('logo_path')
+                                                    <input class="form-control @error('fee') is-invalid @enderror" type="number" name="fee" step="0.01" value="{{ $community->fee }}">
+                                                    @error('fee')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                     <span class="form-text text-muted">
-                                                        Leave this blank if you want to retain the original community image.
+                                                        Put zero if you want joining fee to be free.
                                                     </span>
-                                                    <input type="hidden" name="logo_path" id="logo_path" value="">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-3 col-form-label">Maximum members</label>
+                                                <div class="col-9">
+                                                    <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="max_members" value="{{ $community->max_members }}">
+                                                    @error('max_members')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+                                            <div class="kt-section kt-section--last">
+                                                <div class="kt-section__body">
+                                                    <h3 class="kt-section__title kt-section__title-lg">Community Activation:</h3>
+                                                    <div class="form-group row">
+                                                        <label class="col-3 col-form-label">Community Active</label>
+                                                        <div class="col-9">
+                                                            <div class="row">
+                                                                <div class="col-6">
+                                                                    <label class="kt-option">
+                                                                        <span class="kt-option__control">
+                                                                            <span class="kt-radio kt-radio--bold kt-radio--brand">
+                                                                                <input type="radio" name="active" value="1" {{ $community->active ? 'checked' : '' }}>
+                                                                                <span></span>
+                                                                            </span>
+                                                                        </span>
+                                                                        <span class="kt-option__label">
+                                                                            <span class="kt-option__head">
+                                                                                <span class="kt-option__title">
+                                                                                    Active
+                                                                                </span>
+                                                                            </span>
+                                                                            <span class="kt-option__body">
+                                                                                Community is active and students can join.
+                                                                            </span>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <label class="kt-option">
+                                                                        <span class="kt-option__control">
+                                                                            <span class="kt-radio kt-radio--bold kt-radio--brand">
+                                                                                <input type="radio" name="active" value="0" {{ !$community->active ? 'checked' : '' }}>
+                                                                                <span></span>
+                                                                            </span>
+                                                                        </span>
+                                                                        <span class="kt-option__label">
+                                                                            <span class="kt-option__head">
+                                                                                <span class="kt-option__title">
+                                                                                    Inactive
+                                                                                </span>
+                                                                            </span>
+                                                                            <span class="kt-option__body">
+                                                                                Community is not active and students are unable to join.
+                                                                            </span>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
@@ -298,6 +373,54 @@
             };
         }();
 
+        var KTFormControls = function () {
+            var formValidation = function () {
+                $( "#community-form" ).validate({
+                    rules: {
+                        name: {
+                            required: true,
+                        },
+                        description: {
+                            required: true,
+                        },
+                        fee: {
+                            required: true,
+                        },
+                        max_members: {
+                            required: true,
+                            min: 1,
+                        },
+                        active: {
+                            required: true,
+                        },
+                        admin: {
+                            required: true,
+                        }
+                    },
+                    //display error alert on form submit
+                    invalidHandler: function(event, validator) {
+                        swal.fire({
+                            "title": "",
+                            "text": "There are some errors in your submission. Please correct them.",
+                            "type": "error",
+                            "confirmButtonClass": "btn btn-secondary",
+                        });
+
+                        event.preventDefault();
+                    },
+                    submitHandler: function (form) {
+                        form.submit();
+                    }
+                });
+            }
+
+            return {
+                init: function() {
+                    formValidation();
+                }
+            };
+        }();
+
         $(document).ready(function () {
             $("#save-btn").click(function () {
                 $("#community-form").submit(); // Submit the form
@@ -305,6 +428,7 @@
 
             KTUppy.init();
             Select2.init();
+            KTFormControls.init();
         });
 
     </script>
