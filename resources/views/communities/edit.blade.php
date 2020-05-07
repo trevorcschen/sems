@@ -205,7 +205,6 @@
             }
         };
 
-        // Class definition
         var KTUppy = function () {
             const XHR = Uppy.XHRUpload;
             const ProgressBar = Uppy.ProgressBar;
@@ -234,7 +233,7 @@
                 });
                 uppyDrag.use(Informer, { target: id + ' .kt-uppy__informer'  });
                 uppyDrag.use(XHR, {
-                    endpoint: '{{ route('files.store') }}',
+                    endpoint: '{{ route('files.images.store') }}',
                     method: 'POST',
                     fieldName: 'file',
                     headers: {
@@ -271,7 +270,7 @@
                     var imageId = $(this).attr('data-id');
 
                     $.ajax({
-                        url: '{{ route('files.destroy') }}',
+                        url: '{{ route('files.images.destroy') }}',
                         type: 'DELETE',
                         headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
                         data: {
@@ -299,15 +298,12 @@
             };
         }();
 
-        KTUtil.ready(function() {
-            KTUppy.init();
-        });
-
         $(document).ready(function () {
             $("#save-btn").click(function () {
                 $("#community-form").submit(); // Submit the form
             });
 
+            KTUppy.init();
             Select2.init();
         });
 

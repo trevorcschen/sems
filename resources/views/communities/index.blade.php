@@ -445,14 +445,14 @@
             };
         }();
 
-        jQuery(document).ready(function () {
+        $(document).ready(function () {
             KTDatatablesSearchOptionsColumnSearch.init();
-        });
 
-        $('#modal-delete').on('show.bs.modal', function (e) {
-            var url = '{{ route("communities.destroy", ':id') }}';
-            url = url.replace(':id', $(e.relatedTarget).data('id'));
-            $(this).find('form').attr('action', url);
+            $('#modal-delete').on('show.bs.modal', function (e) {
+                var url = '{{ route("communities.destroy", ':id') }}';
+                url = url.replace(':id', $(e.relatedTarget).data('id'));
+                $(this).find('form').attr('action', url);
+            });
         });
 
 

@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::post('files', 'FileController@store')->name('files.store');
-Route::delete('files', 'FileController@destroy')->name('files.destroy');
+Route::post('files/images', 'FileImageController@store')->name('files.images.store');
+Route::delete('files/images', 'FileImageController@destroy')->name('files.images.destroy');
 
 
 Route::post('/ajax/users/search', 'UserController@ajaxSearch')->name('ajax.users.search');

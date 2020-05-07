@@ -8,6 +8,7 @@
 @section('subheader-action', 'Create')
 
 @section('pagevendorsstyles')
+    <link href="{{ asset('assets/plugins/custom/uppy/uppy.bundle.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('content')
@@ -67,6 +68,24 @@
                                         <div class="kt-section__body">
                                             <h3 class="kt-section__title kt-section__title-lg">User
                                                 Info:</h3>
+                                            <div class="form-group row">
+                                                <label class="col-3 col-form-label">Profile Image</label>
+                                                <div class="col-9">
+                                                    <div class="kt-uppy @error('profile_image_path') is-invalid @enderror" id="kt_uppy_3">
+                                                        <div class="kt-uppy__drag"></div>
+                                                        <div class="kt-uppy__informer"></div>
+                                                        <div class="kt-uppy__progress"></div>
+                                                        <div class="kt-uppy__thumbnails"></div>
+                                                    </div>
+                                                    @error('profile_image_path')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                    <span class="form-text text-muted">
+                                                        Leave this blank if you do not wish to set the profile image.
+                                                    </span>
+                                                    <input type="hidden" name="profile_image_path" id="profile_image_path" value="">
+                                                </div>
+                                            </div>
                                             <div class="form-group row">
                                                 <label class="col-3 col-form-label">Full Name</label>
                                                 <div class="col-9">
@@ -128,6 +147,15 @@
                                                         name="phone_number" type="text" placeholder="0123456789"
                                                         value="{{ old('phone_number') }}">
                                                     @error('phone_number')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-3 col-form-label">Biography</label>
+                                                <div class="col-9">
+                                                    <textarea class="form-control @error('biography') is-invalid @enderror" name="biography" rows="3" maxlength="200">{{ old('biography') }}</textarea>
+                                                    @error('biography')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
                                                 </div>
@@ -262,11 +290,105 @@
 @endsection
 
 @section('pagevendorsscripts')
+    <script src="{{ asset('assets/plugins/custom/uppy/uppy.bundle.js') }}" type="text/javascript"></script>
     <script src="{{ asset('assets/js/pages/crud/forms/widgets/input-mask.js') }}" type="text/javascript"></script>
 @endsection
 
 @section('pagescripts')
     <script>
+        var KTUppy = function () {
+            const XHR = Uppy.XHRUpload;
+            const ProgressBar = Uppy.ProgressBar;
+            const StatusBar = Uppy.StatusBar;
+            const FileInput = Uppy.FileInput;
+            const Informer = Uppy.Informer;
+
+            var initUppy3 = function(){
+                var id = '#kt_uppy_3';
+
+                var uppyDrag = Uppy.Core({
+                    autoProceed: true,
+                    restrictions: {
+                        maxFileSize: 1000000, // 1mb
+                        maxNumberOfFiles: 1,
+                        minNumberOfFiles: 1,
+                        allowedFileTypes: ['image/*']
+                    }
+                });
+
+                uppyDrag.use(Uppy.DragDrop, { target: id + ' .kt-uppy__drag' });
+                uppyDrag.use(ProgressBar, {
+                    target: id + ' .kt-uppy__progress',
+                    hideUploadButton: false,
+                    hideAfterFinish: false
+                });
+                uppyDrag.use(Informer, { target: id + ' .kt-uppy__informer'  });
+                uppyDrag.use(XHR, {
+                    endpoint: '{{ route('files.images.store') }}',
+                    method: 'POST',
+                    fieldName: 'file',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                });
+
+                uppyDrag.on('complete', function(file) {
+                    var imagePreview = "";
+                    $.each(file.successful, function(index, value){
+                        var imageType = /image/;
+                        var thumbnail = "";
+                        if (imageType.test(value.type)){
+                            thumbnail = '<div class="kt-uppy__thumbnail"><img src="'+value.uploadURL+'"/></div>';
+                        }
+                        var sizeLabel = "bytes";
+                        var filesize = value.size;
+                        if (filesize > 1024){
+                            filesize = filesize / 1024;
+                            sizeLabel = "kb";
+                            if(filesize > 1024){
+                                filesize = filesize / 1024;
+                                sizeLabel = "MB";
+                            }
+                        }
+                        $('#profile_image_path').val(value.response.body.image_path);
+                        imagePreview += '<div class="kt-uppy__thumbnail-container" data-id="'+value.id+'">'+thumbnail+' <span class="kt-uppy__thumbnail-label">'+value.name+' ('+ Math.round(filesize, 2) +' '+sizeLabel+')</span><span data-id="'+value.id+'" class="kt-uppy__remove-thumbnail"><i class="flaticon2-cancel-music"></i></span></div>';
+                    });
+
+                    $(id + ' .kt-uppy__thumbnails').append(imagePreview);
+                });
+
+                $(document).on('click', id + ' .kt-uppy__thumbnails .kt-uppy__remove-thumbnail', function(){
+                    var imageId = $(this).attr('data-id');
+
+                    $.ajax({
+                        url: '{{ route('files.images.destroy') }}',
+                        type: 'DELETE',
+                        headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                        data: {
+                            image_path: $('#profile_image_path').val(),
+                        },
+                        error: function() {
+                            $.notify({
+                                icon: 'glyphicon glyphicon-warning-sign',
+                                message: 'An error has occurred',
+                            }, { type: 'danger'});
+                        },
+                        success: function(data) {
+                            uppyDrag.removeFile(imageId);
+                            $(id + ' .kt-uppy__thumbnail-container[data-id="'+imageId+'"').remove();
+                            $("#profile_image_path").val('');
+                        },
+                    });
+                });
+            }
+
+            return {
+                init: function() {
+                    initUppy3();
+                }
+            };
+        }();
+
         var KTFormControls = function () {
             var formValidation = function () {
                 $( "#user-form" ).validate({
@@ -289,6 +411,10 @@
                         phone_number: {
                             required: true,
                             pattern: '^(01)[0-46-9]*[0-9]{7,8}$'
+                        },
+                        biography: {
+                            required: true,
+                            maxlength: 200
                         },
                         password: {
                             required: true,
@@ -329,6 +455,7 @@
                 $("#user-form").submit();
             });
 
+            KTUppy.init();
             KTFormControls.init();
         });
     </script>

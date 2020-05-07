@@ -13,7 +13,7 @@ class Community extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'description', 'logo_path', 'user_id',
+        'name', 'description', 'fee', 'max_members', 'logo_path', 'active', 'user_id',
     ];
 
     /**

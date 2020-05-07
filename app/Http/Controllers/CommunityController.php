@@ -39,7 +39,9 @@ class CommunityController extends Controller
         $request->validate([
             'name' => 'bail|required|string|unique:communities',
             'description' => 'bail|required|string',
+            'max_members' => 'bail|required|numeric|min:1',
             'logo_path' => 'bail|nullable|string',
+            'active' => 'bail|required|boolean',
             'admin' => 'bail|required|exists:users,id',
         ]);
 
@@ -47,13 +49,17 @@ class CommunityController extends Controller
             $community = Community::create([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
+                'max_members' => $request->input('max_members'),
                 'logo_path' => $request->input('logo_path'),
+                'active' => $request->input('active'),
                 'user_id' => $request->input('admin'),
             ]);
         } else {
             $community = Community::create([
                 'name' => $request->input('name'),
                 'description' => $request->input('description'),
+                'max_members' => $request->input('max_members'),
+                'active' => $request->input('active'),
                 'user_id' => $request->input('admin'),
             ]);
         }
@@ -103,7 +109,9 @@ class CommunityController extends Controller
         $request->validate([
             'name' => 'bail|required|string|unique:communities,name,' . $community->id,
             'description' => 'bail|required|string',
+            'max_members' => 'bail|required|numeric|min:1',
             'logo_path' => 'bail|nullable|string',
+            'active' => 'bail|required|boolean',
             'admin' => 'bail|required|exists:users,id',
         ]);
 
@@ -117,13 +125,14 @@ class CommunityController extends Controller
         $community->update([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
+            'max_members' => $request->input('max_members'),
             'logo_path' => $logo_path,
+            'active' => $request->input('active'),
             'user_id' => $request->input('admin'),
         ]);
 
         return redirect()->route('communities.index')
             ->withSuccess('Community <strong>' . $community->name . '</strong> updated successfully.');
-
     }
 
     /**

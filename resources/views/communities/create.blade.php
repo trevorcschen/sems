@@ -69,27 +69,7 @@
                                             <h3 class="kt-section__title kt-section__title-lg">Community
                                                 Info:</h3>
                                             <div class="form-group row">
-                                                <label class="col-3 col-form-label">Community Name</label>
-                                                <div class="col-9">
-                                                    <input class="form-control @error('name') is-invalid @enderror"
-                                                           name="name" type="text" placeholder="Community Name"
-                                                           value="{{ old('name') }}">
-                                                    @error('name')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-3 col-form-label">Description</label>
-                                                <div class="col-9">
-                                                    <textarea class="form-control @error('description') is-invalid @enderror" name="description" rows="3"></textarea>
-                                                    @error('description')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-3 col-form-label">Community Image</label>
+                                                <label class="col-3 col-form-label">Community Logo</label>
                                                 <div class="col-9">
                                                     <div class="kt-uppy @error('logo_path') is-invalid @enderror" id="kt_uppy_3">
                                                         <div class="kt-uppy__drag"></div>
@@ -104,6 +84,89 @@
                                                         Leave this blank if you do not wish to set the community image.
                                                     </span>
                                                     <input type="hidden" name="logo_path" id="logo_path" value="">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-3 col-form-label">Community Name</label>
+                                                <div class="col-9">
+                                                    <input class="form-control @error('name') is-invalid @enderror"
+                                                           name="name" type="text" placeholder="Community Name"
+                                                           value="{{ old('name') }}">
+                                                    @error('name')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-3 col-form-label">Description</label>
+                                                <div class="col-9">
+                                                    <textarea class="form-control @error('description') is-invalid @enderror" name="description" rows="3">{{ old('description') }}</textarea>
+                                                    @error('description')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-3 col-form-label">Maximum members</label>
+                                                <div class="col-9">
+                                                    <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="max_members" value="{{ old('max_members') }}">
+                                                    @error('max_members')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+                                            <div class="kt-section kt-section--last">
+                                                <div class="kt-section__body">
+                                                    <h3 class="kt-section__title kt-section__title-lg">Community Activation:</h3>
+                                                    <div class="form-group row">
+                                                        <label class="col-3 col-form-label">Community Active</label>
+                                                        <div class="col-9">
+                                                            <div class="row">
+                                                                <div class="col-6">
+                                                                    <label class="kt-option">
+                                                                        <span class="kt-option__control">
+                                                                            <span class="kt-radio kt-radio--bold kt-radio--brand">
+                                                                                <input type="radio" name="active" value="1" checked>
+                                                                                <span></span>
+                                                                            </span>
+                                                                        </span>
+                                                                        <span class="kt-option__label">
+                                                                            <span class="kt-option__head">
+                                                                                <span class="kt-option__title">
+                                                                                    Active
+                                                                                </span>
+                                                                            </span>
+                                                                            <span class="kt-option__body">
+                                                                                Community is active and students can join.
+                                                                            </span>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <label class="kt-option">
+                                                                        <span class="kt-option__control">
+                                                                            <span class="kt-radio kt-radio--bold kt-radio--brand">
+                                                                                <input type="radio" name="active" value="0">
+                                                                                <span></span>
+                                                                            </span>
+                                                                        </span>
+                                                                        <span class="kt-option__label">
+                                                                            <span class="kt-option__head">
+                                                                                <span class="kt-option__title">
+                                                                                    Inactive
+                                                                                </span>
+                                                                            </span>
+                                                                            <span class="kt-option__body">
+                                                                                Community is not active and students are unable to join.
+                                                                            </span>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
@@ -202,7 +265,6 @@
             }
         };
 
-        // Class definition
         var KTUppy = function () {
             const XHR = Uppy.XHRUpload;
             const ProgressBar = Uppy.ProgressBar;
@@ -231,7 +293,7 @@
                 });
                 uppyDrag.use(Informer, { target: id + ' .kt-uppy__informer'  });
                 uppyDrag.use(XHR, {
-                    endpoint: '{{ route('files.store') }}',
+                    endpoint: '{{ route('files.images.store') }}',
                     method: 'POST',
                     fieldName: 'file',
                     headers: {
@@ -257,7 +319,7 @@
                                 sizeLabel = "MB";
                             }
                         }
-                        $('#logo_path').val(value.response.body.logo_path);
+                        $('#logo_path').val(value.response.body.image_path);
                         imagePreview += '<div class="kt-uppy__thumbnail-container" data-id="'+value.id+'">'+thumbnail+' <span class="kt-uppy__thumbnail-label">'+value.name+' ('+ Math.round(filesize, 2) +' '+sizeLabel+')</span><span data-id="'+value.id+'" class="kt-uppy__remove-thumbnail"><i class="flaticon2-cancel-music"></i></span></div>';
                     });
 
@@ -268,7 +330,7 @@
                     var imageId = $(this).attr('data-id');
 
                     $.ajax({
-                        url: '{{ route('files.destroy') }}',
+                        url: '{{ route('files.images.destroy') }}',
                         type: 'DELETE',
                         headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
                         data: {
@@ -306,6 +368,13 @@
                         description: {
                             required: true,
                         },
+                        max_members: {
+                            required: true,
+                            min: 1,
+                        },
+                        active: {
+                            required: true,
+                        },
                         admin: {
                             required: true,
                         }
@@ -334,17 +403,13 @@
             };
         }();
 
-        KTUtil.ready(function() {
-            KTUppy.init();
-        });
-
         $(document).ready(function () {
             $("#save-btn").click(function () {
                 $("#community-form").submit(); // Submit the form
             });
 
             Select2.init();
-
+            KTUppy.init();
             KTFormControls.init();
         });
 

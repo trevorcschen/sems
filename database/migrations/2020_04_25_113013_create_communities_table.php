@@ -17,7 +17,10 @@ class CreateCommunitiesTable extends Migration
             $table->id();
             $table->string('name');
             $table->longText('description');
+            $table->double('fee', 8, 2);
+            $table->integer('max_members');
             $table->string('logo_path')->nullable();
+            $table->boolean('active')->default(false);
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 

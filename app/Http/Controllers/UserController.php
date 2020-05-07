@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 
 
@@ -45,6 +46,8 @@ class UserController extends Controller
             'student_id' => 'bail|required|alpha_num|unique:users',
             'ic_number' => 'bail|required|unique:users',
             'phone_number' => 'bail|required|numeric|unique:users',
+            'biography' => 'bail|required|string',
+            'profile_image_path' => 'bail|nullable|string',
             'password' => 'bail|required|min:16|confirmed',
             'role' => 'bail|required|exists:roles,id',
             'active' => 'bail|required|boolean',
@@ -57,6 +60,8 @@ class UserController extends Controller
                 'student_id' => $request->input('student_id'),
                 'ic_number' => $request->input('ic_number'),
                 'phone_number' => $request->input('phone_number'),
+                'biography' => $request->input('biography'),
+                'profile_image_path' => $request->input('profile_image_path'),
                 'password' => Hash::make($request->input('password')),
                 'active' => $request->input('active'),
                 'email_verified_at' => now(),
@@ -68,6 +73,8 @@ class UserController extends Controller
                 'student_id' => $request->input('student_id'),
                 'ic_number' => $request->input('ic_number'),
                 'phone_number' => $request->input('phone_number'),
+                'biography' => $request->input('biography'),
+                'profile_image_path' => $request->input('profile_image_path'),
                 'password' => Hash::make($request->input('password')),
                 'active' => $request->input('active'),
             ]);
@@ -87,7 +94,14 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return response()->view('users.show', compact('user'));
+        $words = explode(" ", $user->name);
+        $acronym = "";
+
+        foreach ($words as $w) {
+            $acronym .= strtoupper($w[0]);
+        }
+
+        return response()->view('users.show', compact('user', 'acronym'));
     }
 
     /**
@@ -117,35 +131,36 @@ class UserController extends Controller
             'student_id' => 'bail|required|alpha_num|unique:users,student_id,' . $user->id,
             'ic_number' => 'bail|required|unique:users,ic_number,' . $user->id,
             'phone_number' => 'bail|required|numeric|unique:users,phone_number,' . $user->id,
+            'biography' => 'bail|required|string',
+            'profile_image_path' => 'bail|nullable|string',
             'password' => 'bail|nullable|min:16|confirmed',
             'role' => 'bail|required|exists:roles,id',
             'active' => 'bail|required|boolean',
         ]);
 
+        if ($request->input('profile_image_path')) {
+            Storage::delete($user->profile_image_path);
+            $profile_image_path = $request->input('profile_image_path');
+        } else {
+            $profile_image_path = $user->profile_image_path;
+        }
+
         $password = empty($request->input('password')) ? $user->password : Hash::make($request->input('password'));
 
-        if ($request->has('email_verified')) {
-            $user->update([
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'student_id' => $request->input('student_id'),
-                'ic_number' => $request->input('ic_number'),
-                'phone_number' => $request->input('phone_number'),
-                'password' => $password,
-                'active' => $request->input('active'),
-                'email_verified_at' => now(),
-            ]);
-        } else {
-            $user->update([
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'student_id' => $request->input('student_id'),
-                'ic_number' => $request->input('ic_number'),
-                'phone_number' => $request->input('phone_number'),
-                'password' => $password,
-                'active' => $request->input('active'),
-            ]);
-        }
+        $email_verified_at = empty($request->input('email_verified')) ? null : now();
+
+        $user->update([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'student_id' => $request->input('student_id'),
+            'ic_number' => $request->input('ic_number'),
+            'phone_number' => $request->input('phone_number'),
+            'biography' => $request->input('biography'),
+            'profile_image_path' => $profile_image_path,
+            'password' => $password,
+            'active' => $request->input('active'),
+            'email_verified_at' => $email_verified_at,
+        ]);
 
         $user->syncRoles($request->input('role'));
 
@@ -161,6 +176,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        Storage::delete($user->profile_image_path);
         $user->delete();
 
         return redirect()->route('users.index')
@@ -175,6 +191,11 @@ class UserController extends Controller
     public function destroyMany($ids)
     {
         $userIds = explode(",", $ids);
+
+        foreach ($userIds as $userId) {
+            $user = User::find($userId);
+            Storage::delete($user->profile_image_path);
+        }
 
         $deleteSuccess = User::destroy($userIds);
 
