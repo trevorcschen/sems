@@ -37,7 +37,7 @@ class VenueController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'bail|required|string|size:80|unique:venues',
+            'name' => 'bail|required|string|max:80|unique:venues',
             'capacity' => 'bail|required|numeric|min:1',
             'air_conditioned' => 'bail|required|boolean',
             'venue_image_path' => 'bail|nullable|string',
@@ -86,7 +86,7 @@ class VenueController extends Controller
     public function update(Request $request, Venue $venue)
     {
         $request->validate([
-            'name' => 'bail|required|string|size:80|unique:venues,name,' . $venue->id,
+            'name' => 'bail|required|string|max:80|unique:venues,name,' . $venue->id,
             'capacity' => 'bail|required|numeric|min:1',
             'air_conditioned' => 'bail|required|boolean',
             'venue_image_path' => 'bail|nullable|string',

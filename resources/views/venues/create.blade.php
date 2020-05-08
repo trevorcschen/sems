@@ -90,7 +90,7 @@
                                                 <label class="col-3 col-form-label">Venue Name</label>
                                                 <div class="col-9">
                                                     <input class="form-control @error('name') is-invalid @enderror"
-                                                           name="name" type="text" placeholder="Venue Name"
+                                                           name="name" type="text" placeholder="Venue Name" maxlength="80"
                                                            value="{{ old('name') }}">
                                                     @error('name')
                                                         <div class="invalid-feedback">{{ $message }}</div>

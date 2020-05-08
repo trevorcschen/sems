@@ -91,7 +91,7 @@
                                                 <label class="col-3 col-form-label">Community Name</label>
                                                 <div class="col-9">
                                                     <input class="form-control @error('name') is-invalid @enderror"
-                                                           name="name" type="text" placeholder="Community Name"
+                                                           name="name" type="text" placeholder="Community Name" maxlength="80"
                                                            value="{{ $community->name }}">
                                                     @error('name')
                                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -101,7 +101,7 @@
                                             <div class="form-group row">
                                                 <label class="col-3 col-form-label">Description</label>
                                                 <div class="col-9">
-                                                    <textarea class="form-control @error('description') is-invalid @enderror" name="description" rows="3">{{ $community->description }}</textarea>
+                                                    <textarea class="form-control @error('description') is-invalid @enderror" name="description" rows="3" maxlength="200">{{ $community->description }}</textarea>
                                                     @error('description')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
