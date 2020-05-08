@@ -281,6 +281,7 @@
                     rules: {
                         name: {
                             required: true,
+                            maxlength: 80,
                         },
                         capacity: {
                             required: true,

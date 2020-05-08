@@ -379,9 +379,11 @@
                     rules: {
                         name: {
                             required: true,
+                            maxlength: 80,
                         },
                         description: {
                             required: true,
+                            maxlength: 200,
                         },
                         fee: {
                             required: true,

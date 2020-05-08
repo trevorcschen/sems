@@ -395,6 +395,7 @@
                     rules: {
                         name: {
                             required: true,
+                            maxlength: 80,
                         },
                         email: {
                             required: true,

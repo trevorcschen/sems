@@ -25,7 +25,7 @@
                             <div class="kt-widget__top">
                                 @if($community->logo_path)
                                     <div class="kt-widget__media kt-hidden-">
-                                        <img src="{{ Storage::url($community->logo_path) }}" id="profile_image" alt="image">
+                                        <img src="{{ Storage::url($community->logo_path) }}" id="community_logo" alt="image">
                                     </div>
                                 @else
                                     <div class="kt-widget__pic kt-widget__pic--danger kt-font-danger kt-font-boldest kt-font-light">
@@ -34,7 +34,7 @@
                                 @endif
                                 <div class="kt-widget__content">
                                     <div class="kt-widget__head">
-                                        <a href="#" onclick="return false;" class="kt-widget__username" style="width: 10px">
+                                        <a href="#" onclick="return false;" class="kt-widget__username">
                                             {{ $community->name }}
                                             @if($community->active)
                                                 <i class="flaticon2-correct" title="Active"></i>
@@ -94,7 +94,7 @@
                                     </div>
                                     <div class="kt-widget__details">
                                         <span class="kt-widget__title">Membership Fee</span>
-                                        <span class="kt-widget__value">{{ $community->fee == 0 ? 'Free' :  'RM ' .$community->fee }}</span>
+                                        <span class="kt-widget__value">{{ $community->fee == 0 ? 'Free' :  'RM ' .number_format($community->fee, 2, '.', ',') }}</span>
                                     </div>
                                 </div>
                                 <div class="kt-widget__item">
@@ -103,7 +103,7 @@
                                     </div>
                                     <div class="kt-widget__details">
                                         <span class="kt-widget__title">Maximum Members</span>
-                                        <span class="kt-widget__value">{{ $community->max_members }}</span>
+                                        <span class="kt-widget__value">{{ number_format($community->max_members) }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -152,7 +152,13 @@
 
 @section('pagescripts')
     <script>
-        var $image = $('#image');
+        var $image = $('#community_logo');
         $image.viewer();
+
+        $('#modal-delete').on('show.bs.modal', function (e) {
+            var url = '{{ route("communities.destroy", ':id') }}';
+            url = url.replace(':id', $(e.relatedTarget).data('id'));
+            $(this).find('form').attr('action', url);
+        });
     </script>
 @endsection

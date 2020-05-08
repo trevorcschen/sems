@@ -37,8 +37,8 @@ class CommunityController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'bail|required|string|unique:communities',
-            'description' => 'bail|required|string',
+            'name' => 'bail|required|string|size:80|unique:communities',
+            'description' => 'bail|required|string|size:200',
             'fee' => 'bail|required|numeric|min:0',
             'max_members' => 'bail|required|numeric|min:1',
             'logo_path' => 'bail|nullable|string',
@@ -101,8 +101,8 @@ class CommunityController extends Controller
     public function update(Request $request, Community $community)
     {
         $request->validate([
-            'name' => 'bail|required|string|unique:communities,name,' . $community->id,
-            'description' => 'bail|required|string',
+            'name' => 'bail|required|string|size:80|unique:communities,name,' . $community->id,
+            'description' => 'bail|required|string|size:200',
             'fee' => 'bail|required|numeric|min:0',
             'max_members' => 'bail|required|numeric|min:1',
             'logo_path' => 'bail|nullable|string',

@@ -42,12 +42,12 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'bail|required|string',
+            'name' => 'bail|required|string|size:80',
             'email' => 'bail|required|email|unique:users',
             'student_id' => 'bail|required|alpha_num|unique:users',
             'ic_number' => 'bail|required|unique:users',
             'phone_number' => 'bail|required|numeric|unique:users',
-            'biography' => 'bail|required|string',
+            'biography' => 'bail|required|string|size:200',
             'profile_image_path' => 'bail|nullable|string',
             'password' => 'bail|required|min:16|confirmed',
             'role' => 'bail|required|exists:roles,id',
@@ -117,12 +117,12 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'name' => 'bail|required|string',
+            'name' => 'bail|required|string|size:80',
             'email' => 'bail|required|email|unique:users,email,' . $user->id,
             'student_id' => 'bail|required|alpha_num|unique:users,student_id,' . $user->id,
             'ic_number' => 'bail|required|unique:users,ic_number,' . $user->id,
             'phone_number' => 'bail|required|numeric|unique:users,phone_number,' . $user->id,
-            'biography' => 'bail|required|string',
+            'biography' => 'bail|required|string|size:200',
             'profile_image_path' => 'bail|nullable|string',
             'password' => 'bail|nullable|min:16|confirmed',
             'role' => 'bail|required|exists:roles,id',

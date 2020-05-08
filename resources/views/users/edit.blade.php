@@ -397,6 +397,7 @@
                     rules: {
                         name: {
                             required: true,
+                            maxlength: 80,
                         },
                         email: {
                             required: true,
@@ -416,7 +417,7 @@
                         },
                         biography: {
                             required: true,
-                            maxlength: 200
+                            maxlength: 200,
                         },
                         password: {
                             minlength: 16,
