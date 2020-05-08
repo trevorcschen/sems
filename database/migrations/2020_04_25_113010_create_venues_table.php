@@ -17,6 +17,8 @@ class CreateVenuesTable extends Migration
             $table->id();
             $table->string('name');
             $table->integer('capacity');
+            $table->boolean('air_conditioned')->default(false);
+            $table->string('venue_image_path')->nullable();
             $table->timestamps();
         });
     }

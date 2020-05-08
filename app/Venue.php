@@ -13,7 +13,7 @@ class Venue extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'capacity',
+        'name', 'capacity', 'air_conditioned', 'venue_image_path',
     ];
 
     /**

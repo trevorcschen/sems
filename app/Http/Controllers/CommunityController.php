@@ -79,10 +79,12 @@ class CommunityController extends Controller
      */
     public function show(Community $community)
     {
-        $words = explode(" ", $community->name);
+        $words = preg_split("/\s+/", $community->name);
         $acronym = "";
 
+        $i = 0;
         foreach ($words as $w) {
+            if ($i == 3) break;
             $acronym .= strtoupper($w[0]);
         }
 

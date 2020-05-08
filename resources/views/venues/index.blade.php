@@ -95,6 +95,7 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Capacity</th>
+                        <th>Air Conditioned</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -103,6 +104,7 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Capacity</th>
+                        <th>Air Conditioned</th>
                         <th>Actions</th>
                     </tr>
                     </tfoot>
@@ -201,10 +203,11 @@
                         headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
                     },
                     columns: [
-                        {data: 'id'},
+                        {data: 'id', width: '1%'},
                         {data: 'name'},
                         {data: 'capacity'},
-                        {data: 'id', responsivePriority: -1},
+                        {data: 'air_conditioned'},
+                        {data: 'id', responsivePriority: -1, width: '10%'},
                     ],
                     order: [[1, "desc"]],
                     headerCallback: function (thead, data, start, end, display) {
@@ -217,7 +220,6 @@
                     columnDefs: [
                         {
                             targets: 0,
-                            width: '30px',
                             className: 'dt-right',
                             orderable: false,
                             render: function (data, type, full, meta) {
@@ -232,7 +234,6 @@
                             targets: -1,
                             title: 'Actions',
                             orderable: false,
-                            width: '10%',
                             render: function (data, type, full, meta) {
                                 var editURL = '{{ route('venues.edit', ':data') }}';
                                 var showURL = '{{ route('venues.show', ':data') }}';
@@ -254,6 +255,19 @@
                                     </a>';
                             },
                         },
+                        {
+                            targets: 3,
+                            render: function (data, type, full, meta) {
+                                var status = {
+                                    0: {'title': 'Not Air Conditioned', 'class': ' kt-badge--danger'},
+                                    1: {'title': 'Air Conditioned', 'class': ' kt-badge--success'},
+                                };
+                                if (typeof status[data] === 'undefined') {
+                                    return data;
+                                }
+                                return '<span class="kt-badge ' + status[data].class + ' kt-badge--inline kt-badge--pill">' + status[data].title + '</span>';
+                            },
+                        },
                     ],
                     initComplete: function () {
                         var thisTable = this;
@@ -268,7 +282,17 @@
                                 case 'Capacity':
                                     input = $('<input type="text" class="form-control form-control-sm form-filter kt-input" data-col-index="' + column.index() + '"/>');
                                     break;
-
+                                case 'Air Conditioned':
+                                    var status = {
+                                        0: {'title': 'Not Air Conditioned', 'class': ' kt-badge--danger'},
+                                        1: {'title': 'Air Conditioned', 'class': ' kt-badge--success'},
+                                    };
+                                    input = $('<select class="form-control form-control-sm form-filter kt-input" title="Select" data-col-index="' + column.index() + '">\
+										<option value="">Select</option></select>');
+                                    column.data().unique().sort().each(function (d, j) {
+                                        $(input).append('<option value="' + d + '">' + status[d].title + '</option>');
+                                    });
+                                    break;
                                 case 'Actions':
                                     var search = $('<button class="btn btn-brand kt-btn btn-sm kt-btn--icon">\
                                                   <span>\

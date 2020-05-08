@@ -213,16 +213,16 @@
                         headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
                     },
                     columns: [
-                        {data: 'id'},
+                        {data: 'id', width: '1%'},
                         {data: 'name'},
                         {data: 'email'},
                         {data: 'student_id'},
                         {data: 'ic_number'},
                         {data: 'phone_number'},
-                        {data: 'role'},
-                        {data: 'active'},
+                        {data: 'role', width: '12%'},
+                        {data: 'active', width: '8%'},
                         {data: 'email_verified'},
-                        {data: 'id', responsivePriority: -1},
+                        {data: 'id', responsivePriority: -1, width: '10%'},
                     ],
                     order: [[1, "desc"]],
                     headerCallback: function (thead, data, start, end, display) {
@@ -235,7 +235,6 @@
                     columnDefs: [
                         {
                             targets: 0,
-                            width: '30px',
                             className: 'dt-right',
                             orderable: false,
                             render: function (data, type, full, meta) {
@@ -250,7 +249,6 @@
                             targets: -1,
                             title: 'Actions',
                             orderable: false,
-                            width: '10%',
                             render: function (data, type, full, meta) {
                                 var editURL = '{{ route('users.edit', ':data') }}';
                                 var showURL = '{{ route('users.show', ':data') }}';
@@ -274,7 +272,6 @@
                         },
                         {
                             targets: 6,
-                            width: '12%',
                             render: function (data, type, full, meta) {
                                 var status = {
                                     'super-admin': {'class': ' kt-badge--brand'},
@@ -289,7 +286,6 @@
                         },
                         {
                             targets: 7,
-                            width: '10%',
                             render: function (data, type, full, meta) {
                                 var status = {
                                     0: {'title': 'Inactive', 'class': ' kt-badge--danger'},

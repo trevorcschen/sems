@@ -346,7 +346,7 @@
                         type: 'DELETE',
                         headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
                         data: {
-                            logo_path: $('#logo_path').val(),
+                            image_path: $('#logo_path').val(),
                         },
                         error: function() {
                             $.notify({

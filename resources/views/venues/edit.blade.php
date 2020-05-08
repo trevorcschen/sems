@@ -8,6 +8,7 @@
 @section('subheader-action', 'Update')
 
 @section('pagevendorsstyles')
+    <link href="{{ asset('assets/plugins/custom/uppy/uppy.bundle.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('content')
@@ -69,6 +70,24 @@
                                             <h3 class="kt-section__title kt-section__title-lg">Venue
                                                 Info:</h3>
                                             <div class="form-group row">
+                                                <label class="col-3 col-form-label">Venue Image</label>
+                                                <div class="col-9">
+                                                    <div class="kt-uppy @error('venue_image_path') is-invalid @enderror" id="kt_uppy_3">
+                                                        <div class="kt-uppy__drag"></div>
+                                                        <div class="kt-uppy__informer"></div>
+                                                        <div class="kt-uppy__progress"></div>
+                                                        <div class="kt-uppy__thumbnails"></div>
+                                                    </div>
+                                                    @error('venue_image_path')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                    <span class="form-text text-muted">
+                                                        Leave this blank if you do not wish to set the venue image.
+                                                    </span>
+                                                    <input type="hidden" name="venue_image_path" id="venue_image_path" value="">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
                                                 <label class="col-3 col-form-label">Venue Name</label>
                                                 <div class="col-9">
                                                     <input class="form-control @error('name') is-invalid @enderror"
@@ -88,6 +107,60 @@
                                                     @enderror
                                                 </div>
                                             </div>
+                                            <div
+                                                class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+                                            <div class="kt-section kt-section--last">
+                                                <div class="kt-section__body">
+                                                    <h3 class="kt-section__title kt-section__title-lg">Air Conditioning:</h3>
+                                                    <div class="form-group row">
+                                                        <label class="col-3 col-form-label">Air Conditioned</label>
+                                                        <div class="col-9">
+                                                            <div class="row">
+                                                                <div class="col-6">
+                                                                    <label class="kt-option">
+                                                                        <span class="kt-option__control">
+                                                                            <span class="kt-radio kt-radio--bold kt-radio--brand">
+                                                                                <input type="radio" name="air_conditioned" value="1" {{ $venue->air_conditioned ? 'checked' : '' }}>
+                                                                                <span></span>
+                                                                            </span>
+                                                                        </span>
+                                                                        <span class="kt-option__label">
+                                                                            <span class="kt-option__head">
+                                                                                <span class="kt-option__title">
+                                                                                    Air Conditioned
+                                                                                </span>
+                                                                            </span>
+                                                                            <span class="kt-option__body">
+                                                                                The venue is air conditioned.
+                                                                            </span>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <label class="kt-option">
+                                                                        <span class="kt-option__control">
+                                                                            <span class="kt-radio kt-radio--bold kt-radio--brand">
+                                                                                <input type="radio" name="air_conditioned" value="0" {{ !$venue->air_conditioned ? 'checked' : '' }}>
+                                                                                <span></span>
+                                                                            </span>
+                                                                        </span>
+                                                                        <span class="kt-option__label">
+                                                                            <span class="kt-option__head">
+                                                                                <span class="kt-option__title">
+                                                                                    Not Air Conditioned
+                                                                                </span>
+                                                                            </span>
+                                                                            <span class="kt-option__body">
+                                                                                The venue is not air conditioned.
+                                                                            </span>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -103,11 +176,105 @@
 @endsection
 
 @section('pagevendorsscripts')
+    <script src="{{ asset('assets/plugins/custom/uppy/uppy.bundle.js') }}" type="text/javascript"></script>
 @endsection
 
 @section('pagescripts')
     <script>
         "use strict";
+
+        var KTUppy = function () {
+            const XHR = Uppy.XHRUpload;
+            const ProgressBar = Uppy.ProgressBar;
+            const StatusBar = Uppy.StatusBar;
+            const FileInput = Uppy.FileInput;
+            const Informer = Uppy.Informer;
+
+            var initUppy3 = function(){
+                var id = '#kt_uppy_3';
+
+                var uppyDrag = Uppy.Core({
+                    autoProceed: true,
+                    restrictions: {
+                        maxFileSize: 1000000, // 1mb
+                        maxNumberOfFiles: 1,
+                        minNumberOfFiles: 1,
+                        allowedFileTypes: ['image/*']
+                    }
+                });
+
+                uppyDrag.use(Uppy.DragDrop, { target: id + ' .kt-uppy__drag' });
+                uppyDrag.use(ProgressBar, {
+                    target: id + ' .kt-uppy__progress',
+                    hideUploadButton: false,
+                    hideAfterFinish: false
+                });
+                uppyDrag.use(Informer, { target: id + ' .kt-uppy__informer'  });
+                uppyDrag.use(XHR, {
+                    endpoint: '{{ route('files.images.store') }}',
+                    method: 'POST',
+                    fieldName: 'file',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                });
+
+                uppyDrag.on('complete', function(file) {
+                    var imagePreview = "";
+                    $.each(file.successful, function(index, value){
+                        var imageType = /image/;
+                        var thumbnail = "";
+                        if (imageType.test(value.type)){
+                            thumbnail = '<div class="kt-uppy__thumbnail"><img src="'+value.uploadURL+'"/></div>';
+                        }
+                        var sizeLabel = "bytes";
+                        var filesize = value.size;
+                        if (filesize > 1024){
+                            filesize = filesize / 1024;
+                            sizeLabel = "kb";
+                            if(filesize > 1024){
+                                filesize = filesize / 1024;
+                                sizeLabel = "MB";
+                            }
+                        }
+                        $('#venue_image_path').val(value.response.body.image_path);
+                        imagePreview += '<div class="kt-uppy__thumbnail-container" data-id="'+value.id+'">'+thumbnail+' <span class="kt-uppy__thumbnail-label">'+value.name+' ('+ Math.round(filesize, 2) +' '+sizeLabel+')</span><span data-id="'+value.id+'" class="kt-uppy__remove-thumbnail"><i class="flaticon2-cancel-music"></i></span></div>';
+                    });
+
+                    $(id + ' .kt-uppy__thumbnails').append(imagePreview);
+                });
+
+                $(document).on('click', id + ' .kt-uppy__thumbnails .kt-uppy__remove-thumbnail', function(){
+                    var imageId = $(this).attr('data-id');
+
+                    $.ajax({
+                        url: '{{ route('files.images.destroy') }}',
+                        type: 'DELETE',
+                        headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                        data: {
+                            image_path: $('#venue_image_path').val(),
+                        },
+                        error: function() {
+                            $.notify({
+                                icon: 'glyphicon glyphicon-warning-sign',
+                                message: 'An error has occurred',
+                            }, { type: 'danger'});
+                        },
+                        success: function(data) {
+                            uppyDrag.removeFile(imageId);
+                            $(id + ' .kt-uppy__thumbnail-container[data-id="'+imageId+'"').remove();
+                            $("#venue_image_path").val('');
+                        },
+                    });
+                });
+            }
+
+            return {
+                init: function() {
+                    initUppy3();
+                }
+            };
+        }();
 
         var KTFormControls = function () {
             var formValidation = function () {
@@ -150,6 +317,7 @@
                 $("#venue-form").submit(); // Submit the form
             });
 
+            KTUppy.init();
             KTFormControls.init();
         });
 

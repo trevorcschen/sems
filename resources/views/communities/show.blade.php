@@ -34,7 +34,7 @@
                                 @endif
                                 <div class="kt-widget__content">
                                     <div class="kt-widget__head">
-                                        <a href="#" onclick="return false;" class="kt-widget__username">
+                                        <a href="#" onclick="return false;" class="kt-widget__username" style="width: 10px">
                                             {{ $community->name }}
                                             @if($community->active)
                                                 <i class="flaticon2-correct" title="Active"></i>

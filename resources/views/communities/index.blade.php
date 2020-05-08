@@ -95,8 +95,11 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Description</th>
+                        <th>Fee (RM)</th>
+                        <th>Max Members</th>
                         <th>Admin</th>
                         <th>Founding Date</th>
+                        <th>Active</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -105,8 +108,11 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Description</th>
+                        <th>Fee (RM)</th>
+                        <th>Max Members</th>
                         <th>Admin</th>
                         <th>Founding Date</th>
+                        <th>Active</th>
                         <th>Actions</th>
                     </tr>
                     </tfoot>
@@ -206,12 +212,15 @@
                         headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
                     },
                     columns: [
-                        {data: 'id'},
+                        {data: 'id', width: '1%'},
                         {data: 'name'},
-                        {data: 'description'},
+                        {data: 'description', width: '43%'},
+                        {data: 'fee'},
+                        {data: 'max_members', width: '1%'},
                         {data: 'admin'},
-                        {data: 'created_at', searchable: 'false'},
-                        {data: 'id', responsivePriority: -1},
+                        {data: 'created_at', searchable: 'false', width: '20%'},
+                        {data: 'active',  width: '8%'},
+                        {data: 'id', responsivePriority: -1, width: '10%'},
                     ],
                     order: [[1, "desc"]],
                     headerCallback: function (thead, data, start, end, display) {
@@ -224,7 +233,6 @@
                     columnDefs: [
                         {
                             targets: 0,
-                            width: '30px',
                             className: 'dt-right',
                             orderable: false,
                             render: function (data, type, full, meta) {
@@ -236,17 +244,9 @@
                             },
                         },
                         {
-                            targets: 2,
-                            width: '45%',
-                            render: function (data, type, full, meta) {
-                                return data.length > 200 ? data.substr(0, 200) +' …' : data;
-                            },
-                        },
-                        {
                             targets: -1,
                             title: 'Actions',
                             orderable: false,
-                            width: '10%',
                             render: function (data, type, full, meta) {
                                 var editURL = '{{ route('communities.edit', ':data') }}';
                                 var showURL = '{{ route('communities.show', ':data') }}';
@@ -268,6 +268,25 @@
                                     </a>';
                             },
                         },
+                        {
+                            targets: 2,
+                            render: function (data, type, full, meta) {
+                                return data.length > 200 ? data.substr(0, 200) +' …' : data;
+                            },
+                        },
+                        {
+                            targets: 7,
+                            render: function (data, type, full, meta) {
+                                var status = {
+                                    0: {'title': 'Inactive', 'class': ' kt-badge--danger'},
+                                    1: {'title': 'Active', 'class': ' kt-badge--success'},
+                                };
+                                if (typeof status[data] === 'undefined') {
+                                    return data;
+                                }
+                                return '<span class="kt-badge ' + status[data].class + ' kt-badge--inline kt-badge--pill">' + status[data].title + '</span>';
+                            },
+                        },
                     ],
                     initComplete: function () {
                         var thisTable = this;
@@ -280,6 +299,8 @@
                             switch (column.title()) {
                                 case 'Name':
                                 case 'Description':
+                                case 'Fee (RM)':
+                                case 'Max Members':
                                 case 'Admin':
                                     input = $('<input type="text" class="form-control form-control-sm form-filter kt-input" data-col-index="' + column.index() + '"/>');
                                     break;
@@ -291,7 +312,17 @@
                                 </div>\
                                 </div>');
                                     break;
-
+                                case 'Active':
+                                    var status = {
+                                        0: {'title': 'Inactive', 'class': ' kt-badge--danger'},
+                                        1: {'title': 'Active', 'class': ' kt-badge--success'},
+                                    };
+                                    input = $('<select class="form-control form-control-sm form-filter kt-input" title="Select" data-col-index="' + column.index() + '">\
+										<option value="">Select</option></select>');
+                                    column.data().unique().sort().each(function (d, j) {
+                                        $(input).append('<option value="' + d + '">' + status[d].title + '</option>');
+                                    });
+                                    break;
                                 case 'Actions':
                                     var search = $('<button class="btn btn-brand kt-btn btn-sm kt-btn--icon">\
                                                   <span>\

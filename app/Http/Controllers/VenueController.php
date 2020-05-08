@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Venue;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class VenueController extends Controller
 {
@@ -38,11 +39,15 @@ class VenueController extends Controller
         $request->validate([
             'name' => 'bail|required|string|unique:venues',
             'capacity' => 'bail|required|numeric|min:1',
+            'air_conditioned' => 'bail|required|boolean',
+            'venue_image_path' => 'bail|nullable|string',
         ]);
 
         $venue = Venue::create([
             'name' => $request->input('name'),
             'capacity' => $request->input('capacity'),
+            'air_conditioned' => $request->input('air_conditioned'),
+            'venue_image_path' => $request->input('venue_image_path'),
         ]);
 
         return redirect()->route('venues.index')
@@ -81,13 +86,24 @@ class VenueController extends Controller
     public function update(Request $request, Venue $venue)
     {
         $request->validate([
-            'name' => 'bail|required|string|unique:venues',
+            'name' => 'bail|required|string|unique:venues,name,' . $venue->id,
             'capacity' => 'bail|required|numeric|min:1',
+            'air_conditioned' => 'bail|required|boolean',
+            'venue_image_path' => 'bail|nullable|string',
         ]);
+
+        if ($request->input('venue_image_path')) {
+            Storage::delete($venue->venue_image_path);
+            $venue_image_path = $request->input('venue_image_path');
+        } else {
+            $venue_image_path = $venue->venue_image_path;
+        }
 
         $venue->update([
             'name' => $request->input('name'),
             'capacity' => $request->input('capacity'),
+            'air_conditioned' => $request->input('air_conditioned'),
+            'venue_image_path' => $venue_image_path,
         ]);
 
         return redirect()->route('venues.index')
@@ -102,6 +118,7 @@ class VenueController extends Controller
      */
     public function destroy(Venue $venue)
     {
+        Storage::delete($venue->venue_image_path);
         $venue->delete();
 
         return redirect()->route('venues.index')
@@ -116,6 +133,11 @@ class VenueController extends Controller
     public function destroyMany($ids)
     {
         $venueIds = explode(",", $ids);
+
+        foreach ($venueIds as $venueId) {
+            $venue = Venue::find($venueId);
+            Storage::delete($venue->venue_image_path);
+        }
 
         $deleteSuccess = Venue::destroy($venueIds);
 
