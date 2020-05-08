@@ -46,26 +46,15 @@ class CommunityController extends Controller
             'admin' => 'bail|required|exists:users,id',
         ]);
 
-        if ($request->input('logo_path')) {
-            $community = Community::create([
-                'name' => $request->input('name'),
-                'description' => $request->input('description'),
-                'fee' => $request->input('fee'),
-                'max_members' => $request->input('max_members'),
-                'logo_path' => $request->input('logo_path'),
-                'active' => $request->input('active'),
-                'user_id' => $request->input('admin'),
-            ]);
-        } else {
-            $community = Community::create([
-                'name' => $request->input('name'),
-                'description' => $request->input('description'),
-                'fee' => $request->input('fee'),
-                'max_members' => $request->input('max_members'),
-                'active' => $request->input('active'),
-                'user_id' => $request->input('admin'),
-            ]);
-        }
+        $community = Community::create([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'fee' => $request->input('fee'),
+            'max_members' => $request->input('max_members'),
+            'logo_path' => $request->input('logo_path'),
+            'active' => $request->input('active'),
+            'user_id' => $request->input('admin'),
+        ]);
 
         return redirect()->route('communities.index')
             ->withSuccess('Community <strong>' . $community->name . '</strong> created successfully.');
@@ -188,9 +177,8 @@ class CommunityController extends Controller
 
             $communities = Community::all();
 
-            if (!empty($request->input('columns.4.search.value'))) {
+            if ($request->input('columns.4.search.value')) {
                 $fromTo = explode(" - ", $request->input('columns.4.search.value'));
-
                 $communities = Community::whereBetween('created_at', [$fromTo[0], $fromTo[1]]);
             }
 

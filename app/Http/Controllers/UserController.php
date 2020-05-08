@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 
@@ -36,7 +37,7 @@ class UserController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -53,32 +54,20 @@ class UserController extends Controller
             'active' => 'bail|required|boolean',
         ]);
 
-        if ($request->has('email_verified')) {
-            $user = User::create([
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'student_id' => $request->input('student_id'),
-                'ic_number' => $request->input('ic_number'),
-                'phone_number' => $request->input('phone_number'),
-                'biography' => $request->input('biography'),
-                'profile_image_path' => $request->input('profile_image_path'),
-                'password' => Hash::make($request->input('password')),
-                'active' => $request->input('active'),
-                'email_verified_at' => now(),
-            ]);
-        } else {
-            $user = User::create([
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'student_id' => $request->input('student_id'),
-                'ic_number' => $request->input('ic_number'),
-                'phone_number' => $request->input('phone_number'),
-                'biography' => $request->input('biography'),
-                'profile_image_path' => $request->input('profile_image_path'),
-                'password' => Hash::make($request->input('password')),
-                'active' => $request->input('active'),
-            ]);
-        }
+        $email_verified_at = $request->has('email_verified') ? now() : null;
+
+        $user = User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'student_id' => $request->input('student_id'),
+            'ic_number' => $request->input('ic_number'),
+            'phone_number' => $request->input('phone_number'),
+            'biography' => $request->input('biography'),
+            'profile_image_path' => $request->input('profile_image_path'),
+            'password' => Hash::make($request->input('password')),
+            'active' => $request->input('active'),
+            'email_verified_at' => $email_verified_at,
+        ]);
 
         $user->syncRoles($request->input('role'));
 
@@ -94,10 +83,12 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $words = explode(" ", $user->name);
+        $words = preg_split("/\s+/", $user->name);
         $acronym = "";
 
+        $i = 0;
         foreach ($words as $w) {
+            if ($i == 3) break;
             $acronym .= strtoupper($w[0]);
         }
 
@@ -145,9 +136,9 @@ class UserController extends Controller
             $profile_image_path = $user->profile_image_path;
         }
 
-        $password = empty($request->input('password')) ? $user->password : Hash::make($request->input('password'));
+        $password = $request->input('password') ? Hash::make($request->input('password')) : $user->password;
 
-        $email_verified_at = empty($request->input('email_verified')) ? null : now();
+        $email_verified_at = $request->input('email_verified') ? now() : null;
 
         $user->update([
             'name' => $request->input('name'),
