@@ -5,10 +5,13 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use HasRoles;
+
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'student_id', 'ic_number', 'phone_number', 'password', 'email_verified_at',
+        'name', 'email', 'student_id', 'ic_number', 'phone_number', 'biography', 'profile_image_path', 'password', 'active', 'email_verified_at',
     ];
 
     /**
@@ -37,7 +40,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function AdminCommunities()
+    /**
+     * Get the communities managed by the user.
+     */
+    public function communitiesManaged()
     {
         return $this->hasMany('App\Community');
     }
@@ -56,5 +62,23 @@ class User extends Authenticatable
     public function events()
     {
         return $this->belongsToMany('App\Event');
+    }
+
+    /**
+     * Get the events managed by the user.
+     */
+    public function eventsManaged()
+    {
+        return $this->hasMany('App\Event');
+    }
+
+    /**
+     * Get the events joined percentage of the user.
+     */
+    public function getActiveRateAttribute()
+    {
+        $eventCount = Event::count();
+        if ($eventCount == 0) return 0;
+        return ($this->events->count() / $eventCount) * 100;
     }
 }

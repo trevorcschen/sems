@@ -8,8 +8,7 @@
 @section('subheader-action', 'List')
 
 @section('pagevendorsstyles')
-    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet"
-          type="text/css"/>
+    <link href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('content')
@@ -99,6 +98,8 @@
                         <th>Student ID</th>
                         <th>IC Number</th>
                         <th>Phone Number</th>
+                        <th>Role</th>
+                        <th>Active</th>
                         <th>Email Verified</th>
                         <th>Actions</th>
                     </tr>
@@ -111,6 +112,8 @@
                         <th>Student ID</th>
                         <th>IC Number</th>
                         <th>Phone Number</th>
+                        <th>Role</th>
+                        <th>Active</th>
                         <th>Email Verified</th>
                         <th>Actions</th>
                     </tr>
@@ -176,10 +179,9 @@
 
 @endsection
 
-@section('pagevendors')
+@section('pagevendorsscripts')
     <script src="{{ asset('assets/plugins/custom/datatables/datatables.bundle.js') }}" type="text/javascript"></script>
 @endsection
-
 
 @section('pagescripts')
     <script>
@@ -206,18 +208,21 @@
                             pageSize: 'A4',
                         }, 'print'],
                     ajax: {
-                        url: '{{ route('users.index') }}',
+                        url: '{{ route('ajax.users.index') }}',
+                        type: "POST",
                         headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
                     },
                     columns: [
-                        {data: 'id'},
+                        {data: 'id', width: '1%'},
                         {data: 'name'},
                         {data: 'email'},
                         {data: 'student_id'},
                         {data: 'ic_number'},
                         {data: 'phone_number'},
+                        {data: 'role', width: '12%'},
+                        {data: 'active', width: '8%'},
                         {data: 'email_verified'},
-                        {data: 'id', responsivePriority: -1},
+                        {data: 'id', responsivePriority: -1, width: '10%'},
                     ],
                     order: [[1, "desc"]],
                     headerCallback: function (thead, data, start, end, display) {
@@ -230,7 +235,6 @@
                     columnDefs: [
                         {
                             targets: 0,
-                            width: '30px',
                             className: 'dt-right',
                             orderable: false,
                             render: function (data, type, full, meta) {
@@ -270,6 +274,33 @@
                             targets: 6,
                             render: function (data, type, full, meta) {
                                 var status = {
+                                    'super-admin': {'class': ' kt-badge--brand'},
+                                    'community-admin': {'class': ' kt-badge--danger'},
+                                    'student': {'class': ' kt-badge--success'},
+                                };
+                                if (typeof status[data] === 'undefined') {
+                                    return data;
+                                }
+                                return '<span class="kt-badge ' + status[data].class + ' kt-badge--inline kt-badge--pill">' + data + '</span>';
+                            },
+                        },
+                        {
+                            targets: 7,
+                            render: function (data, type, full, meta) {
+                                var status = {
+                                    0: {'title': 'Inactive', 'class': ' kt-badge--danger'},
+                                    1: {'title': 'Active', 'class': ' kt-badge--success'},
+                                };
+                                if (typeof status[data] === 'undefined') {
+                                    return data;
+                                }
+                                return '<span class="kt-badge ' + status[data].class + ' kt-badge--inline kt-badge--pill">' + status[data].title + '</span>';
+                            },
+                        },
+                        {
+                            targets: 8,
+                            render: function (data, type, full, meta) {
+                                var status = {
                                     0: {'title': 'Unverified', 'class': ' kt-badge--danger'},
                                     1: {'title': 'Verified', 'class': ' kt-badge--success'},
                                 };
@@ -296,7 +327,24 @@
                                 case 'Phone Number':
                                     input = $('<input type="text" class="form-control form-control-sm form-filter kt-input" data-col-index="' + column.index() + '"/>');
                                     break;
-
+                                case 'Role':
+                                    input = $('<select class="form-control form-control-sm form-filter kt-input" title="Select" data-col-index="' + column.index() + '">\
+										<option value="">Select</option></select>');
+                                    column.data().unique().sort().each(function (d, j) {
+                                        $(input).append('<option value="' + d + '">' + d + '</option>');
+                                    });
+                                    break;
+                                case 'Active':
+                                    var status = {
+                                        0: {'title': 'Inactive', 'class': ' kt-badge--danger'},
+                                        1: {'title': 'Active', 'class': ' kt-badge--success'},
+                                    };
+                                    input = $('<select class="form-control form-control-sm form-filter kt-input" title="Select" data-col-index="' + column.index() + '">\
+										<option value="">Select</option></select>');
+                                    column.data().unique().sort().each(function (d, j) {
+                                        $(input).append('<option value="' + d + '">' + status[d].title + '</option>');
+                                    });
+                                    break;
                                 case 'Email Verified':
                                     var status = {
                                         0: {'title': 'Unverified', 'class': ' kt-badge--danger'},
@@ -308,7 +356,6 @@
                                         $(input).append('<option value="' + d + '">' + status[d].title + '</option>');
                                     });
                                     break;
-
                                 case 'Actions':
                                     var search = $('<button class="btn btn-brand kt-btn btn-sm kt-btn--icon">\
                                                   <span>\
@@ -441,15 +488,14 @@
             };
         }();
 
-        jQuery(document).ready(function () {
+        $(document).ready(function () {
             KTDatatablesSearchOptionsColumnSearch.init();
-        });
 
-        $('#modal-delete').on('show.bs.modal', function (e) {
-            var url = '{{ route("users.destroy", ':id') }}';
-            url = url.replace(':id', $(e.relatedTarget).data('id'));
-            $(this).find('form').attr('action', url);
+            $('#modal-delete').on('show.bs.modal', function (e) {
+                var url = '{{ route("users.destroy", ':id') }}';
+                url = url.replace(':id', $(e.relatedTarget).data('id'));
+                $(this).find('form').attr('action', url);
+            });
         });
-
     </script>
 @endsection
