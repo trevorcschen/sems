@@ -98,6 +98,15 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
+                                                <label class="col-3 col-form-label">Description</label>
+                                                <div class="col-9">
+                                                    <textarea class="form-control @error('description') is-invalid @enderror" name="description" rows="3" maxlength="200">{{ old('description') }}</textarea>
+                                                    @error('description')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
                                                 <label class="col-3 col-form-label">Capacity (persons)</label>
                                                 <div class="col-9">
                                                     <input class="form-control @error('capacity') is-invalid @enderror" type="number" name="capacity" value="{{ old('capacity') }}">
@@ -151,6 +160,60 @@
                                                                             </span>
                                                                             <span class="kt-option__body">
                                                                                 The venue is not air conditioned.
+                                                                            </span>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="kt-separator kt-separator--border-dashed kt-separator--space-lg"></div>
+                                            <div class="kt-section kt-section--last">
+                                                <div class="kt-section__body">
+                                                    <h3 class="kt-section__title kt-section__title-lg">Venue Activation:</h3>
+                                                    <div class="form-group row">
+                                                        <label class="col-3 col-form-label">Venue Active</label>
+                                                        <div class="col-9">
+                                                            <div class="row">
+                                                                <div class="col-6">
+                                                                    <label class="kt-option">
+                                                                        <span class="kt-option__control">
+                                                                            <span class="kt-radio kt-radio--bold kt-radio--brand">
+                                                                                <input type="radio" name="active" value="1" checked>
+                                                                                <span></span>
+                                                                            </span>
+                                                                        </span>
+                                                                        <span class="kt-option__label">
+                                                                            <span class="kt-option__head">
+                                                                                <span class="kt-option__title">
+                                                                                    Active
+                                                                                </span>
+                                                                            </span>
+                                                                            <span class="kt-option__body">
+                                                                                Venue is active and can be booked.
+                                                                            </span>
+                                                                        </span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <label class="kt-option">
+                                                                        <span class="kt-option__control">
+                                                                            <span class="kt-radio kt-radio--bold kt-radio--brand">
+                                                                                <input type="radio" name="active" value="0">
+                                                                                <span></span>
+                                                                            </span>
+                                                                        </span>
+                                                                        <span class="kt-option__label">
+                                                                            <span class="kt-option__head">
+                                                                                <span class="kt-option__title">
+                                                                                    Inactive
+                                                                                </span>
+                                                                            </span>
+                                                                            <span class="kt-option__body">
+                                                                                Venue is inactive and cannot be booked.
                                                                             </span>
                                                                         </span>
                                                                     </label>
@@ -282,6 +345,10 @@
                         name: {
                             required: true,
                             maxlength: 80,
+                        },
+                        description: {
+                            required: true,
+                            maxlength: 200
                         },
                         capacity: {
                             required: true,

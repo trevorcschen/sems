@@ -29,4 +29,13 @@ class Event extends Model
     {
         return $this->belongsTo('App\Venue');
     }
+
+    /**
+     * Get the user that posted the event.
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+
+    }
 }

@@ -392,9 +392,6 @@
                             required: true,
                             min: 1,
                         },
-                        active: {
-                            required: true,
-                        },
                         admin: {
                             required: true,
                         }

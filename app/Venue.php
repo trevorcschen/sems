@@ -13,7 +13,7 @@ class Venue extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'capacity', 'air_conditioned', 'venue_image_path',
+        'name', 'description', 'capacity', 'air_conditioned', 'active', 'venue_image_path',
     ];
 
     /**
@@ -22,5 +22,15 @@ class Venue extends Model
     public function events()
     {
         return $this->hasMany('App\Event');
+    }
+
+    /**
+     * Get the usage rate for the venue.
+     */
+    public function getUsageRateAttribute()
+    {
+        $eventCount = Event::count();
+        if ($eventCount == 0) return 0;
+        return ($this->events->count() / $eventCount) * 100;
     }
 }

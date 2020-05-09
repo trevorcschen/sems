@@ -75,6 +75,7 @@ class CommunityController extends Controller
         foreach ($words as $w) {
             if ($i == 3) break;
             $acronym .= strtoupper($w[0]);
+            $i++;
         }
 
         return response()->view('communities.show', compact('community', 'acronym'));

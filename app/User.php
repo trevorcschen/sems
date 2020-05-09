@@ -40,7 +40,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function adminCommunities()
+    /**
+     * Get the communities managed by the user.
+     */
+    public function communitiesManaged()
     {
         return $this->hasMany('App\Community');
     }
@@ -59,5 +62,23 @@ class User extends Authenticatable
     public function events()
     {
         return $this->belongsToMany('App\Event');
+    }
+
+    /**
+     * Get the events managed by the user.
+     */
+    public function eventsManaged()
+    {
+        return $this->hasMany('App\Event');
+    }
+
+    /**
+     * Get the events joined percentage of the user.
+     */
+    public function getActiveRateAttribute()
+    {
+        $eventCount = Event::count();
+        if ($eventCount == 0) return 0;
+        return ($this->events->count() / $eventCount) * 100;
     }
 }

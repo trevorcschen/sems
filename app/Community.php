@@ -39,4 +39,13 @@ class Community extends Model
     {
         return $this->hasMany('App\Event');
     }
+
+    /**
+     * Get the membership rate of the community.
+     */
+    public function getMembershipRateAttribute()
+    {
+        if ($this->max_members == 0) return 0;
+        return ($this->users->count() / $this->max_members) * 100;
+    }
 }

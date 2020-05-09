@@ -38,15 +38,19 @@ class VenueController extends Controller
     {
         $request->validate([
             'name' => 'bail|required|string|max:80|unique:venues',
+            'description' => 'bail|required|string|max:200',
             'capacity' => 'bail|required|numeric|min:1',
             'air_conditioned' => 'bail|required|boolean',
+            'active' => 'bail|required|boolean',
             'venue_image_path' => 'bail|nullable|string',
         ]);
 
         $venue = Venue::create([
             'name' => $request->input('name'),
+            'description' => $request->input('description'),
             'capacity' => $request->input('capacity'),
             'air_conditioned' => $request->input('air_conditioned'),
+            'active' => $request->input('active'),
             'venue_image_path' => $request->input('venue_image_path'),
         ]);
 
@@ -62,7 +66,17 @@ class VenueController extends Controller
      */
     public function show(Venue $venue)
     {
-        return response()->view('venues.show', compact('venue'));
+        $words = preg_split("/\s+/", $venue->name);
+        $acronym = "";
+
+        $i = 0;
+        foreach ($words as $w) {
+            if ($i == 3) break;
+            $acronym .= strtoupper($w[0]);
+            $i++;
+        }
+
+        return response()->view('venues.show', compact('venue', 'acronym'));
     }
 
     /**
@@ -87,8 +101,10 @@ class VenueController extends Controller
     {
         $request->validate([
             'name' => 'bail|required|string|max:80|unique:venues,name,' . $venue->id,
+            'description' => 'bail|required|string|max:200',
             'capacity' => 'bail|required|numeric|min:1',
             'air_conditioned' => 'bail|required|boolean',
+            'active' => 'bail|required|boolean',
             'venue_image_path' => 'bail|nullable|string',
         ]);
 
@@ -101,8 +117,10 @@ class VenueController extends Controller
 
         $venue->update([
             'name' => $request->input('name'),
+            'description' => $request->input('description'),
             'capacity' => $request->input('capacity'),
             'air_conditioned' => $request->input('air_conditioned'),
+            'active' => $request->input('active'),
             'venue_image_path' => $venue_image_path,
         ]);
 

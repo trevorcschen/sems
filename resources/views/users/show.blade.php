@@ -53,27 +53,31 @@
                                         </div>
                                     </div>
                                     <div class="kt-widget__subhead">
-                                        <a href="#" onclick="return false;"><i class="flaticon-user-ok"></i>{{ $user->getRoleNames()[0] }}</a>
-                                        <a href="#" onclick="return false;"><i class=" flaticon-profile-1"></i>{{ $user->student_id }}</a>
+                                        <a href="#" onclick="return false;" title="Created at {{ $user->created_at->format('l, F j, Y h:i:s A') }}"><i class="flaticon-calendar"></i>{{ $user->created_at->format('F j, Y') }}</a>
+                                        <a href="#" onclick="return false;" title="Updated at {{ $user->updated_at->format('l, F j, Y h:i:s A') }}"><i class="flaticon2-pen"></i>{{ $user->updated_at->format('F j, Y') }}</a>
                                     </div>
                                     <div class="kt-widget__subhead">
-                                        <a href="#" onclick="return false;"><i class="flaticon2-calendar-3"></i>{{ $user->ic_number }}</a>
-                                        <a href="#" onclick="return false;"><i class="flaticon2-new-email"></i>{{ $user->email }}</a>
-                                        <a href="#" onclick="return false;"><i class="flaticon2-phone"></i>{{ $user->phone_number }}</a>
+                                        <a href="#" onclick="return false;" title="User Role"><i class="flaticon-user-ok"></i>{{ $user->getRoleNames()[0] }}</a>
+                                        <a href="#" onclick="return false;" title="Student ID"><i class=" flaticon-profile-1"></i>{{ $user->student_id }}</a>
+                                    </div>
+                                    <div class="kt-widget__subhead">
+                                        <a href="#" onclick="return false;" title="IC Number"><i class="flaticon2-calendar-3"></i>{{ $user->ic_number }}</a>
+                                        <a href="#" onclick="return false;" title="Email"><i class="flaticon2-new-email"></i>{{ $user->email }}</a>
+                                        <a href="#" onclick="return false;" title="Phone Number"><i class="flaticon2-phone"></i>{{ $user->phone_number }}</a>
                                     </div>
                                     <div class="kt-widget__info">
-                                        <div class="kt-widget__desc" style="width: 100px;">
+                                        <div class="kt-widget__desc" style="width: 100px;" title="Biography">
                                            {{ $user->biography }}
                                         </div>
                                         <div class="kt-widget__progress">
                                             <div class="kt-widget__text">
-                                                Events Joined
+                                                Active Rate
                                             </div>
                                             <div class="progress" style="height: 5px;width: 100%;">
-                                                <div class="progress-bar kt-bg-success" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="progress-bar kt-bg-success" role="progressbar" style="width: {{ $user->active_rate }}%;" aria-valuenow="{{ $user->active_rate }}" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                             <div class="kt-widget__stats">
-                                                78%
+                                                {{ $user->active_rate }}%
                                             </div>
                                         </div>
                                     </div>
@@ -86,7 +90,7 @@
                                     </div>
                                     <div class="kt-widget__details">
                                         <span class="kt-widget__title">Communities Joined</span>
-                                        <span class="kt-widget__value">249,500</span>
+                                        <span class="kt-widget__value">{{ number_format($user->communities->count()) }}</span>
                                     </div>
                                 </div>
                                 <div class="kt-widget__item">
@@ -95,7 +99,7 @@
                                     </div>
                                     <div class="kt-widget__details">
                                         <span class="kt-widget__title">Events Joined</span>
-                                        <span class="kt-widget__value">164,700</span>
+                                        <span class="kt-widget__value">{{ number_format($user->events->count()) }}</span>
                                     </div>
                                 </div>
                                 <div class="kt-widget__item">
@@ -103,8 +107,8 @@
                                         <i class="flaticon-users"></i>
                                     </div>
                                     <div class="kt-widget__details">
-                                        <span class="kt-widget__title">73 Communities</span>
-                                        <a href="#" class="kt-widget__value kt-font-brand">View</a>
+                                        <span class="kt-widget__title">Communities Managed</span>
+                                        <span class="kt-widget__value">{{ number_format($user->communitiesManaged->count()) }}</span>
                                     </div>
                                 </div>
                                 <div class="kt-widget__item">
@@ -112,8 +116,8 @@
                                         <i class="flaticon-confetti"></i>
                                     </div>
                                     <div class="kt-widget__details">
-                                        <span class="kt-widget__title">648 Events</span>
-                                        <a href="#" class="kt-widget__value kt-font-brand">View</a>
+                                        <span class="kt-widget__title">Events Managed</span>
+                                        <span class="kt-widget__value">{{ number_format($user->eventsManaged->count()) }}</span>
                                     </div>
                                 </div>
                             </div>

@@ -24,6 +24,7 @@ class CreateEventsTable extends Migration
             $table->double('fee', 8, 2);
             $table->unsignedBigInteger('community_id');
             $table->unsignedBigInteger('venue_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
             $table->foreign('community_id')
@@ -31,6 +32,9 @@ class CreateEventsTable extends Migration
                 ->onDelete('cascade');
             $table->foreign('venue_id')
                 ->references('id')->on('venues')
+                ->onDelete('cascade');
+            $table->foreign('user_id')
+                ->references('id')->on('users')
                 ->onDelete('cascade');
         });
     }

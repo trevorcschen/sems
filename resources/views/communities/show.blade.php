@@ -48,22 +48,25 @@
                                         </div>
                                     </div>
                                     <div class="kt-widget__subhead">
+                                        <a href="#" onclick="return false;" title="Founded at {{ $community->created_at->format('l, F j, Y h:i:s A') }}"><i class=" flaticon-calendar"></i>{{ $community->created_at->format('F j, Y') }}</a>
+                                        <a href="#" onclick="return false;" title="Updated at {{ $community->updated_at->format('l, F j, Y h:i:s A') }}"><i class=" flaticon-calendar"></i>{{ $community->updated_at->format('F j, Y') }}</a>
+                                    </div>
+                                    <div class="kt-widget__subhead">
                                         <a href="#" onclick="return false;" title="Community Admin"><i class="flaticon-profile-1"></i>{{ $community->admin->name }}</a>
-                                        <a href="#" onclick="return false;" title="Founding Date"><i class=" flaticon-calendar"></i>{{ $community->created_at->format('Y-m-d') }}</a>
                                     </div>
                                     <div class="kt-widget__info">
-                                        <div class="kt-widget__desc" style="width: 100px;">
+                                        <div class="kt-widget__desc" style="width: 100px;" title="Description">
                                             {{ $community->description }}
                                         </div>
                                         <div class="kt-widget__progress">
                                             <div class="kt-widget__text" >
-                                                Membership
+                                                Membership Rate
                                             </div>
                                             <div class="progress" style="height: 5px;width: 100%;">
-                                                <div class="progress-bar kt-bg-success" role="progressbar" style="width: 78%;" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="progress-bar kt-bg-success" role="progressbar" style="width: {{ $community->membership_rate }}%;" aria-valuenow="{{ $community->membership_rate }}" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                             <div class="kt-widget__stats">
-                                                78%
+                                                {{ $community->membership_rate }}%
                                             </div>
                                         </div>
                                     </div>
@@ -76,7 +79,7 @@
                                     </div>
                                     <div class="kt-widget__details">
                                         <span class="kt-widget__title">Members</span>
-                                        <span class="kt-widget__value">249,500</span>
+                                        <span class="kt-widget__value">{{ number_format($community->users->count()) }}</span>
                                     </div>
                                 </div>
                                 <div class="kt-widget__item">
@@ -85,7 +88,7 @@
                                     </div>
                                     <div class="kt-widget__details">
                                         <span class="kt-widget__title">Events</span>
-                                        <span class="kt-widget__value">164,700</span>
+                                        <span class="kt-widget__value">{{ number_format($community->events->count()) }}</span>
                                     </div>
                                 </div>
                                 <div class="kt-widget__item">

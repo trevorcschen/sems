@@ -90,6 +90,7 @@ class UserController extends Controller
         foreach ($words as $w) {
             if ($i == 3) break;
             $acronym .= strtoupper($w[0]);
+            $i++;
         }
 
         return response()->view('users.show', compact('user', 'acronym'));
