@@ -1,9 +1,9 @@
 @extends('layouts.default')
 
-@section('title', 'Users')
+@section('title', 'Venues')
 
-@section('subheader', 'Users')
-@section('subheader-link', route('users.index'))
+@section('subheader', 'Venues')
+@section('subheader-link', route('venues.index'))
 
 @section('subheader-action', 'List')
 
@@ -55,16 +55,18 @@
                         @yield('subheader')
                     </h3>
                 </div>
-                <div class="kt-portlet__head-toolbar">
-                    <div class="kt-portlet__head-wrapper">
-                        <div class="kt-portlet__head-actions">
-                            <a href="{{ route('users.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
-                                <i class="la la-plus"></i>
-                                New Record
-                            </a>
+                @can('venue.create')
+                    <div class="kt-portlet__head-toolbar">
+                        <div class="kt-portlet__head-wrapper">
+                            <div class="kt-portlet__head-actions">
+                                <a href="{{ route('venues.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
+                                    <i class="la la-plus"></i>
+                                    New Record
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endcan
             </div>
             <div class="kt-portlet__body">
                 <!--begin: Selected Rows Group Action Form -->
@@ -89,18 +91,15 @@
                     </div>
                 </div>
                 <!--end: Selected Rows Group Action Form -->
-                <table class="table table-striped- table-bordered table-hover table-checkable" id="user_table">
+                <table class="table table-striped- table-bordered table-hover table-checkable" id="venue_table">
                     <thead>
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>Email</th>
-                        <th>Student ID</th>
-                        <th>IC Number</th>
-                        <th>Phone Number</th>
-                        <th>Role</th>
+                        <th>Description</th>
+                        <th>Capacity</th>
+                        <th>Air Conditioned</th>
                         <th>Active</th>
-                        <th>Email Verified</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -108,13 +107,10 @@
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>Email</th>
-                        <th>Student ID</th>
-                        <th>IC Number</th>
-                        <th>Phone Number</th>
-                        <th>Role</th>
+                        <th>Description</th>
+                        <th>Capacity</th>
+                        <th>Air Conditioned</th>
                         <th>Active</th>
-                        <th>Email Verified</th>
                         <th>Actions</th>
                     </tr>
                     </tfoot>
@@ -122,6 +118,7 @@
             </div>
         </div>
     </div>
+    @can('venue.delete')
     <!--begin::Modal-->
     <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -176,6 +173,7 @@
         </div>
     </div>
     <!--end::Modal-->
+    @endcan
 
 @endsection
 
@@ -193,7 +191,7 @@
             });
 
             var initTable1 = function () {
-                var table = $('#user_table').DataTable({
+                var table = $('#venue_table').DataTable({
                     responsive: true,
                     dom: "<'row'<'col-sm-12 text-center'B>>\
                     <'row'<'col-sm-12'tr>>\
@@ -208,20 +206,17 @@
                             pageSize: 'A4',
                         }, 'print'],
                     ajax: {
-                        url: '{{ route('ajax.users.index') }}',
+                        url: '{{ route('ajax.venues.index') }}',
                         type: "POST",
                         headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
                     },
                     columns: [
                         {data: 'id', width: '1%'},
                         {data: 'name'},
-                        {data: 'email'},
-                        {data: 'student_id'},
-                        {data: 'ic_number'},
-                        {data: 'phone_number'},
-                        {data: 'role', width: '12%'},
+                        {data: 'description'},
+                        {data: 'capacity'},
+                        {data: 'air_conditioned', width: '14%'},
                         {data: 'active', width: '8%'},
-                        {data: 'email_verified'},
                         {data: 'id', responsivePriority: -1, width: '10%'},
                     ],
                     order: [[1, "desc"]],
@@ -250,8 +245,8 @@
                             title: 'Actions',
                             orderable: false,
                             render: function (data, type, full, meta) {
-                                var editURL = '{{ route('users.edit', ':data') }}';
-                                var showURL = '{{ route('users.show', ':data') }}';
+                                var editURL = '{{ route('venues.edit', ':data') }}';
+                                var showURL = '{{ route('venues.show', ':data') }}';
                                 editURL = editURL.replace(':data', data);
                                 showURL = showURL.replace(':data', data);
 
@@ -271,25 +266,11 @@
                             },
                         },
                         {
-                            targets: 6,
+                            targets: 4,
                             render: function (data, type, full, meta) {
                                 var status = {
-                                    'super-admin': {'class': ' kt-badge--brand'},
-                                    'community-admin': {'class': ' kt-badge--danger'},
-                                    'student': {'class': ' kt-badge--success'},
-                                };
-                                if (typeof status[data] === 'undefined') {
-                                    return data;
-                                }
-                                return '<span class="kt-badge ' + status[data].class + ' kt-badge--inline kt-badge--pill">' + data + '</span>';
-                            },
-                        },
-                        {
-                            targets: 7,
-                            render: function (data, type, full, meta) {
-                                var status = {
-                                    0: {'title': 'Inactive', 'class': ' kt-badge--danger'},
-                                    1: {'title': 'Active', 'class': ' kt-badge--success'},
+                                    0: {'title': 'Not Air Conditioned', 'class': ' kt-badge--danger'},
+                                    1: {'title': 'Air Conditioned', 'class': ' kt-badge--success'},
                                 };
                                 if (typeof status[data] === 'undefined') {
                                     return data;
@@ -298,11 +279,11 @@
                             },
                         },
                         {
-                            targets: 8,
+                            targets: 5,
                             render: function (data, type, full, meta) {
                                 var status = {
-                                    0: {'title': 'Unverified', 'class': ' kt-badge--danger'},
-                                    1: {'title': 'Verified', 'class': ' kt-badge--success'},
+                                    0: {'title': 'Inactive', 'class': ' kt-badge--danger'},
+                                    1: {'title': 'Active', 'class': ' kt-badge--success'},
                                 };
                                 if (typeof status[data] === 'undefined') {
                                     return data;
@@ -321,23 +302,14 @@
 
                             switch (column.title()) {
                                 case 'Name':
-                                case 'Email':
-                                case 'Student ID':
-                                case 'IC Number':
-                                case 'Phone Number':
+                                case 'Description':
+                                case 'Capacity':
                                     input = $('<input type="text" class="form-control form-control-sm form-filter kt-input" data-col-index="' + column.index() + '"/>');
                                     break;
-                                case 'Role':
-                                    input = $('<select class="form-control form-control-sm form-filter kt-input" title="Select" data-col-index="' + column.index() + '">\
-										<option value="">Select</option></select>');
-                                    column.data().unique().sort().each(function (d, j) {
-                                        $(input).append('<option value="' + d + '">' + d + '</option>');
-                                    });
-                                    break;
-                                case 'Active':
+                                case 'Air Conditioned':
                                     var status = {
-                                        0: {'title': 'Inactive', 'class': ' kt-badge--danger'},
-                                        1: {'title': 'Active', 'class': ' kt-badge--success'},
+                                        0: {'title': 'Not Air Conditioned', 'class': ' kt-badge--danger'},
+                                        1: {'title': 'Air Conditioned', 'class': ' kt-badge--success'},
                                     };
                                     input = $('<select class="form-control form-control-sm form-filter kt-input" title="Select" data-col-index="' + column.index() + '">\
 										<option value="">Select</option></select>');
@@ -345,10 +317,10 @@
                                         $(input).append('<option value="' + d + '">' + status[d].title + '</option>');
                                     });
                                     break;
-                                case 'Email Verified':
+                                case 'Active':
                                     var status = {
-                                        0: {'title': 'Unverified', 'class': ' kt-badge--danger'},
-                                        1: {'title': 'Verified', 'class': ' kt-badge--success'},
+                                        0: {'title': 'Inactive', 'class': ' kt-badge--danger'},
+                                        1: {'title': 'Active', 'class': ' kt-badge--success'},
                                     };
                                     input = $('<select class="form-control form-control-sm form-filter kt-input" title="Select" data-col-index="' + column.index() + '">\
 										<option value="">Select</option></select>');
@@ -447,7 +419,6 @@
 
                 table.on('change', '.kt-group-checkable, tbody tr .kt-checkbox', function (e) {
                     var checkedNodes = table.rows('.active').nodes();
-                    console.log(checkedNodes)
                     var count = checkedNodes.length;
                     $('#kt_datatable_selected_number').html(count);
                     if (count > 0) {
@@ -471,14 +442,13 @@
                     }
                     $(e.target).find('.kt-datatable_selected_ids').append(c);
 
-                    var url = '{{ route("users.destroyMany", ':ids') }}';
+                    var url = '{{ route("venues.destroyMany", ':ids') }}';
                     url = url.replace(':ids', ids);
                     $(this).find('form').attr('action', url);
 
                 }).on('hide.bs.modal', function (e) {
                     $(e.target).find('.kt-datatable_selected_ids').empty();
                 });
-
             };
 
             return {
@@ -490,12 +460,14 @@
 
         $(document).ready(function () {
             KTDatatablesSearchOptionsColumnSearch.init();
-
+            @can('venue.delete')
             $('#modal-delete').on('show.bs.modal', function (e) {
-                var url = '{{ route("users.destroy", ':id') }}';
+                var url = '{{ route("venues.destroy", ':id') }}';
                 url = url.replace(':id', $(e.relatedTarget).data('id'));
                 $(this).find('form').attr('action', url);
             });
+            @endcan
         });
+
     </script>
 @endsection

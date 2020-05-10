@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
-class RoleTableSeeder extends Seeder
+class RoleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -24,6 +24,7 @@ class RoleTableSeeder extends Seeder
 
         $communityAdminRole = Role::findByName('community-admin');
         $communityAdminRole->syncPermissions(
+            'user.show',
             'community.show',
             'community.edit',
             'event.create',
@@ -35,6 +36,7 @@ class RoleTableSeeder extends Seeder
 
         $studentRole = Role::findByName('student');
         $studentRole->syncPermissions(
+            'user.show',
             'community.show',
             'event.create',
             'event.show',
@@ -42,6 +44,5 @@ class RoleTableSeeder extends Seeder
             'event.delete',
             'event.join',
             'venue.show');
-
     }
 }

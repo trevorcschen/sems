@@ -13,13 +13,27 @@ use Spatie\Permission\Models\Role;
 class UserController extends Controller
 {
     /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('permission:user.create', ['only' => ['create','store']]);
+        $this->middleware('permission:user.show', ['only' => ['index','show', 'ajaxIndex', 'ajaxSearch']]);
+        $this->middleware('permission:user.edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:user.delete', ['only' => ['destroy', 'destroyMany']]);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return response()->view('users.index');
+        return response()->view('superadmin.users.index');
     }
 
     /**
@@ -30,7 +44,7 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all();
-        return response()->view('users.create', compact('roles'));
+        return response()->view('superadmin.users.create', compact('roles'));
     }
 
     /**
@@ -83,17 +97,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $words = preg_split("/\s+/", $user->name);
-        $acronym = "";
-
-        $i = 0;
-        foreach ($words as $w) {
-            if ($i == 3) break;
-            $acronym .= strtoupper($w[0]);
-            $i++;
-        }
-
-        return response()->view('users.show', compact('user', 'acronym'));
+        return response()->view('superadmin.users.show', compact('user'));
     }
 
     /**
@@ -105,7 +109,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $roles = Role::all('id', 'name');
-        return response()->view('users.edit', compact('user', 'roles'));
+        return response()->view('superadmin.users.edit', compact('user', 'roles'));
     }
 
     /**

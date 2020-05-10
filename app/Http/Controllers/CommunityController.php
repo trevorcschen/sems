@@ -4,10 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Community;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class CommunityController extends Controller
 {
+    /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('permission:community.create', ['only' => ['create','store']]);
+        $this->middleware('permission:community.show', ['only' => ['index','show', 'ajaxIndex', 'ajaxSearch']]);
+        $this->middleware('permission:community.edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:community.delete', ['only' => ['destroy', 'destroyMany']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +30,9 @@ class CommunityController extends Controller
      */
     public function index()
     {
-        return response()->view('communities.index');
+        if (Auth::user()->hasRole('super-admin')) {
+            return response()->view('superadmin.communities.index');
+        }
     }
 
     /**
@@ -25,7 +42,7 @@ class CommunityController extends Controller
      */
     public function create()
     {
-        return response()->view('communities.create');
+        return response()->view('superadmin.communities.create');
     }
 
     /**
@@ -78,7 +95,7 @@ class CommunityController extends Controller
             $i++;
         }
 
-        return response()->view('communities.show', compact('community', 'acronym'));
+        return response()->view('superadmin.communities.show', compact('community', 'acronym'));
     }
 
     /**
@@ -89,7 +106,7 @@ class CommunityController extends Controller
      */
     public function edit(Community $community)
     {
-        return response()->view('communities.edit', compact('community'));
+        return response()->view('superadmin.communities.edit', compact('community'));
     }
 
     /**
@@ -191,6 +208,19 @@ class CommunityController extends Controller
                     return $community->created_at->format('Y-m-d');
                 })
                 ->toJson();
+        }
+    }
+
+    public function ajaxSearch(Request $request)
+    {
+        if($request->has('q')) {
+            $search = $request->input('q');
+
+            $communities = Community::where('name','LIKE',"%$search%")
+                ->orderBy('name', 'desc')
+                ->paginate(5);
+
+            return response()->json($communities, $status=200, $headers=[], $options=JSON_PRETTY_PRINT);
         }
     }
 }

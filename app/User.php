@@ -73,6 +73,23 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the name acronym for the user.
+     */
+    public function getNameAcronymAttribute()
+    {
+        $words = preg_split("/\s+/", $this->name);
+        $acronym = "";
+
+        $i = 0;
+        foreach ($words as $w) {
+            if ($i == 3) break;
+            $acronym .= strtoupper($w[0]);
+            $i++;
+        }
+        return $acronym;
+    }
+
+    /**
      * Get the events joined percentage of the user.
      */
     public function getActiveRateAttribute()
