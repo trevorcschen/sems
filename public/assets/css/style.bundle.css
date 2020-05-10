@@ -15586,7 +15586,7 @@ canvas {
   -ms-user-select: none; }
 
 /* Customize website's scrollbar like Mac OS */
-/* 
+/*
 ::-webkit-scrollbar {
     background-color:#f6f6f6;
     width:14px;
@@ -35667,7 +35667,7 @@ body {
     -webkit-box-pack: flex-begin;
     -ms-flex-pack: flex-begin;
     justify-content: flex-begin; }
-    .kt-aside--minimize .kt-aside__brand .kt-aside__brand-logo img {
+    .kt-aside--minimize .kt-aside__brand .kt-aside__brand-logo img, .kt-aside--minimize .kt-aside__brand .kt-aside__brand-logo span {
       display: none; }
   .kt-aside__brand .kt-aside__brand-tools {
     display: -webkit-box;

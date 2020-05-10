@@ -9,13 +9,27 @@ use Illuminate\Support\Facades\Storage;
 class VenueController extends Controller
 {
     /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('permission:venue.create', ['only' => ['create','store']]);
+        $this->middleware('permission:venue.show', ['only' => ['index','show', 'ajaxIndex', 'ajaxSearch']]);
+        $this->middleware('permission:venue.edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:venue.delete', ['only' => ['destroy', 'destroyMany']]);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return response()->view('venues.index');
+        return response()->view('superadmin.venues.index');
     }
 
     /**
@@ -25,7 +39,7 @@ class VenueController extends Controller
      */
     public function create()
     {
-        return response()->view('venues.create');
+        return response()->view('superadmin.venues.create');
     }
 
     /**
@@ -76,7 +90,7 @@ class VenueController extends Controller
             $i++;
         }
 
-        return response()->view('venues.show', compact('venue', 'acronym'));
+        return response()->view('superadmin.venues.show', compact('venue', 'acronym'));
     }
 
     /**
@@ -87,7 +101,7 @@ class VenueController extends Controller
      */
     public function edit(Venue $venue)
     {
-        return response()->view('venues.edit', compact('venue'));
+        return response()->view('superadmin.venues.edit', compact('venue'));
     }
 
     /**
@@ -173,6 +187,19 @@ class VenueController extends Controller
         if ($request->ajax()) {
             return datatables()->of(Venue::all())
                 ->toJson();
+        }
+    }
+
+    public function ajaxSearch(Request $request)
+    {
+        if($request->has('q')) {
+            $search = $request->input('q');
+
+            $venues = Venue::where('name','LIKE',"%$search%")
+                ->orderBy('name', 'desc')
+                ->paginate(5);
+
+            return response()->json($venues, $status=200, $headers=[], $options=JSON_PRETTY_PRINT);
         }
     }
 }

@@ -1,9 +1,9 @@
 @extends('layouts.default')
 
-@section('title', 'Venues')
+@section('title', 'Communities')
 
-@section('subheader', 'Venues')
-@section('subheader-link', route('venues.index'))
+@section('subheader', 'Communities')
+@section('subheader-link', route('communities.index'))
 
 @section('subheader-action', 'Show')
 
@@ -23,47 +23,50 @@
                     <div class="kt-portlet__body">
                         <div class="kt-widget kt-widget--user-profile-3">
                             <div class="kt-widget__top">
-                                @if($venue->venue_image_path)
+                                @if($community->logo_path)
                                     <div class="kt-widget__media kt-hidden-">
-                                        <img src="{{ Storage::url($venue->venue_image_path) }}" id="venue_image" alt="image">
+                                        <img src="{{ Storage::url($community->logo_path) }}" id="community_logo" alt="image">
                                     </div>
                                 @else
                                     <div class="kt-widget__pic kt-widget__pic--danger kt-font-danger kt-font-boldest kt-font-light">
-                                        {{ $acronym }}
+                                        {{ $community->name_acronym }}
                                     </div>
                                 @endif
                                 <div class="kt-widget__content">
                                     <div class="kt-widget__head">
                                         <a href="#" onclick="return false;" class="kt-widget__username">
-                                            {{ $venue->name }}
-                                            @if($venue->active)
+                                            {{ $community->name }}
+                                            @if($community->active)
                                                 <i class="flaticon2-correct" title="Active"></i>
                                             @else
                                                 <i class="flaticon2-correct text-danger" title="Inactive"></i>
                                             @endif
                                         </a>
                                         <div class="kt-widget__action">
-                                            <button type="button" class="btn btn-label-danger btn-sm btn-upper" data-toggle="modal" data-target="#modal-delete" data-id="{{ $venue->id }}"><i class="la la-trash"></i>Delete</button>&nbsp;
-                                            <a href="{{ route('venues.edit', $venue) }}" class="btn btn-brand btn-sm btn-upper"><i class="la la-edit"></i>Edit</a>
+                                            <button type="button" class="btn btn-label-danger btn-sm btn-upper" data-toggle="modal" data-target="#modal-delete" data-id="{{ $community->id }}"><i class="la la-trash"></i>Delete</button>&nbsp;
+                                            <a href="{{ route('communities.edit', $community) }}" class="btn btn-brand btn-sm btn-upper"><i class="la la-edit"></i>Edit</a>
                                         </div>
                                     </div>
                                     <div class="kt-widget__subhead">
-                                        <a href="#" onclick="return false;" title="Created at {{ $venue->created_at->format('l, F j, Y h:i:s A') }}"><i class="flaticon-calendar"></i>{{ $venue->created_at->format('F j, Y') }}</a>
-                                        <a href="#" onclick="return false;" title="Updated at {{ $venue->updated_at->format('l, F j, Y h:i:s A') }}"><i class="flaticon2-pen"></i>{{ $venue->updated_at->format('F j, Y') }}</a>
+                                        <a href="#" onclick="return false;" title="Founded at {{ $community->created_at->format('l, F j, Y h:i:s A') }}"><i class=" flaticon-calendar"></i>{{ $community->created_at->format('F j, Y') }}</a>
+                                        <a href="#" onclick="return false;" title="Updated at {{ $community->updated_at->format('l, F j, Y h:i:s A') }}"><i class=" flaticon-calendar"></i>{{ $community->updated_at->format('F j, Y') }}</a>
+                                    </div>
+                                    <div class="kt-widget__subhead">
+                                        <a href="#" onclick="return false;" title="Community Admin"><i class="flaticon-profile-1"></i>{{ $community->admin->name }}</a>
                                     </div>
                                     <div class="kt-widget__info">
-                                        <div class="kt-widget__desc" style="width: 100px;" title="Description">
-                                            {{ $venue->description }}
+                                        <div class="kt-widget__desc" style="width: 100px;overflow-wrap: break-word;" title="Description">
+                                            {{ $community->description }}
                                         </div>
                                         <div class="kt-widget__progress">
                                             <div class="kt-widget__text" >
-                                                Usage Rate
+                                                Membership Rate
                                             </div>
                                             <div class="progress" style="height: 5px;width: 100%;">
-                                                <div class="progress-bar kt-bg-success" role="progressbar" style="width: {{ $venue->usage_rate }}%;" aria-valuenow="{{ $venue->usage_rate }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="progress-bar kt-bg-success" role="progressbar" style="width: {{ $community->membership_rate }}%;" aria-valuenow="{{ $community->membership_rate }}" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                             <div class="kt-widget__stats">
-                                                {{ $venue->usage_rate }}%
+                                                {{ $community->membership_rate }}%
                                             </div>
                                         </div>
                                     </div>
@@ -75,8 +78,8 @@
                                         <i class="flaticon-network"></i>
                                     </div>
                                     <div class="kt-widget__details">
-                                        <span class="kt-widget__title">Capacity</span>
-                                        <span class="kt-widget__value">{{ number_format($venue->capacity) }}</span>
+                                        <span class="kt-widget__title">Members</span>
+                                        <span class="kt-widget__value">{{ number_format($community->users->count()) }}</span>
                                     </div>
                                 </div>
                                 <div class="kt-widget__item">
@@ -84,8 +87,8 @@
                                         <i class="flaticon-presentation"></i>
                                     </div>
                                     <div class="kt-widget__details">
-                                        <span class="kt-widget__title">Air Conditioned</span>
-                                        <span class="kt-widget__value">{{ $venue->air_conditioned ? 'Yes' : 'No' }}</span>
+                                        <span class="kt-widget__title">Events</span>
+                                        <span class="kt-widget__value">{{ number_format($community->events->count()) }}</span>
                                     </div>
                                 </div>
                                 <div class="kt-widget__item">
@@ -93,9 +96,8 @@
                                         <i class="flaticon-users"></i>
                                     </div>
                                     <div class="kt-widget__details">
-                                        <span class="kt-widget__title">Events Conducted</span>
-                                        <span class="kt-widget__value">{{ number_format($venue->events->count()) }}</span>
-
+                                        <span class="kt-widget__title">Membership Fee</span>
+                                        <span class="kt-widget__value">{{ $community->fee == 0 ? 'Free' :  'RM ' .number_format($community->fee, 2, '.', ',') }}</span>
                                     </div>
                                 </div>
                                 <div class="kt-widget__item">
@@ -103,8 +105,8 @@
                                         <i class="flaticon-confetti"></i>
                                     </div>
                                     <div class="kt-widget__details">
-                                        <span class="kt-widget__title">Communities Used</span>
-                                        <span class="kt-widget__value">{{ number_format($venue->events->unique('community_id')->count()) }}</span>
+                                        <span class="kt-widget__title">Maximum Members</span>
+                                        <span class="kt-widget__value">{{ number_format($community->max_members) }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -153,11 +155,11 @@
 
 @section('pagescripts')
     <script>
-        var $image = $('#venue_image');
+        var $image = $('#community_logo');
         $image.viewer();
 
         $('#modal-delete').on('show.bs.modal', function (e) {
-            var url = '{{ route("venues.destroy", ':id') }}';
+            var url = '{{ route("communities.destroy", ':id') }}';
             url = url.replace(':id', $(e.relatedTarget).data('id'));
             $(this).find('form').attr('action', url);
         });

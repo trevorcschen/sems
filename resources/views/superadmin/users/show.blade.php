@@ -29,7 +29,7 @@
                                     </div>
                                 @else
                                     <div class="kt-widget__pic kt-widget__pic--danger kt-font-danger kt-font-boldest kt-font-light">
-                                        {{ $acronym }}
+                                        {{ $user->name_acronym }}
                                     </div>
                                 @endif
                                 <div class="kt-widget__content">
@@ -66,7 +66,7 @@
                                         <a href="#" onclick="return false;" title="Phone Number"><i class="flaticon2-phone"></i>{{ $user->phone_number }}</a>
                                     </div>
                                     <div class="kt-widget__info">
-                                        <div class="kt-widget__desc" style="width: 100px;" title="Biography">
+                                        <div class="kt-widget__desc" style="width: 100px;overflow-wrap: break-word;" title="Biography">
                                            {{ $user->biography }}
                                         </div>
                                         <div class="kt-widget__progress">

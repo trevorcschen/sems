@@ -34,6 +34,7 @@ composer:
     - cp .env.gitlab-ci .env
     - php artisan key:generate
     - php artisan migrate:fresh --force
+    - php artisan db:seed --force
   artifacts:
     expire_in: 1 month
     paths:

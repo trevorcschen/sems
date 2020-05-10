@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
-class RoleTableSeeder extends Seeder
+class RoleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -42,6 +42,5 @@ class RoleTableSeeder extends Seeder
             'event.delete',
             'event.join',
             'venue.show');
-
     }
 }
