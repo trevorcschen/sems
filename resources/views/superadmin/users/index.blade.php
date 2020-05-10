@@ -55,6 +55,7 @@
                         @yield('subheader')
                     </h3>
                 </div>
+                @can('user.create')
                 <div class="kt-portlet__head-toolbar">
                     <div class="kt-portlet__head-wrapper">
                         <div class="kt-portlet__head-actions">
@@ -65,6 +66,7 @@
                         </div>
                     </div>
                 </div>
+                @endcan
             </div>
             <div class="kt-portlet__body">
                 <!--begin: Selected Rows Group Action Form -->
@@ -122,6 +124,7 @@
             </div>
         </div>
     </div>
+    @can('user.delete')
     <!--begin::Modal-->
     <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -176,7 +179,7 @@
         </div>
     </div>
     <!--end::Modal-->
-
+    @endcan
 @endsection
 
 @section('pagevendorsscripts')
@@ -491,11 +494,13 @@
         $(document).ready(function () {
             KTDatatablesSearchOptionsColumnSearch.init();
 
+            @can('user.delete')
             $('#modal-delete').on('show.bs.modal', function (e) {
                 var url = '{{ route("users.destroy", ':id') }}';
                 url = url.replace(':id', $(e.relatedTarget).data('id'));
                 $(this).find('form').attr('action', url);
             });
+            @endcan
         });
     </script>
 @endsection

@@ -55,16 +55,18 @@
                         @yield('subheader')
                     </h3>
                 </div>
-                <div class="kt-portlet__head-toolbar">
-                    <div class="kt-portlet__head-wrapper">
-                        <div class="kt-portlet__head-actions">
-                            <a href="{{ route('venues.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
-                                <i class="la la-plus"></i>
-                                New Record
-                            </a>
+                @can('venue.create')
+                    <div class="kt-portlet__head-toolbar">
+                        <div class="kt-portlet__head-wrapper">
+                            <div class="kt-portlet__head-actions">
+                                <a href="{{ route('venues.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
+                                    <i class="la la-plus"></i>
+                                    New Record
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endcan
             </div>
             <div class="kt-portlet__body">
                 <!--begin: Selected Rows Group Action Form -->
@@ -116,6 +118,7 @@
             </div>
         </div>
     </div>
+    @can('venue.delete')
     <!--begin::Modal-->
     <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -170,6 +173,7 @@
         </div>
     </div>
     <!--end::Modal-->
+    @endcan
 
 @endsection
 
@@ -456,12 +460,13 @@
 
         $(document).ready(function () {
             KTDatatablesSearchOptionsColumnSearch.init();
-
+            @can('venue.delete')
             $('#modal-delete').on('show.bs.modal', function (e) {
                 var url = '{{ route("venues.destroy", ':id') }}';
                 url = url.replace(':id', $(e.relatedTarget).data('id'));
                 $(this).find('form').attr('action', url);
             });
+            @endcan
         });
 
     </script>

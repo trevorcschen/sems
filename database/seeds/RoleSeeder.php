@@ -24,6 +24,7 @@ class RoleSeeder extends Seeder
 
         $communityAdminRole = Role::findByName('community-admin');
         $communityAdminRole->syncPermissions(
+            'user.show',
             'community.show',
             'community.edit',
             'event.create',
@@ -35,6 +36,7 @@ class RoleSeeder extends Seeder
 
         $studentRole = Role::findByName('student');
         $studentRole->syncPermissions(
+            'user.show',
             'community.show',
             'event.create',
             'event.show',
