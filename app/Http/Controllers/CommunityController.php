@@ -30,9 +30,9 @@ class CommunityController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->hasRole('super-admin')) {
+//        if (Auth::user()->hasRole('super-admin')) {
             return response()->view('superadmin.communities.index');
-        }
+//        }
     }
 
     /**

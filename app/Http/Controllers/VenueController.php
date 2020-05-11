@@ -29,7 +29,9 @@ class VenueController extends Controller
      */
     public function index()
     {
-        return response()->view('superadmin.venues.index');
+//        if (Auth::user()->hasRole('super-admin')) {
+            return response()->view('superadmin.venues.index');
+//        }
     }
 
     /**
