@@ -5,10 +5,12 @@
             <span class="kt-subheader__separator kt-hidden"></span>
             <div class="kt-subheader__breadcrumbs">
                 <a href="@yield('subheader-link')" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                @hasSection('subheader-action')
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <a href="javascript:void(0)" class="kt-subheader__breadcrumbs-link">
                     @yield('subheader-action')
                 </a>
+                @endif
             </div>
         </div>
     </div>

@@ -33,7 +33,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        return response()->view('superadmin.users.index');
+//        if (Auth::user()->hasRole('super-admin')) {
+            return response()->view('superadmin.users.index');
+//        }
     }
 
     /**
