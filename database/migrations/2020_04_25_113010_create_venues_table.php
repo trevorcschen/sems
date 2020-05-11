@@ -16,7 +16,11 @@ class CreateVenuesTable extends Migration
         Schema::create('venues', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->longText('description');
             $table->integer('capacity');
+            $table->boolean('air_conditioned')->default(false);
+            $table->boolean('active')->default(false);
+            $table->string('venue_image_path')->nullable();
             $table->timestamps();
         });
     }

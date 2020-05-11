@@ -1,18 +1,61 @@
 image: php:latest
+services:
+  - postgres:latest
+variables:
+  POSTGRES_DB: mydb-test
+  POSTGRES_USER: runner
+  POSTGRES_PASSWORD: "runner"
+  POSTGRES_HOST_AUTH_METHOD: trust
+
 before_script:
-  - apt-get update -qq
-  - apt-get install -y -qq git
-phpunit tests:
-  stage: test
+  - >
+    set -xe
+    && apt-get update -yqq
+    && apt-get install -yqq
+    git
+    libicu-dev
+    libpq-dev
+    libzip-dev
+    zlib1g-dev
+  - >
+    docker-php-ext-install
+    pdo_pgsql
+    pgsql
+    sockets
+    intl
+    zip
+
+composer:
+  stage: build
   script:
     - curl -sS https://getcomposer.org/installer | php
-    - php composer.phar install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
-    - cp .env.example .env
+    - php composer.phar self-update
+    - php composer.phar install --no-progress --no-interaction
+    - cp .env.gitlab-ci .env
     - php artisan key:generate
+    - php artisan migrate:fresh --force
+    - php artisan db:seed --force
+  artifacts:
+    expire_in: 1 month
+    paths:
+      - vendor/
+      - .env
+  cache:
+    paths:
+      - vendor/
+  only:
+    - master
+
+phpunit tests:
+  stage: test
+  dependencies:
+    - composer
+  script:
     - vendor/bin/phpunit tests
   only:
     - master
-deploy to heroku:
+
+staging:
   stage: deploy
   script:
     - apt-get install -y ruby
