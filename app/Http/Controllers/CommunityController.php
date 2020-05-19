@@ -223,4 +223,10 @@ class CommunityController extends Controller
             return response()->json($communities, $status=200, $headers=[], $options=JSON_PRETTY_PRINT);
         }
     }
+
+    // Trevor Module
+    public function communityPage()
+    {
+        return view('communityadmin.community.group');
+    }
 }
