@@ -43,3 +43,27 @@ Route::delete('/communities/destroy/many/{ids}', 'CommunityController@destroyMan
 Route::resource('communities', 'CommunityController');
 
 Route::get('/commi','CommunityController@communityPage')->name('commi.community');
+Route::get('/eventC', function() // testing
+{
+    $length = 50;
+    $word1 = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZabcedefghiklmnopqrstxyz'),1,$length);
+    $word2 = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZabcedefghiklmnopqrstxyz'),1,10);
+    $alpha =  new \App\Event();
+    $alpha->name = $word2;
+    $alpha->description = $word1;
+    $alpha->start_time = date('Y-m-d H:i:s', strtotime(now()));
+    $alpha->end_time = date('Y-m-d H:i:s' ,strtotime("+ 7 day"));
+    $alpha->max_participants = rand(20,50);
+    $alpha->fee = 0.0;
+    $alpha->community_id = 1;
+    $alpha->venue_id = 1;
+    $alpha->user_id = 2;
+    $alpha->image_URL = "";
+    $alpha->created_at = now();
+    echo $alpha;
+    $alpha->save();
+//   for($i = 0;$i<15;$i++)
+//{
+//
+//}
+});
