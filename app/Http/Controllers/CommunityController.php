@@ -226,9 +226,9 @@ class CommunityController extends Controller
     }
 
     // Trevor Module
-    public function communityPage()
+    public function communityPage($id)
     {
-        $events = Event::where('community_id', 1)->paginate(10);
+        $events = Event::where('community_id', $id)->paginate(12);
         foreach ($events as $event)
     {
         $event->current_participants = rand(0, $event->max_participants);
@@ -238,7 +238,9 @@ class CommunityController extends Controller
 //        {
 //            echo $event;
 //        }
-        $count = Event::where('community_id', 1)->get();
-        return view('communityadmin.community.group', compact('events' ))->with('count', $count->count());
+        $count = Event::where('community_id', $id)->get();
+        $community = Community::where('id', $id)->first();
+//        echo $id;
+        return view('communityadmin.community.group', compact('events','community'))->with('count', $count->count());
     }
 }

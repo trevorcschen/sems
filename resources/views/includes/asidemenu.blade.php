@@ -49,7 +49,7 @@
                         <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">Communities</span></span></li>
                         @can('community.show')
                           @foreach($communities as $community)
-                            <li class="kt-menu__item " aria-haspopup="true"><a href="{{ route('commi.community') }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">{{$community->name}}</span></a></li>
+                            <li class="kt-menu__item " aria-haspopup="true"><a href="{{ route('commi.community', $community->id) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">{{$community->name}}</span></a></li>
                         @endforeach
                         @endcan
                         @can('community.create')
