@@ -8,7 +8,9 @@
 @section('subheader-action', '')
 
 @section('pagevendorsstyles')
+
 @endsection
+
 <style>
     .flip-card {
         background-color: transparent;
@@ -84,7 +86,13 @@
                     <div class="kt-portlet__head-toolbar">
                         <div class="kt-portlet__head-wrapper">
                             <div class="kt-portlet__head-actions">
-                                <a href="{{ route('communities.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
+                                @can('community.edit')
+                                <a href="javascript:void(0)" class="btn btn-brand btn-elevate btn-icon-sm" data-toggle="modal" data-target="#modalCommunity" >
+                                    <i class="la la-edit"></i>
+                                    Community Details Settings
+                                </a>
+                                @endcan
+                                <a href="javascript:void(0)" style="right: 20px" class="btn btn-brand btn-elevate btn-icon-sm" data-toggle="modal" data-target="#exampleModal" >
                                     <i class="la la-plus"></i>
                                     Event Creation
                                 </a>
@@ -210,6 +218,148 @@
 
 
             </div>
+
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Event Creation</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Event Name:</label>
+                                        <input type="text" class="form-control" id="recipient-name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Event Description:</label>
+                                        <textarea class="form-control" id="message-text"></textarea>
+                                    </div>
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Event Start Date:</label>
+                                            <div class="input-group">
+                                                <input type='text' class="form-control" id='datetimepicker4' autocomplete="off" />
+                                                <span class="input-group-text">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                            </div>
+
+                                        </div>
+                                    <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Event End Date:</label>
+                                        <div class="input-group">
+
+                                        <input type='text' class="form-control" id='datetimepicker3' autocomplete="off" />
+                                        <span class="input-group-text">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Event Fee : </label>
+                                        <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="fees" value="{{ old('max_members') }}">
+                                        @error('max_members')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Maximum Participants :</label>
+                                        <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="max_members" value="{{ old('max_members') }}">
+                                        @error('max_members')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleFormControlSelect1">Venue</label>
+                                        <br/>
+                                        <select class="form-control js-data-example-ajax">
+                                            <option>dsa</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-form-label">Event Image : </label>
+                                        <div class="custom-file input-group">
+                                            <input type="file" class="custom-file-input image-picker" id="inputGroupFile01"
+                                                   aria-describedby="inputGroupFileAddon01">
+                                            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                        </div>
+                                    </div>
+                                    <div class="ml-2 col-sm-6" style="padding: 10px;">
+                                        <img src="https://placehold.it/80x80" id="preview" class="img-thumbnail" style="display: none">
+                                    </div>
+
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">CREATE</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Coommunity -->
+                <div class="modal fade" id="modalCommunity" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Community Details </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Community Name:</label>
+                                        <input type="text" class="form-control" id="recipient-name" value="{{$community->name}}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Community Description:</label>
+                                        <textarea class="form-control" id="message-text">{{$community->description}}</textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Membership Fee : </label>
+                                        <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="fees" value="{{number_format($community->fee, 2)}}">
+                                        @error('max_members')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Maximum Participants :</label>
+                                        <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="max_members" value="{{$community->max_members }}">
+                                        @error('max_members')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-form-label">Community Icon : </label>
+                                        <div class="custom-file input-group">
+                                            <input type="file" class="custom-file-input image-picker" id="inputGroupFile01"
+                                                   aria-describedby="inputGroupFileAddon01">
+                                            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                        </div>
+                                    </div>
+                                    <div class="ml-2 col-sm-6" style="padding: 10px;">
+                                        <img src="https://placehold.it/80x80" id="preview" class="img-thumbnail" style="display: none">
+                                    </div>
+
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">UPDATE</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             <div class="kt-pagination__links kt-pagination" style="padding: 40px;">
                 {{$events->links()}}
                 Displaying {{$events->count()}} of {{$count}}
@@ -224,6 +374,25 @@
     <script type="text/javascript">
 
         $(document).ready(function(){
+            $('.js-data-example-ajax').select2({
+                width: '200px',
+                allowClear: !0,
+                minimumInputLength : 3,
+                ajax: {
+                    url: 'https://api.github.com/search/repositories',
+                    dataType: 'json'
+                    // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+                }
+            });
+            $('#datetimepicker3').datetimepicker();
+            $('#datetimepicker4').datetimepicker();
+
+            $('#exampleModal').on('hidden.bs.modal', function (e) {
+                // do something...
+                $("#recipient-name").val("");
+            })
+
+
             $(".action-bar").css('position', 'absolute');
             $(".action-bar").hover(function()
             {
@@ -249,20 +418,28 @@
                 console.log('d');
             });
 
-            // $(".hideID").hover(function()
-            // {
-            //    // $(this).hide();
-            //    $(this).css('display', 'none');
-            //    $(this).next().css('display', 'block');
-            //    $(this).next().css('transition','transform 0.3s, opacity 0.3s')
-            // }, function()
-            // {
-            //     // $(this).show();
-            //     $(this).css('display', 'block');
-            //     $(this).next().css('display', 'none');
-            //
-            //
-            // });
+            $('input[type="file"]').change(function(e) {
+                var fileName = e.target.files[0].name;
+                if(!e.target.files[0].name.match(/.(jpg|jpeg|png|gif)$/i))
+                {
+                    alert("Not an image!!")
+                    $(".image-picker").reset();
+                    return;
+                }
+                $("#preview").css("display", "block");
+
+                console.log(fileName)
+                $("#file").val(fileName);
+
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    // get loaded data and render thumbnail.
+                    document.getElementById("preview").src = e.target.result;
+                };
+                // read the image file as a data URL.
+                reader.readAsDataURL(this.files[0]);
+            });
+
         });
 
     </script>
