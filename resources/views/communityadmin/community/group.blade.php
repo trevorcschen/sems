@@ -150,9 +150,9 @@
                                                   <div class="dropdown-menu option-bar">
                                                       <span class="dropdown-item" href="javascript:void(0)">Action</span>
                                                       <div class="dropdown-divider"></div>
-                                                      <a class="dropdown-item" href="javascript:void(0)">Update Event's details</a>
+                                                      <a class="dropdown-item" data-toggle="modal" data-target="#exampleModal" data-is ="true" data-val="{{$event}}" data-venue="{{$event->venue->name}}" href="javascript:void(0)">Update Event's details</a>
                                                       <div class="dropdown-divider"></div>
-                                                      <a class="dropdown-item" href="javascript:void(0)">Update Event's Status</a>
+                                                      <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#deleteModal">Update Event's Status</a>
                                                   </div>
                                               </div>
 
@@ -171,7 +171,7 @@
 
                                           <div style="display: flex;padding: 10px;">
                                               <button type="button" class="btn-primary btn-sm">Interested</button>
-                                              <button type="button" class="btn-block btn-label-twitter-o2">Join</button>
+                                              <button type="button" class="btn btn-brand btn-elevate btn-icon-sm">Join</button>
                                           </div>
                                       </div>
 
@@ -219,7 +219,7 @@
 
             </div>
 
-                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="exampleModal"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -236,7 +236,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="message-text" class="col-form-label">Event Description:</label>
-                                        <textarea class="form-control" id="message-text"></textarea>
+                                        <textarea class="form-control" id="event-description"></textarea>
                                     </div>
                                         <div class="form-group">
                                             <label for="message-text" class="col-form-label">Event Start Date:</label>
@@ -262,14 +262,14 @@
 
                                     <div class="form-group">
                                         <label for="message-text" class="col-form-label">Event Fee : </label>
-                                        <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="fees" value="{{ old('max_members') }}">
+                                        <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="fees" value="{{ old('max_members') }}" id="fee">
                                         @error('max_members')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                     <div class="form-group">
                                         <label for="message-text" class="col-form-label">Maximum Participants :</label>
-                                        <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="max_members" value="{{ old('max_members') }}">
+                                        <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="max_members" value="{{ old('max_members') }}" id="max_members">
                                         @error('max_members')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -278,8 +278,8 @@
                                     <div class="form-group">
                                         <label for="exampleFormControlSelect1">Venue</label>
                                         <br/>
-                                        <select class="form-control js-data-example-ajax">
-                                            <option>dsa</option>
+                                        <select class="form-control js-data-example-ajax" id="venue">
+                                            <option></option>
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -305,7 +305,7 @@
                 </div>
 
                 <!-- Modal Coommunity -->
-                <div class="modal fade" id="modalCommunity" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="modalCommunity" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -360,6 +360,28 @@
                         </div>
                     </div>
                 </div>
+                <!-- Modal Delete -->
+
+                <div class="modal fade" id="deleteModal" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel">Confirmation</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure to delete this event?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-danger">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             <div class="kt-pagination__links kt-pagination" style="padding: 40px;">
                 {{$events->links()}}
                 Displaying {{$events->count()}} of {{$count}}
@@ -368,6 +390,7 @@
         </div>
     </div>
 @endsection
+{{--        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>--}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 
@@ -375,24 +398,25 @@
 
         $(document).ready(function(){
             $('.js-data-example-ajax').select2({
+                placeholder : 'Venue',
                 width: '200px',
-                allowClear: !0,
+                allowClear: true,
                 minimumInputLength : 3,
-                ajax: {
-                    url: 'https://api.github.com/search/repositories',
-                    dataType: 'json'
-                    // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
-                }
+                // ajax: {
+                //     url: 'https://api.github.com/search/repositories',
+                //     dataType: 'json'
+                //     // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+                // }
             });
             $('#datetimepicker3').datetimepicker();
             $('#datetimepicker4').datetimepicker();
 
             $('#exampleModal').on('hidden.bs.modal', function (e) {
                 // do something...
-                $("#recipient-name").val("");
+                $(this).find(".modal-body").find("input ,textarea").val('');
+                $('.js-data-example-ajax').empty()
+
             })
-
-
             $(".action-bar").css('position', 'absolute');
             $(".action-bar").hover(function()
             {
@@ -440,6 +464,34 @@
                 reader.readAsDataURL(this.files[0]);
             });
 
+            $('#exampleModal').on('show.bs.modal', function (event) {
+                $eventChange = $(event.relatedTarget).data('is');
+                if(typeof $eventChange == "undefined")
+                {
+                    console.log("creation");
+                    $(this).find(".modal-title").text("Event Creation :");
+                    return;
+                }
+                var myVal = $(event.relatedTarget).data('val')
+                $venue = $(event.relatedTarget).data('venue');
+                $(this).find(".modal-title").text('Event Update :');
+                $(this).find(".modal-body").find("#recipient-name").val(myVal.name);
+                $(this).find(".modal-body").find("#event-description").val(myVal.description);
+                $(this).find(".modal-body").find("#datetimepicker4").val(myVal.start_time);
+                $(this).find(".modal-body").find("#datetimepicker3").val(myVal.end_time);
+                $(this).find(".modal-body").find("#fee").val(myVal.fee.toFixed(2));
+                $(this).find(".modal-body").find("#max_members").val(myVal.max_participants);
+                var newOption = new Option($venue, myVal.venue_id, true, true);
+
+                $(".js-data-example-ajax").append(newOption).trigger('change')
+
+                // $(this).find(".modal-body").find("#venue").val('dsa');
+                // $(this).find(".modal-body").find("#venue").html('<option></option>')
+
+
+            });
+
         });
 
     </script>
+    </div>
