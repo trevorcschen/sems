@@ -13,6 +13,7 @@ class CreateFailedJobsTable extends Migration
      */
     public function up()
     {
+        schema::defaultStringLength(191);
         Schema::create('failed_jobs', function (Blueprint $table) {
             $table->id();
             $table->text('connection');
