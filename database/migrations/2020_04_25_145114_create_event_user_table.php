@@ -13,6 +13,7 @@ class CreateEventUserTable extends Migration
      */
     public function up()
     {
+        schema::defaultStringLength(191);
         Schema::create('event_user', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('event_id');
