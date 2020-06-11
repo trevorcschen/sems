@@ -13,6 +13,7 @@ class CreateVenuesTable extends Migration
      */
     public function up()
     {
+        schema::defaultStringLength(191);
         Schema::create('venues', function (Blueprint $table) {
             $table->id();
             $table->string('name');
