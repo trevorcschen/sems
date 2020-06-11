@@ -13,6 +13,7 @@ class CreateCommunitiesTable extends Migration
      */
     public function up()
     {
+        schema::defaultStringLength(191);
         Schema::create('communities', function (Blueprint $table) {
             $table->id();
             $table->string('name');
