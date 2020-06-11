@@ -13,6 +13,7 @@ class CreateEventsTable extends Migration
      */
     public function up()
     {
+        schema::defaultStringLength(191);
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('name');
