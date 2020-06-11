@@ -13,6 +13,7 @@ class CreateCommunityUserTable extends Migration
      */
     public function up()
     {
+        schema::defaultStringLength(191);
         Schema::create('community_user', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('community_id');
