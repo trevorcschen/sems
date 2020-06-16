@@ -19,7 +19,7 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'verified']);
         $this->middleware('permission:user.create', ['only' => ['create','store']]);
         $this->middleware('permission:user.show', ['only' => ['index','show', 'ajaxIndex', 'ajaxSearch']]);
         $this->middleware('permission:user.edit', ['only' => ['edit','update']]);

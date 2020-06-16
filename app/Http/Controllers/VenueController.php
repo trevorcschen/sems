@@ -15,7 +15,7 @@ class VenueController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'verified']);
         $this->middleware('permission:venue.create', ['only' => ['create','store']]);
         $this->middleware('permission:venue.show', ['only' => ['index','show', 'ajaxIndex', 'ajaxSearch']]);
         $this->middleware('permission:venue.edit', ['only' => ['edit','update']]);
