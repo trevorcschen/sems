@@ -1,73 +1,77 @@
-@extends('layouts.app')
+@extends('layouts.auth')
+
+@section('title', 'Login')
+
+@section('pagevendorsstyles')
+    <link href="{{ asset('assets/css/pages/login/login-3.css') }}" rel="stylesheet" type="text/css" />
+@endsection
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
-
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
-
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
+    <div class="kt-grid kt-grid--ver kt-grid--root">
+        <div class="kt-grid kt-grid--hor kt-grid--root  kt-login kt-login--v3 kt-login--signin" id="kt_login">
+            <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" style="background-image: url({{ asset('assets/media/bg/bg-3.jpg') }});">
+                <div class="kt-grid__item kt-grid__item--fluid kt-login__wrapper">
+                    <div class="kt-login__container">
+                        <div class="kt-login__logo">
+                            <a href="#">
+                                <img src="{{ asset('assets/media/logos/inti-logo.png') }}" width="300px" height="50px">
+                            </a>
                         </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                        <div class="kt-login__signin">
+                            <div class="kt-login__head">
+                                <h3 class="kt-login__title">Login to {{ config('app.name') }}</h3>
                             </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
+                            <form id="login-form" class="kt-form" method="POST" action="{{ route('login') }}">
+                                @csrf
+                                <div class="input-group">
+                                    <input class="form-control @error('email') is-invalid @enderror" type="text" placeholder="{{ __('E-Mail Address') }}" name="email" value="{{ old('email') }}" autocomplete="off" required autofocus>
+                                    @error('email')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                            </div>
+                                <div class="input-group">
+                                    <input class="form-control @error('password') is-invalid @enderror" type="password" placeholder="{{ __('Password') }}" name="password" required>
+                                    @error('password')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="row kt-login__extra">
+                                    <div class="col">
+                                        <label class="kt-checkbox">
+                                            <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> {{ __('Remember Me') }}
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                    @if (Route::has('password.request'))
+                                        <div class="col kt-align-right">
+                                            <a href="{{ route('password.request') }}" id="kt_login_forgot" class="kt-login__link">{{ __('Forgot Your Password?') }}</a>
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="kt-login__actions">
+                                    <button type="submit" id="kt_login_signin_submit" class="btn btn-brand btn-elevate kt-login__btn-primary">{{ __('Login') }}</button>
+                                </div>
+                            </form>
                         </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
+                        @if (Route::has('register'))
+                            <div class="kt-login__account">
+                                    <span class="kt-login__account-msg">
+                                        Don't have an account yet ?
+                                    </span>
+                                &nbsp;&nbsp;
+                                <a href="{{ route('register') }}" id="kt_login_signup" class="kt-login__account-link">{{ __('Register') }}</a>
                             </div>
-                        </div>
-                    </form>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+@endsection
+
+@section('pagevendorsscripts')
+@endsection
+
+@section('pagescripts')
+    <script src="{{ asset('assets/js/pages/custom/login/login-general.js') }}" type="text/javascript"></script>
 @endsection

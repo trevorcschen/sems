@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('student_id')->unique();
             $table->string('ic_number')->unique();
             $table->string('phone_number')->unique();
-            $table->longText('biography');
+            $table->longText('biography')->nullable();
             $table->string('profile_image_path')->nullable();
             $table->string('password');
             $table->boolean('active')->default(false);

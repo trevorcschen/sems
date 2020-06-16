@@ -50,9 +50,12 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'name' => ['required', 'string', 'max:80'],
+            'email' => ['required', 'string', 'email', 'regex:/(.+)@student\.newinti\.edu\.my/i', 'max:255', 'unique:users'],
+            'student_id' => ['required', 'alpha_num', 'max:9', 'unique:users'],
+            'ic_number' => ['required', 'max:255', 'unique:users'],
+            'phone_number' => ['required', 'numeric', 'unique:users'],
+            'password' => ['required', 'string', 'min:16', 'confirmed'],
         ]);
     }
 
@@ -64,11 +67,18 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'student_id' => $data['student_id'],
+            'ic_number' => $data['ic_number'],
+            'phone_number' => $data['phone_number'],
             'password' => Hash::make($data['password']),
+            'active' => true,
         ]);
+
+        $user->syncRoles('student');
+        return $user;
     }
 
     /**
