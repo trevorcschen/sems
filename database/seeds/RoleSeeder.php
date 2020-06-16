@@ -26,9 +26,11 @@ class RoleSeeder extends Seeder
         $communityAdminRole->syncPermissions(
             'user.show',
             'community.show',
+            'community.index',
             'community.edit',
             'event.create',
             'event.show',
+            'event.index',
             'event.edit',
             'event.delete',
             'event.join',
@@ -38,8 +40,10 @@ class RoleSeeder extends Seeder
         $studentRole->syncPermissions(
             'user.show',
             'community.show',
+            'community.index',
             'event.create',
             'event.show',
+            'event.index',
             'event.edit',
             'event.delete',
             'event.join',
