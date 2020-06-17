@@ -10,7 +10,7 @@ $factory->define(Community::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'description' => $faker->text($maxNbChars = 200),
-        'fee' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = NULL),
+        'fee' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 5),
         'max_members' => $faker->numberBetween($min = 50, $max = 1200),
         'logo_path' => null,
         'active' => true,
