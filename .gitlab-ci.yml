@@ -52,6 +52,14 @@ phpunit tests:
   dependencies:
     - composer
   script:
+    - curl -sS https://getcomposer.org/installer | php
+    - php composer.phar self-update
+    - php composer.phar install --no-progress --no-interaction
+    - cp .env.gitlab-ci .env
+    - php artisan key:generate
+    - php artisan config:clear
+    - php artisan migrate:fresh --force
+    - php artisan db:seed --force
     - vendor/bin/phpunit tests
   only:
     - master
