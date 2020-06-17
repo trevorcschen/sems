@@ -30,7 +30,7 @@ class UserTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('users.index'));
 
-        $response->assertStatus(200);
+        $response->assertStatus(403);
     }
 
     public function testUserIndexStudentAccess()
@@ -40,7 +40,7 @@ class UserTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('users.index'));
 
-        $response->assertStatus(200);
+        $response->assertStatus(403);
     }
 
     public function testUserCreation()

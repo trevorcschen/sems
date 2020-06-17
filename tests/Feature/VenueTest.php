@@ -28,7 +28,7 @@ class VenueTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('venues.index'));
 
-        $response->assertStatus(200);
+        $response->assertStatus(403);
     }
 
     public function testVenueIndexStudentAccess()
@@ -38,7 +38,7 @@ class VenueTest extends TestCase
 
         $response = $this->actingAs($user)->get(route('venues.index'));
 
-        $response->assertStatus(200);
+        $response->assertStatus(403);
     }
 
     public function testVenueCreation()
