@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Community;
+use App\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -223,5 +224,24 @@ class CommunityController extends Controller
 
             return response()->json($communities, $status=200, $headers=[], $options=JSON_PRETTY_PRINT);
         }
+    }
+
+    // Trevor Module
+    public function communityPage($id)
+    {
+        $events = Event::where('community_id', $id)->paginate(12);
+        foreach ($events as $event)
+    {
+        $event->current_participants = rand(0, $event->max_participants);
+        $event->percentage = round($event->current_participants / $event->max_participants * 100, 0);
+    }
+//        foreach ($events as $event)
+//        {
+//            echo $event;
+//        }
+        $count = Event::where('community_id', $id)->get();
+        $community = Community::where('id', $id)->first();
+//        echo $id;
+        return view('communityadmin.community.group', compact('events','community'))->with('count', $count->count());
     }
 }
