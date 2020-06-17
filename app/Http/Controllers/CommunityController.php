@@ -16,9 +16,10 @@ class CommunityController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'verified']);
         $this->middleware('permission:community.create', ['only' => ['create','store']]);
-        $this->middleware('permission:community.show', ['only' => ['index','show', 'ajaxIndex', 'ajaxSearch']]);
+        $this->middleware('permission:community.show', ['only' => ['index', 'ajaxSearch']]);
+        $this->middleware('permission:community.index', ['only' => ['index', 'ajaxIndex']]);
         $this->middleware('permission:community.edit', ['only' => ['edit','update']]);
         $this->middleware('permission:community.delete', ['only' => ['destroy', 'destroyMany']]);
     }
