@@ -132,7 +132,7 @@
                                                 <label class="col-3 col-form-label">IC Number</label>
                                                 <div class="col-9">
                                                     <input class="form-control @error('ic_number') is-invalid @enderror"
-                                                           name="ic_number" type="text" id="kt_inputmask_4"
+                                                           name="ic_number" type="text" placeholder="IC Number" id="kt_inputmask_4"
                                                            value="{{ old('ic_number') }}">
                                                     @error('ic_number')
                                                         <div class="invalid-feedback">{{ $message }}</div>

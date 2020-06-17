@@ -100,7 +100,7 @@
                                             <div class="form-group row">
                                                 <label class="col-3 col-form-label">Description</label>
                                                 <div class="col-9">
-                                                    <textarea class="form-control @error('description') is-invalid @enderror" name="description" rows="3" maxlength="200">{{ old('description') }}</textarea>
+                                                    <textarea class="form-control @error('description') is-invalid @enderror" name="description" placeholder="Community Description" rows="3" maxlength="200">{{ old('description') }}</textarea>
                                                     @error('description')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
@@ -109,7 +109,7 @@
                                             <div class="form-group row">
                                                 <label class="col-3 col-form-label">Membership Fee</label>
                                                 <div class="col-9">
-                                                    <input class="form-control @error('fee') is-invalid @enderror" type="number" name="fee" step="0.01" value="{{ old('fee') }}">
+                                                    <input class="form-control @error('fee') is-invalid @enderror" type="number" name="fee" placeholder="Membership Fee" step="0.01" value="{{ old('fee') }}">
                                                     @error('fee')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
@@ -121,7 +121,7 @@
                                             <div class="form-group row">
                                                 <label class="col-3 col-form-label">Maximum members</label>
                                                 <div class="col-9">
-                                                    <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="max_members" value="{{ old('max_members') }}">
+                                                    <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="max_members" placeholder="Maximum members" value="{{ old('max_members') }}">
                                                     @error('max_members')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror

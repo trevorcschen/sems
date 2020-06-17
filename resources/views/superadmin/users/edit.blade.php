@@ -122,7 +122,7 @@
                                                 <div class="col-9">
                                                     <input
                                                         class="form-control @error('student_id') is-invalid @enderror"
-                                                        name="student_id" type="text" placeholder="P18000000"
+                                                        name="student_id" type="text" placeholder="Student ID"
                                                         value="{{ $user->student_id }}">
                                                     @error('student_id')
                                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -133,7 +133,7 @@
                                                 <label class="col-3 col-form-label">IC Number</label>
                                                 <div class="col-9">
                                                     <input class="form-control @error('ic_number') is-invalid @enderror"
-                                                           name="ic_number" type="text" id="kt_inputmask_4"
+                                                           name="ic_number" type="text" placeholder="IC Number" id="kt_inputmask_4"
                                                            value="{{ $user->ic_number }}">
                                                     @error('ic_number')
                                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -145,7 +145,7 @@
                                                 <div class="col-9">
                                                     <input
                                                         class="form-control @error('phone_number') is-invalid @enderror"
-                                                        name="phone_number" type="text"
+                                                        name="phone_number" type="text" placeholder="Phone Number"
                                                         value="{{ $user->phone_number }}">
                                                     @error('phone_number')
                                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -155,7 +155,7 @@
                                             <div class="form-group row">
                                                 <label class="col-3 col-form-label">Biography</label>
                                                 <div class="col-9">
-                                                    <textarea class="form-control @error('biography') is-invalid @enderror" name="biography" rows="3" maxlength="200">{{ $user->biography }}</textarea>
+                                                    <textarea class="form-control @error('biography') is-invalid @enderror" name="biography" placeholder="Biography" rows="3" maxlength="200">{{ $user->biography }}</textarea>
                                                     @error('biography')
                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
@@ -165,7 +165,7 @@
                                                 <label class="col-3 col-form-label">Password</label>
                                                 <div class="col-9">
                                                     <input class="form-control @error('password') is-invalid @enderror"
-                                                           name="password" id="password" type="password">
+                                                           name="password" id="password" placeholder="Password" type="password">
                                                     @error('password')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
@@ -176,7 +176,7 @@
                                                 <div class="col-9">
                                                     <input
                                                         class="form-control @error('password_confirmation') is-invalid @enderror"
-                                                        name="password_confirmation" type="password">
+                                                        name="password_confirmation" placeholder="Confirm Password" type="password">
                                                     @error('password_confirmation')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror

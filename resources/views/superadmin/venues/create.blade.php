@@ -100,7 +100,7 @@
                                             <div class="form-group row">
                                                 <label class="col-3 col-form-label">Description</label>
                                                 <div class="col-9">
-                                                    <textarea class="form-control @error('description') is-invalid @enderror" name="description" rows="3" maxlength="200">{{ old('description') }}</textarea>
+                                                    <textarea class="form-control @error('description') is-invalid @enderror" name="description" placeholder="Venue Description" rows="3" maxlength="200">{{ old('description') }}</textarea>
                                                     @error('description')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
@@ -109,7 +109,7 @@
                                             <div class="form-group row">
                                                 <label class="col-3 col-form-label">Capacity (persons)</label>
                                                 <div class="col-9">
-                                                    <input class="form-control @error('capacity') is-invalid @enderror" type="number" name="capacity" value="{{ old('capacity') }}">
+                                                    <input class="form-control @error('capacity') is-invalid @enderror" type="number" name="capacity" placeholder="Capacity" value="{{ old('capacity') }}">
                                                     @error('capacity')
                                                         <div class="invalid-feedback">{{ $message }}</div>
                                                     @enderror
