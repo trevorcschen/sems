@@ -6,6 +6,7 @@ use App\Community;
 use App\Event;
 use App\User;
 use App\Venue;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -64,5 +65,35 @@ class HomeController extends Controller
         }
 
         return view('home', compact('widget'));
+    }
+
+
+    public function chart()
+    {
+        $user = Auth::user();
+
+        $response = array();
+
+        if ($user->hasRole('super-admin'))  {
+            $i = 0;
+            while ($i < 7) {
+                $dateOfWeekBefore = Carbon::now()->subDays($i + 1);
+                $dateOfWeek = Carbon::now()->subDays($i);
+                $eventsForThisDay = User::whereBetween('created_at', [$dateOfWeekBefore, $dateOfWeek]);
+                $response[$dateOfWeek->toDateString()] = $eventsForThisDay->count();
+                $i++;
+            }
+        } else {
+            $i = 0;
+            while ($i < 7) {
+                $dateOfWeekBefore = Carbon::now()->subDays($i + 1);
+                $dateOfWeek = Carbon::now()->subDays($i);
+                $eventsForThisDay = Event::whereBetween('created_at', [$dateOfWeekBefore, $dateOfWeek]);
+                $response[$dateOfWeek->toDateString()] = $eventsForThisDay->count();
+                $i++;
+            }
+        }
+
+        return response()->json($response);
     }
 }

@@ -29,8 +29,8 @@ class ViewServiceProvider extends ServiceProvider
     {
         View::composer('includes.asidemenu', function($view)
         {
-            $authID = Auth::user()->id;
-            $communities = Community::where('user_id', $authID)->get();
+            $userId = Auth::user()->id;
+            $communities = Community::where('user_id', $userId)->get();
             $view->with('communities', $communities);
         });
     }

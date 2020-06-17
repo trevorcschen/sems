@@ -21,7 +21,7 @@ Auth::routes(['verify' => true]);
 
 Route::get('/', 'HomeController@index')->name('home');;
 
-Route::get('event/chart','EventController@chart')->name('events.chart');
+Route::get('ajax/home/chart','HomeController@chart')->name('ajax.home.chart');
 
 Route::get('/profile', 'ProfileController@show')->name('profiles.show');;
 Route::get('/profile/edit', 'ProfileController@edit')->name('profiles.edit');;

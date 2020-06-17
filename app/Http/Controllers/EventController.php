@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Event;
-use App\User;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
@@ -44,10 +41,10 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Event $event)
     {
         //
     }
@@ -55,10 +52,10 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Event $event)
     {
         //
     }
@@ -67,10 +64,10 @@ class EventController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Event $event)
     {
         //
     }
@@ -78,40 +75,11 @@ class EventController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Event $event)
     {
         //
-    }
-
-    public function chart()
-    {
-        $user = Auth::user();
-
-        $response = array();
-
-        if ($user->hasRole('super-admin'))  {
-            $i = 0;
-            while ($i < 7) {
-                $dateOfWeekBefore = Carbon::now()->subDays($i + 1);
-                $dateOfWeek = Carbon::now()->subDays($i);
-                $eventsForThisDay = User::whereBetween('created_at', [$dateOfWeekBefore, $dateOfWeek]);
-                $response[$dateOfWeek->toDateString()] = $eventsForThisDay->count();
-                $i++;
-            }
-        } else {
-            $i = 0;
-            while ($i < 7) {
-                $dateOfWeekBefore = Carbon::now()->subDays($i + 1);
-                $dateOfWeek = Carbon::now()->subDays($i);
-                $eventsForThisDay = Event::whereBetween('created_at', [$dateOfWeekBefore, $dateOfWeek]);
-                $response[$dateOfWeek->toDateString()] = $eventsForThisDay->count();
-                $i++;
-            }
-        }
-
-        return response()->json($response);
     }
 }

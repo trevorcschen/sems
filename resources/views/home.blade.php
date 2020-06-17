@@ -204,10 +204,7 @@
                 @endrole
             </div>
         </div>
-
         <!--End::Row-->
-
-
         <!--End::Dashboard 1-->
     </div>
 @endsection
@@ -241,7 +238,7 @@
                 let dates = [];
                 let newUserCounts = [];
 
-                $.get("{{ route('events.chart') }}", function(response) {
+                $.get("{{ route('ajax.home.chart') }}", function(response) {
                     dates = Object.keys(response).reverse();
                     newUserCounts = Object.values(response).reverse() ;
                     var config = {
@@ -338,7 +335,7 @@
                 let dates = [];
                 let newUserCounts = [];
 
-                $.get("{{ route('events.chart') }}", function(response) {
+                $.get("{{ route('ajax.home.chart') }}", function(response) {
                     dates = Object.keys(response).reverse();
                     newUserCounts = Object.values(response).reverse() ;
                     console.log(dates);
