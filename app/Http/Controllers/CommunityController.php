@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Community;
 use App\Event;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -75,6 +76,9 @@ class CommunityController extends Controller
             'user_id' => $request->input('admin'),
         ]);
 
+        $user = User::find($request->input('admin'));
+        $user->syncRoles('community-admin');
+
         return redirect()->route('communities.index')
             ->withSuccess('Community <strong>' . $community->name . '</strong> created successfully.');
     }
@@ -137,6 +141,8 @@ class CommunityController extends Controller
             $logo_path = $community->logo_path;
         }
 
+        $oldAdminId = $community->admin->id;
+
         $community->update([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
@@ -146,6 +152,16 @@ class CommunityController extends Controller
             'active' => $request->input('active'),
             'user_id' => $request->input('admin'),
         ]);
+
+        $user = User::find($request->input('admin'));
+        $user->syncRoles(['community-admin']);
+
+        $otherCommunitiesforOldAdmin = Community::where('user_id', $community->admin)->whereNotIn('id', array($community));
+
+        if (!$otherCommunitiesforOldAdmin->exists()) {
+            $oldCommunityAdmin = User::find($oldAdminId);
+            $oldCommunityAdmin->syncRoles('student');
+        }
 
         return redirect()->route('communities.index')
             ->withSuccess('Community <strong>' . $community->name . '</strong> updated successfully.');

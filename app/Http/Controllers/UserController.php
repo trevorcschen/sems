@@ -229,7 +229,8 @@ class UserController extends Controller
         if($request->has('q')) {
             $search = $request->input('q');
 
-            $users = User::where('name','LIKE',"%$search%")
+            $users = User::role(['community-admin', 'student'])
+                ->where('name','LIKE',"%$search%")
                 ->orderBy('name', 'desc')
                 ->paginate(5);
 

@@ -111,4 +111,5 @@
 
 @section('pagescripts')
     <script src="{{ asset('assets/js/pages/custom/login/login-general.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/js/pages/crud/forms/widgets/input-mask.js') }}" type="text/javascript"></script>
 @endsection
