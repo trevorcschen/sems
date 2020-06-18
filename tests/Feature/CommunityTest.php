@@ -103,7 +103,8 @@ class CommunityTest extends TestCase
             'admin' => $userStudent->id,
         ]);
 
-        ddd($response);
+//        ddd($response);
+//        echo $userStudent->id;
 
         $response->assertRedirect(route('communities.index'));
 
