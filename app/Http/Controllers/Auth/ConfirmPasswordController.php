@@ -47,9 +47,4 @@ class ConfirmPasswordController extends Controller
     {
         return view('auths.passwords.confirm');
     }
-
-    protected function redirectTo()
-    {
-        return route('home');
-    }
 }

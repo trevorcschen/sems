@@ -90,9 +90,4 @@ class RegisterController extends Controller
     {
         return view('auths.register');
     }
-
-    protected function redirectTo()
-    {
-        return route('home');
-    }
 }

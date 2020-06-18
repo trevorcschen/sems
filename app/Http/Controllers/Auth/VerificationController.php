@@ -53,9 +53,4 @@ class VerificationController extends Controller
             ? redirect($this->redirectPath())
             : view('auths.verify');
     }
-
-    protected function redirectTo()
-    {
-        return route('home');
-    }
 }

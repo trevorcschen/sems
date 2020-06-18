@@ -44,9 +44,4 @@ class ResetPasswordController extends Controller
             ['token' => $token, 'email' => $request->email]
         );
     }
-
-    protected function redirectTo()
-    {
-        return route('home');
-    }
 }
