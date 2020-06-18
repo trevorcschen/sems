@@ -156,7 +156,7 @@ class CommunityController extends Controller
         $user = User::find($request->input('admin'));
         $user->syncRoles(['community-admin']);
 
-        $otherCommunitiesforOldAdmin = Community::where('user_id', $oldAdminId)->whereNotIn('id', array($community));
+        $otherCommunitiesforOldAdmin = Community::where('user_id', $oldAdminId)->whereNotIn('id', array($community->id));
 
         if (!$otherCommunitiesforOldAdmin->exists()) {
             $oldCommunityAdmin = User::find($oldAdminId);
