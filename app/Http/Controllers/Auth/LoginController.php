@@ -48,4 +48,9 @@ class LoginController extends Controller
     {
         return view('auths.login');
     }
+
+    protected function redirectTo()
+    {
+       return route('home');
+    }
 }
