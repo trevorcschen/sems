@@ -81,6 +81,9 @@ class CommunityTest extends TestCase
         $user = factory(User::class)->create();
         $user->syncRoles('super-admin');
 
+        $userStudent = factory(User::class)->create();
+        $userStudent->syncRoles('student');
+
         $community = factory(Community::class)->create();
 
         $name = $this->faker->name;
@@ -97,7 +100,7 @@ class CommunityTest extends TestCase
             'max_members' => $max_members,
             'logo_path' => $logo_path,
             'active' => $active,
-            'admin' => $user->id,
+            'admin' => $userStudent->id,
         ]);
 
         $response->assertRedirect(route('communities.index'));
@@ -109,7 +112,7 @@ class CommunityTest extends TestCase
             'max_members' => $max_members,
             'logo_path' => $logo_path,
             'active' => $active,
-            'user_id' => $user->id,
+            'user_id' => $userStudent->id,
         ]);
     }
 
