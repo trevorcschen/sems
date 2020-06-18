@@ -103,10 +103,9 @@ class CommunityTest extends TestCase
             'admin' => $userStudent->id,
         ]);
 
-//        echo $userStudent->id;
+        ddd($response);
 
         $response->assertRedirect(route('communities.index'));
-        ddd($response);
 
         $this->assertDatabaseHas('communities', [
             'name' => $name,
