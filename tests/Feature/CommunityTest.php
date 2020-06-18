@@ -48,7 +48,7 @@ class CommunityTest extends TestCase
 
         $name = $this->faker->name;
         $description = $this->faker->text($maxNbChars = 200);
-        $fee = $this->faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = NULL);
+        $fee = $this->faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 5);
         $max_members = $this->faker->numberBetween($min = 50, $max = 1200);
         $logo_path = null;
         $active = true;
@@ -62,8 +62,6 @@ class CommunityTest extends TestCase
             'active' => $active,
             'admin' => $user->id,
         ]);
-
-//        ddd($response);
 
         $response->assertRedirect(route('communities.index'));
 
@@ -87,7 +85,7 @@ class CommunityTest extends TestCase
 
         $name = $this->faker->name;
         $description = $this->faker->text($maxNbChars = 200);
-        $fee = $this->faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = NULL);
+        $fee = $this->faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 5);
         $max_members = $this->faker->numberBetween($min = 50, $max = 1200);
         $logo_path = null;
         $active = true;
