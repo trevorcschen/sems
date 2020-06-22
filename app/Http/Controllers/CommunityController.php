@@ -6,6 +6,7 @@ use App\Community;
 use App\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class CommunityController extends Controller
@@ -243,4 +244,58 @@ class CommunityController extends Controller
 //        echo $id;
         return view('communityadmin.community.group', compact('events','community'))->with('count', $count->count());
     }
+
+    public function aJaxUpdateCom(Request $request)
+    {
+        if($request->get('isNewImage') == "true")
+        {
+            $base64_image = $request->get('base64URL');
+            @list($type, $file_data) = explode(';', $base64_image);
+            @list(, $type) = explode('/', $type);
+            @list(, $file_data) = explode(',', $file_data);
+            $newFileName = mt_rand().time() . '.' . $type;
+//            Storage::put('images/community/'. $request->get('id').'/'.$newFileName, base64_decode($file_data)); // store img locally
+            $community = Community::where('id' , $request->get('id'))->first();
+            $community->description = $request->get('description');
+            $community->fee = (double) $request->get('fees');
+            $community->max_members = $request->get('max_mem');
+            if($community->isDirty())
+            {
+                $community->logo_path = $newFileName;
+//                $community->update();
+                return response()->json(['status'=> '1', 'messaged' => 'received', 'isDirty' => 'true'], 200);
+
+            }
+            else
+            {
+                $community->logo_path = $newFileName;
+//                $community->update();
+                return response()->json(['status'=> '1', 'messaged' => 'received', 'isDirty' => 'false'], 200);
+            }
+        }
+        else
+        {
+            $community = Community::where('id' , $request->get('id'))->first();
+            $community->description = $request->get('description');
+            $community->fee = (double) $request->get('fees');
+            $community->max_members = $request->get('max_mem');
+            if($community->isDirty())
+            {
+                $community->update();
+                Session::flash('message', $community->getDirty());
+
+                return response()->json(['status'=> '1', 'messaged' => 'received', 'isDirty' => 'true', $community->getDirty()], 200);
+
+            }
+            else
+            {
+                return response()->json(['status'=> '0', 'messaged' => 'received but nothing else changed', ], 200);
+
+            }
+        }
+
+
+    }
+
+
 }
