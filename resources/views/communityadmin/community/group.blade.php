@@ -233,90 +233,90 @@
 
             </div>
                 <!-- Modal Event -->
-{{--                <div class="modal fade" id="exampleModal"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">--}}
-{{--                    <div class="modal-dialog" role="document">--}}
-{{--                        <div class="modal-content">--}}
-{{--                            <div class="modal-header">--}}
-{{--                                <h5 class="modal-title" id="exampleModalLabel">Event Creation</h5>--}}
-{{--                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
-{{--                                    <span aria-hidden="true">&times;</span>--}}
-{{--                                </button>--}}
-{{--                            </div>--}}
-{{--                            <div class="modal-body">--}}
-{{--                                <form>--}}
-{{--                                    <div class="form-group">--}}
-{{--                                        <label for="recipient-name" class="col-form-label">Event Name:</label>--}}
-{{--                                        <input type="text" class="form-control" id="recipient-name">--}}
-{{--                                    </div>--}}
-{{--                                    <div class="form-group">--}}
-{{--                                        <label for="message-text" class="col-form-label">Event Description:</label>--}}
-{{--                                        <textarea class="form-control" id="event-description"></textarea>--}}
-{{--                                    </div>--}}
-{{--                                        <div class="form-group">--}}
-{{--                                            <label for="message-text" class="col-form-label">Event Start Date:</label>--}}
-{{--                                            <div class="input-group">--}}
-{{--                                                <input type='text' class="form-control" id='datetimepicker4' autocomplete="off" />--}}
-{{--                                                <span class="input-group-text">--}}
-{{--                                                            <span class="glyphicon glyphicon-calendar"></span>--}}
-{{--                                                        </span>--}}
-{{--                                            </div>--}}
+                <div class="modal fade" id="exampleModal"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Event Creation</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">Event Name:</label>
+                                        <input type="text" class="form-control" id="recipient-name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Event Description:</label>
+                                        <textarea class="form-control" id="event-description"></textarea>
+                                    </div>
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Event Start Date:</label>
+                                            <div class="input-group">
+                                                <input type='text' class="form-control" id='datetimepicker4' autocomplete="off" />
+                                                <span class="input-group-text">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                            </div>
 
-{{--                                        </div>--}}
-{{--                                    <div class="form-group">--}}
-{{--                                            <label for="message-text" class="col-form-label">Event End Date:</label>--}}
-{{--                                        <div class="input-group">--}}
+                                        </div>
+                                    <div class="form-group">
+                                            <label for="message-text" class="col-form-label">Event End Date:</label>
+                                        <div class="input-group">
 
-{{--                                        <input type='text' class="form-control" id='datetimepicker3' autocomplete="off" />--}}
-{{--                                        <span class="input-group-text">--}}
-{{--                                                            <span class="glyphicon glyphicon-calendar"></span>--}}
-{{--                                                        </span>--}}
-{{--                                        </div>--}}
+                                        <input type='text' class="form-control" id='datetimepicker3' autocomplete="off" />
+                                        <span class="input-group-text">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                        </div>
 
-{{--                                    </div>--}}
+                                    </div>
 
-{{--                                    <div class="form-group">--}}
-{{--                                        <label for="message-text" class="col-form-label">Event Fee : </label>--}}
-{{--                                        <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="fees" value="{{ old('max_members') }}" id="fee">--}}
-{{--                                        @error('max_members')--}}
-{{--                                        <div class="invalid-feedback">{{ $message }}</div>--}}
-{{--                                        @enderror--}}
-{{--                                    </div>--}}
-{{--                                    <div class="form-group">--}}
-{{--                                        <label for="message-text" class="col-form-label">Maximum Participants :</label>--}}
-{{--                                        <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="max_members" value="{{ old('max_members') }}" id="max_members">--}}
-{{--                                        @error('max_members')--}}
-{{--                                        <div class="invalid-feedback">{{ $message }}</div>--}}
-{{--                                        @enderror--}}
-{{--                                    </div>--}}
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Event Fee : </label>
+                                        <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="fees" value="{{ old('max_members') }}" id="fee">
+                                        @error('max_members')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message-text" class="col-form-label">Maximum Participants :</label>
+                                        <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="max_members" value="{{ old('max_members') }}" id="max_members">
+                                        @error('max_members')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
 
-{{--                                    <div class="form-group">--}}
-{{--                                        <label for="exampleFormControlSelect1">Venue</label>--}}
-{{--                                        <br/>--}}
-{{--                                        <select class="form-control js-data-example-ajax" id="venue">--}}
-{{--                                            <option></option>--}}
-{{--                                        </select>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="form-group">--}}
-{{--                                        <label class="col-form-label">Event Image : </label>--}}
-{{--                                        <div class="custom-file input-group">--}}
-{{--                                            <input type="file" class="custom-file-input image-picker" id="inputGroupFile01"--}}
-{{--                                                   aria-describedby="inputGroupFileAddon01">--}}
-{{--                                            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="ml-2 col-sm-6" style="padding: 10px;">--}}
-{{--                                        <img src="https://placehold.it/80x80" id="preview" class="img-thumbnail" style="display: none">--}}
-{{--                                    </div>--}}
+                                    <div class="form-group">
+                                        <label for="exampleFormControlSelect1">Venue</label>
+                                        <br/>
+                                        <select class="form-control js-data-example-ajax" id="venue">
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-form-label">Event Image : </label>
+                                        <div class="custom-file input-group" id="eventProps">
+                                            <input type="file" class="custom-file-input image-picker" id="inputGroupFile01"
+                                                   aria-describedby="inputGroupFileAddon01">
+                                            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                        </div>
+                                    </div>
+                                    <div class="ml-2 col-sm-6" style="padding: 10px;">
+                                        <img src="https://placehold.it/80x80" id="preview" class="img-thumbnail" style="display: none">
+                                    </div>
 
-{{--                                </form>--}}
-{{--                            </div>--}}
-{{--                            <div class="modal-footer">--}}
-{{--                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>--}}
-{{--                                <button type="button" class="btn btn-primary">CREATE</button>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">CREATE</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Modal Coommunity -->
                 <div class="modal fade" id="modalCommunity" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -356,14 +356,14 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="col-form-label">Community Icon : </label>
-                                        <div class="custom-file input-group">
+                                        <div class="custom-file input-group" id="communityProps">
                                             <input type="file" class="custom-file-input image-picker" id="inputGroupFile01" name="image_community"
                                                    aria-describedby="inputGroupFileAddon01">
                                             <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                                         </div>
                                     </div>
                                     <div class="ml-2 col-sm-6" style="padding: 10px;">
-                                        <img src="https://placehold.it/80x80" id="preview" class="img-thumbnail" style="display: none">
+                                        <img src="https://placehold.it/80x80" id="previewEdit" class="img-thumbnail" style="display: none">
                                     </div>
 
                                 </form>
@@ -488,7 +488,11 @@
                     $(".image-picker").reset();
                     return;
                 }
-                $("#preview").css("display", "block");
+                var parentProp = $(this).parent();
+
+                // console.log(parentProp.prop('id'));
+                parentProp.prop('id') === 'eventProps' ? $("#preview").css("display", "block") : $("#previewEdit").css("display", "block");
+                // $("#preview").css("display", "block");
 
                 console.log(fileName)
                 $("#file").val(fileName);
@@ -496,7 +500,7 @@
                 var reader = new FileReader();
                 reader.onload = function(e) {
                     // get loaded data and render thumbnail.
-                    document.getElementById("preview").src = e.target.result;
+                    document.getElementById(parentProp.prop('id') === 'eventProps' ? "preview" : "previewEdit").src = e.target.result;
                 };
                 // read the image file as a data URL.
                 reader.readAsDataURL(this.files[0]);
@@ -530,6 +534,25 @@
 
             });
 
+            $('#exampleModal').on('hidden.bs.modal', function(event)
+            {
+                var imgSrc = document.querySelector('#preview');
+                imgSrc.style.display = "none";
+                imgSrc.src = ' ';
+                var imageLabel = document.querySelector('.custom-file-label');
+                imageLabel.classList.remove('selected');
+                imageLabel.innerHTML = 'Choose File';
+            })
+            $('#modalCommunity').on('hidden.bs.modal', function(event)
+            {
+                var imgSrc = document.querySelector('#previewEdit');
+                imgSrc.style.display = "none";
+                imgSrc.src = ' ';
+                var imageLabel = document.querySelectorAll('.custom-file-label')[1];
+                imageLabel.classList.remove('selected');
+                imageLabel.innerHTML = 'Choose File';
+            })
+
 
             $('#exampleModal').on('show.bs.modal', function (event) {
                 $eventChange = $(event.relatedTarget).data('is');
@@ -549,8 +572,8 @@
                 $(this).find(".modal-body").find("#fee").val(myVal.fee.toFixed(2));
                 $(this).find(".modal-body").find("#max_members").val(myVal.max_participants);
                 var newOption = new Option($venue, myVal.venue_id, true, true);
-
                 $(".js-data-example-ajax").append(newOption).trigger('change')
+
 
                 // $(this).find(".modal-body").find("#venue").val('dsa');
                 // $(this).find(".modal-body").find("#venue").html('<option></option>')
