@@ -229,7 +229,7 @@ class CommunityController extends Controller
     // Trevor Module
     public function communityPage($id)
     {
-        $events = Event::where('community_id', $id)->paginate(12);
+        $events = Event::where('community_id', $id)->where('active', 1)->paginate(12);
         foreach ($events as $event)
     {
         $event->current_participants = rand(0, $event->max_participants);
@@ -282,7 +282,7 @@ class CommunityController extends Controller
             if($community->isDirty())
             {
                 $community->update();
-                Session::flash('message', $community->getDirty());
+                Session::flash('message', "Customization on Community Details worked perfectly !!.");
 
                 return response()->json(['status'=> '1', 'messaged' => 'received', 'isDirty' => 'true', $community->getDirty()], 200);
 

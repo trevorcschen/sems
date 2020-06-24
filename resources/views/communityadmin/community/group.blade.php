@@ -71,7 +71,7 @@
                 <div class="alert-icon"><i class="flaticon2-checkmark"></i></div>
                 <div class="alert-text">
                     <strong>
-                        Well done! Customization on Community Details worked perfectly !!.
+                        Well done! {{Session::get('message')}}.
                     </strong>
                     {!! session('success') !!}
                 </div>
@@ -90,7 +90,6 @@
                                             <i class="kt-font-brand flaticon2-line-chart"></i>
                                             @else
                                                 <img src="storage/images/community/{{$community->id}}/{{$community->logo_path}}" style="width: 32px;height: 32px;" />
-
                                             @endif
 										</span>
                     <h3 class="kt-portlet__head-title">
@@ -167,7 +166,7 @@
                                                       <div class="dropdown-divider"></div>
                                                       <a class="dropdown-item" data-toggle="modal" data-target="#exampleModal" data-is ="true" data-val="{{$event}}" data-venue="{{$event->venue->name}}" href="javascript:void(0)">Update Event's details</a>
                                                       <div class="dropdown-divider"></div>
-                                                      <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#deleteModal">Update Event's Status</a>
+                                                      <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#deleteModal" data-del-id ="{{$event->id}}">Update Event's Status</a>
                                                   </div>
                                               </div>
 
@@ -392,7 +391,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-danger">Save changes</button>
+                                <button type="button" class="btn btn-danger delCommunityModal">Save changes</button>
                             </div>
                         </div>
                     </div>
@@ -503,6 +502,35 @@
                 reader.readAsDataURL(this.files[0]);
             });
 
+            $('#deleteModal').on('show.bs.modal', function (event)
+            {
+                console.log($(event.relatedTarget).data('del-id'))
+                $(".delCommunityModal").click(function()
+                {
+                    console.log('delete this id' + $(event.relatedTarget).data('del-id'))
+                    $.ajax(
+                        {
+                            url: "{{route('event.ajax.delete')}}",
+                            type: "POST",
+                            data: {
+                                id : $(event.relatedTarget).data('del-id'),
+                            },
+                            dataType: 'json',
+                            headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                            success: function (data, text, xhr) {
+                                console.log(data)
+                                location.reload();
+
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+
+                            }
+                        });
+                });
+
+            });
+
+
             $('#exampleModal').on('show.bs.modal', function (event) {
                 $eventChange = $(event.relatedTarget).data('is');
                 if(typeof $eventChange == "undefined")
@@ -530,7 +558,7 @@
             });
             var substringTest = function (str) {
                 return str.substring(str.lastIndexOf('\\')+1);
-            }
+            };
             $(".updateCommunityModal").click(function()
             {
                 var description = document.querySelector('textarea[name="community_description"]');
@@ -538,13 +566,13 @@
                 var fees = document.querySelector('input[name="community_fees"]');
                 var com_id = document.querySelector('input[name="community_id"]');
 
-                description.classList.remove('is-invalid')
-                max_mem.classList.remove('is-invalid')
-                fees.classList.remove('is-invalid')
+                description.classList.remove('is-invalid');
+                max_mem.classList.remove('is-invalid');
+                fees.classList.remove('is-invalid');
 
-                console.log(description.value)
-                console.log(max_mem.value)
-                console.log(fees.value)
+                console.log(description.value);
+                console.log(max_mem.value);
+                console.log(fees.value);
                 var imageSelector = document.querySelector('input[name="image_community"]');
                 var imageURL = document.getElementById("preview");
                 // console.log(imageURL.src)

@@ -44,6 +44,7 @@ Route::resource('communities', 'CommunityController');
 
 Route::get('/commi/{id}','CommunityController@communityPage')->name('commi.community');
 Route::post('/ajax/updateCom', 'CommunityController@aJaxUpdateCom')->name('commi.ajax.update.community');
+Route::post('/ajax/deleteEvent', 'EventController@ajaxDeleteEvent')->name('event.ajax.delete');
 Route::get('/eventC', function() // testing
 {
     $length = 50;
