@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Community;
 use App\Event;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use JD\Cloudder\Facades\Cloudder;
 
 class CommunityController extends Controller
 {
@@ -229,19 +231,14 @@ class CommunityController extends Controller
     // Trevor Module
     public function communityPage($id)
     {
-        $events = Event::where('community_id', $id)->where('active', 1)->paginate(12);
+        $events = Event::where('community_id', $id)->where('active', 1)->where('start_time' ,'>=', Carbon::now()->toDateString('Y-m-d'))->paginate(12);
         foreach ($events as $event)
     {
         $event->current_participants = rand(0, $event->max_participants);
         $event->percentage = round($event->current_participants / $event->max_participants * 100, 0);
     }
-//        foreach ($events as $event)
-//        {
-//            echo $event;
-//        }
-        $count = Event::where('community_id', $id)->get();
+        $count = Event::where('community_id', $id)->where('start_time' ,'>=', Carbon::now()->toDateString('Y-m-d'))->get();
         $community = Community::where('id', $id)->first();
-//        echo $id;
         return view('communityadmin.community.group', compact('events','community'))->with('count', $count->count());
     }
 
@@ -268,6 +265,10 @@ class CommunityController extends Controller
             }
             else
             {
+//                Cloudder::upload($base64_image, null);
+//                $pId = Cloudder::getPublicId();
+//                $imageURL = Cloudder::show($pId, ["width" => 500, "height"=>500]);
+
                 $community->logo_path = $newFileName;
 //                $community->update();
                 return response()->json(['status'=> '1', 'messaged' => 'received', 'isDirty' => 'false'], 200);
@@ -296,6 +297,5 @@ class CommunityController extends Controller
 
 
     }
-
 
 }

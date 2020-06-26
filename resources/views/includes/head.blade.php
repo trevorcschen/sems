@@ -18,6 +18,7 @@
     <!--begin::Global Theme Styles(used by all pages) -->
     <link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js" type="text/javascript"></script>
     <!--end::Global Theme Styles -->
 
     <!--begin::Layout Skins(used by all pages) -->

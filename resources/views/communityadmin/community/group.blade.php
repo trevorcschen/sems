@@ -61,6 +61,13 @@
         margin-top: -5px;
         right: 1px;
     }
+
+    .card-header
+    {
+        cursor: pointer;
+    }
+
+
 </style>
 
 @section('content')
@@ -121,16 +128,21 @@
                       <div class="sub-flex" style="display: flex;flex-wrap: wrap">
 
                           @foreach($events as $event)
-                          <div class="card text-white bg-primary mb-3" style="max-width: 350px;display: flex;flex-direction: row;margin: 0px 5px 0px 5px;">
-                              <div class="card-header" style="background-color: #ff673d;padding: 10px 15px 10px 15px;max-width: 150px">
+                          <div class="card text-white bg-primary mb-3 cardEvents" style="max-width: 350px;display: flex;flex-direction: row;margin: 0px 5px 0px 5px;">
+                              <div class="card-header" style="background-color: #ff673d;padding: 10px 15px 10px 15px;max-width: 150px" data-id="{{$event->id}}" data-toggle="tooltip" title="Click the panel to view the event's detail" >
 {{--                                  <h5 class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white">Community Admin</h5>--}}
                                   <h5>Organized By
                                       <span class="kt-badge kt-badge--inline kt-badge--pill" style="background-color: rgba(83, 161, 243, 0.92);font-weight: lighter;margin-top:10px">Computer Science Societies</span>
                                       <span class="badge badge-pill badge" style="background-color:#3dc8ff;color: white"></span>
                                   </h5>
                                   <img src="https://image.flaticon.com/icons/svg/2971/2971373.svg" style="height: 64px;width: 64px;margin: 15px"/>
-                                  <p class="card-text">Due Date :
-                                  <span class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white"> 2020-02-01 23:59:59</span>
+{{--                                  <a href="#" onclick="return false;" style="color:white" title="Dued at 2020-02-01">--}}
+{{--                                      <i class="flaticon-calendar" style="padding-right: 10px"></i>--}}
+{{--                                      <span class="badge badge-pill badge-secondary" style="background-color:#3dc8ff    ;color: white"> 2020-02-01 23:59:59</span>--}}
+{{--                                  </a>--}}
+{{----}}
+                                  <p class="card-text">Dued  at
+                                  <span class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white"> {{date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $event->start_time) ) )) }}</span>
                                   </p>
                               </div>
                               <div class="flip-card">
@@ -154,9 +166,9 @@
 
                                       <div class="card-body card-back">
                                           <div style="display: flex;flex-direction: column">
-                                              <div style="padding: 0px 24px 0px 24px">
-                                                  <span style="text-align: center;width: 10px">{{$event->name}}dsadsaadsasddas</span>
-                                              </div>
+{{--                                              <div style="padding: 0px 24px 0px 24px">--}}
+{{--                                                  <span style="text-align: center;width: 10px">{{$event->name}}dsadsaadsasddas</span>--}}
+{{--                                              </div>--}}
                                               <div class="action-bar" style="right: 1px">
                                                   <svg class="bi bi-three-dots-vertical" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="color: black;font-size: 16px;margin-right: 5px">
                                                       <path fill-rule="evenodd" d="M9.5 13a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clip-rule="evenodd"/>
@@ -174,13 +186,13 @@
 
 
                                                                            @if($event->fee == 0.0)
-                                              <h5 class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white;padding: 5px;margin: 5px;">Free of Charge (FOC)</h5>
+                                              <h5 class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white;padding: 5px;margin: 5px;margin-top: 20px">Free of Charge (FOC)</h5>
                                           @else
                                               <span>Fee <h5 class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white;padding: 5px;margin: 5px;">RM {{number_format($event->fee, 2)}}</h5> </span> <br/>
                                           @endif
-                                          <span>From<h5 class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white;padding: 5px;margin: 5px;">{{date( 'd-m-Y, D ,h:i a', strtotime($event->start_time))}}</h5></span>
-                                          <br />
-                                          <span>To<h5 class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white;padding: 5px;margin: 5px;">{{date( 'd-m-Y, D ,h:i a', strtotime($event->end_time))}}</h5></span>
+                                          <div>From<h5 class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white;padding: 5px;margin: 5px;">{{date( 'd-m-Y, D ,h:i a', strtotime($event->start_time))}}</h5></div>
+                                          <div>
+                                              <h6>To</h6><h5 class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white;padding: 5px;margin: 5px;">{{date( 'd-m-Y, D ,h:i a', strtotime($event->end_time))}}</h5></div>
                                           <span>Venue <h5 class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white;padding: 5px;margin: 5px;">{{$event->venue->name}}</h5></span>
 
                                           <div style="display: flex;padding: 10px;">
@@ -221,8 +233,10 @@
                                   @if(strlen($community->description ) > 100)
                                       <a href="javascript:void(0)" id="dots" style="color: blue;opacity: 1;display: block">Read More</a><span id="more" style="display: none">{{substr($community->description, 100)}}</span></p>
                               @endif
-                              <h4 class="card-title">Community Creation Date </h4>
-                              <span class="kt-badge kt-badge--inline kt-badge--pill" style="background-color: rgba(83, 161, 243, 0.92);font-weight: lighter;margin-top:10px;color: white">{{date_format($community->created_at, 'd M Y')}}</span>
+                              <div class="kt-widget__subhead" style="display: flex;justify-content: space-around">
+                                  <a href="#" onclick="return false;" title="Created at {{date_format($community->created_at, 'd M Y')}}"><i class="flaticon-calendar" style="padding-right: 10px"></i>{{date_format($community->created_at, 'd M Y')}}</a>
+                                  <a href="#" onclick="return false;" title="Updated at {{date_format($community->updated_at, 'd M Y')}}"><i class="flaticon2-pen" style="padding-right: 10px"></i>{{date_format($community->updated_at, 'd M Y')}}</a>
+                              </div>
 
                           </div>
                       </div>
@@ -244,13 +258,23 @@
                             </div>
                             <div class="modal-body">
                                 <form>
+                                    <div class="alert alert-danger alert-ajax" role="alert" style="display: none">
+                                        This is a primary alert—check it out!
+                                    </div>
                                     <div class="form-group">
                                         <label for="recipient-name" class="col-form-label">Event Name:</label>
                                         <input type="text" class="form-control" id="recipient-name">
+                                        <div class="invalid-feedback">
+                                            Please provide an event name
+                                        </div>
+                                        <input type="text" class="form-control" id="event-id" hidden>
                                     </div>
                                     <div class="form-group">
                                         <label for="message-text" class="col-form-label">Event Description:</label>
-                                        <textarea class="form-control" id="event-description"></textarea>
+                                        <textarea class="form-control" id="event-description" name="event-description"></textarea>
+                                        <div class="invalid-feedback">
+                                            Please provide an event description
+                                        </div>
                                     </div>
                                         <div class="form-group">
                                             <label for="message-text" class="col-form-label">Event Start Date:</label>
@@ -259,6 +283,9 @@
                                                 <span class="input-group-text">
                                                             <span class="glyphicon glyphicon-calendar"></span>
                                                         </span>
+                                            </div>
+                                            <div class="invalid-feedback">
+                                                Please provide an appropriate starting date of event
                                             </div>
 
                                         </div>
@@ -271,22 +298,25 @@
                                                             <span class="glyphicon glyphicon-calendar"></span>
                                                         </span>
                                         </div>
+                                        <div class="invalid-feedback">
+                                            Please provide an appropriate ending date of event
+                                        </div>
 
                                     </div>
 
                                     <div class="form-group">
                                         <label for="message-text" class="col-form-label">Event Fee : </label>
                                         <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="fees" value="{{ old('max_members') }}" id="fee">
-                                        @error('max_members')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                        <div class="invalid-feedback">
+                                            Please provide an appropriate event fee, (min : 0.00)
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="message-text" class="col-form-label">Maximum Participants :</label>
                                         <input class="form-control @error('max_members') is-invalid @enderror" type="number" name="max_members" value="{{ old('max_members') }}" id="max_members">
-                                        @error('max_members')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                        <div class="invalid-feedback">
+                                            Please provide an appropriate number of participants
+                                        </div>
                                     </div>
 
                                     <div class="form-group">
@@ -295,6 +325,9 @@
                                         <select class="form-control js-data-example-ajax" id="venue">
                                             <option></option>
                                         </select>
+                                        <div class="invalid-feedback">
+                                            Please provide an venue for the event
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-form-label">Event Image : </label>
@@ -302,6 +335,9 @@
                                             <input type="file" class="custom-file-input image-picker" id="inputGroupFile01"
                                                    aria-describedby="inputGroupFileAddon01">
                                             <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            Please provide an image for the event
                                         </div>
                                     </div>
                                     <div class="ml-2 col-sm-6" style="padding: 10px;">
@@ -408,11 +444,128 @@
 {{--        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>--}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
 
 
     <script type="text/javascript">
 
         $(document).ready(function(){
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $(document).on('click', "button.eventCreate", function(e)
+            {
+                console.log('d')
+            })
+
+            $(document).on('click', "button.eventUpdate", function(e)
+            {
+                for(var i = 0 ; i< document.querySelectorAll(".invalid-feedback").length; i++)
+                {
+                    document.querySelectorAll(".invalid-feedback")[i].style.display = 'none';
+
+                }
+                document.querySelector('.alert-ajax').style.display = 'none';
+
+                var eventName = document.getElementById('recipient-name');
+                var eventDescription = document.querySelector('textarea[name="event-description"]');
+                var eventID = document.querySelector('input[id="event-id"]');
+                var eventDate1 = document.querySelector('input[id="datetimepicker4"]');
+                var eventDate2 = document.querySelector('input[id="datetimepicker3"]');
+                var selectElement = document.querySelector('select[id="venue"]');
+                var imageURL = document.getElementById("preview");
+                // console.log(eventName.value);
+                // console.log(eventDescription.value);
+                // console.log(eventDate1.value);
+                // console.log(eventDate2.value);
+                // console.log(selectElement.selectedIndex)
+                console.log(selectElement.options[selectElement.selectedIndex].value);
+                // console.log(selectElement.options[selectElement.selectedIndex].textContent);
+
+                if(eventName.value === null || eventName.value === '')
+                {
+                    document.querySelectorAll(".invalid-feedback")[0].style.display = 'block';
+                }
+                if(eventDescription.value === null || eventDescription.value === '')
+                {
+                    document.querySelectorAll(".invalid-feedback")[1].style.display = 'block';
+                }
+                if(moment(eventDate2.value).isSameOrBefore(eventDate1.value))
+                {
+                    document.querySelectorAll(".invalid-feedback")[3].style.display = 'block';
+                }
+                if(selectElement.options[selectElement.selectedIndex].value === '' || selectElement.options[selectElement.selectedIndex].value === null)
+                {
+                    document.querySelectorAll(".invalid-feedback")[6].style.display = 'block';
+                }
+
+                var elementStyle = document.querySelectorAll(".invalid-feedback")[0];
+                var anyError = false;
+                _.forEach(document.querySelectorAll(".invalid-feedback"), (item, index) =>
+                {
+                    (item.computedStyleMap().get('display').value === 'block') ? anyError = true : null
+                });
+                if(anyError)
+                {
+                    console.log(anyError);
+                    return;
+                }
+
+                // console.log(elementStyle.computedStyleMap().get('display'));
+                // console.log(imageURL.src);
+                // console.log(!!imageURL.src.includes('base64'))
+
+                $.ajax(
+                    {
+                        url: "{{route('event.ajax.update')}}",
+                        type: "POST",
+                        data : {
+                            base64URL : imageURL.src,
+                            id : eventID.value,
+                            description : eventDescription.value,
+                            name: eventName.value,
+                            startDate: eventDate1.value,
+                            endDate: eventDate2.value,
+                            venueID :selectElement.options[selectElement.selectedIndex].value ,
+                            isNewImage: !!imageURL.src.includes('base64') // !!true => true / !!false => false
+                        },
+                        dataType: 'json',
+                        headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                        success: function (data, text, xhr) {
+                            console.log('ajax')
+                            if(data.status === "1")
+                            {
+                                if(data.errorFound)
+                                {
+                                    document.querySelector('.alert-ajax').style.display = 'block';
+                                    document.querySelector('.alert-ajax').textContent = 'ERROR!! Please select other venue or time';
+                                    return;
+                                }
+                                location.reload()
+
+                            }
+                            else
+                            {
+                                console.log('false');
+                                document.querySelector('.alert-ajax').style.display = 'block';
+                                document.querySelector('.alert-ajax').textContent = 'ERROR!! No Columns have been changed';
+                            }
+
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+
+                        }
+                    });
+
+
+                // console.log($(".js-data-example-ajax :selected").text())
+            });
+
+
+            $(".card-header").on('click', function(e)
+            {
+                console.log($(this).data("id"))
+            });
             $('.js-data-example-ajax').select2({
                 placeholder : 'Venue',
                 width: '200px',
@@ -434,7 +587,7 @@
                         return t.page = t.page || 1, {
                             results:  $.map(e.data, function (item) {
                                 return {
-                                    id: item.name,
+                                    id: item.id,
                                     text: item.name,
                                 }
                             }),
@@ -446,15 +599,19 @@
                     cache: !0
                 },
             });
-            $('#datetimepicker3').datetimepicker();
-            $('#datetimepicker4').datetimepicker();
+            $('#datetimepicker3, #datetimepicker4').on("show", function(e){
+                e.preventDefault();
+                e.stopPropagation();
+            }).on("hide", function(e){
+                e.preventDefault();
+                e.stopPropagation();
+            });
+            $('#datetimepicker3, #datetimepicker4').datetimepicker(      {
+                // startDate: new Date(),
+                format : "yyyy-mm-dd hh:ii:ss",
+                minuteStep : 15
+            });
 
-            $('#exampleModal').on('hidden.bs.modal', function (e) {
-                // do something...
-                $(this).find(".modal-body").find("input ,textarea").val('');
-                $('.js-data-example-ajax').empty()
-
-            })
             $(".action-bar").css('position', 'absolute');
             $(".action-bar").hover(function()
             {
@@ -463,6 +620,8 @@
                $(".show").css('top', '0')
                $(".show").css('will-change', 'transform')
                $(".show").css('transform', 'translate3d(0px,16px,0px)')
+               $(".show").css('left', '34')
+
             }, function()
             {
                 $(".option-bar").removeClass('show')
@@ -536,13 +695,27 @@
 
             $('#exampleModal').on('hidden.bs.modal', function(event)
             {
+                for(var i = 0 ; i< document.querySelectorAll(".invalid-feedback").length; i++)
+                {
+                    document.querySelectorAll(".invalid-feedback")[i].style.display = 'none';
+
+                }
+                document.querySelector('.alert-ajax').style.display = 'none';
+
+                $(this).find(".modal-body").find("input ,textarea").val('');
+                $('.js-data-example-ajax').empty()
                 var imgSrc = document.querySelector('#preview');
                 imgSrc.style.display = "none";
                 imgSrc.src = ' ';
                 var imageLabel = document.querySelector('.custom-file-label');
                 imageLabel.classList.remove('selected');
                 imageLabel.innerHTML = 'Choose File';
-            })
+                $(this).find(".modal-body").find("#fee").removeAttr('disabled');
+                $(this).find(".modal-body").find("#max_members").removeAttr('disabled');
+                $classBtn = $(this).find('.modal-footer').find('.btn-primary');
+                $classBtn[0].className = $classBtn[0].className.replace(/\bevent.*?\b/g, '')
+
+            });
             $('#modalCommunity').on('hidden.bs.modal', function(event)
             {
                 var imgSrc = document.querySelector('#previewEdit');
@@ -556,16 +729,19 @@
 
             $('#exampleModal').on('show.bs.modal', function (event) {
                 $eventChange = $(event.relatedTarget).data('is');
+                console.log('stil lshow')
                 if(typeof $eventChange == "undefined")
                 {
                     console.log("creation");
                     $(this).find(".modal-title").text("Event Creation :");
+                    $(this).find('.modal-footer').find('.btn-primary').addClass('eventCreate');
                     return;
                 }
                 var myVal = $(event.relatedTarget).data('val')
                 $venue = $(event.relatedTarget).data('venue');
                 $(this).find(".modal-title").text('Event Update :');
                 $(this).find(".modal-body").find("#recipient-name").val(myVal.name);
+                $(this).find(".modal-body").find("#event-id").val(myVal.id);
                 $(this).find(".modal-body").find("#event-description").val(myVal.description);
                 $(this).find(".modal-body").find("#datetimepicker4").val(myVal.start_time);
                 $(this).find(".modal-body").find("#datetimepicker3").val(myVal.end_time);
@@ -573,6 +749,12 @@
                 $(this).find(".modal-body").find("#max_members").val(myVal.max_participants);
                 var newOption = new Option($venue, myVal.venue_id, true, true);
                 $(".js-data-example-ajax").append(newOption).trigger('change')
+
+                $(this).find(".modal-body").find("#fee").attr('disabled', 'true');
+                $(this).find(".modal-body").find("#max_members").attr('disabled', 'true');
+                $(this).find('.modal-footer').find('.btn-primary').addClass('eventUpdate');
+
+
 
 
                 // $(this).find(".modal-body").find("#venue").val('dsa');
@@ -593,11 +775,11 @@
                 max_mem.classList.remove('is-invalid');
                 fees.classList.remove('is-invalid');
 
-                console.log(description.value);
-                console.log(max_mem.value);
-                console.log(fees.value);
+                // console.log(description.value);
+                // console.log(max_mem.value);
+                // console.log(fees.value);
                 var imageSelector = document.querySelector('input[name="image_community"]');
-                var imageURL = document.getElementById("preview");
+                var imageURL = document.getElementById("previewEdit");
                 // console.log(imageURL.src)
                 // console.log(substringTest(imageSelector.value))
                 if(description.value.trim().length  === 0)
@@ -626,7 +808,7 @@
                             description : description.value,
                             max_mem: max_mem.value,
                             fees: fees.value,
-                            isNewImage: imageURL.src.includes('base64') ? true: false
+                            isNewImage: !!imageURL.src.includes('base64') // !!true => true / !!false => false
                         },
                         dataType: 'json',
                         headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
@@ -634,7 +816,7 @@
                                 if(data.status === "1")
                                 {
                                     console.log(data)
-                                    location.reload()
+                                    // location.reload()
 
                                 }
                                 else
