@@ -51,6 +51,10 @@ Route::post('/ajax/updateCom', 'CommunityController@aJaxUpdateCom')->name('commi
 Route::post('/ajax/deleteEvent', 'EventController@ajaxDeleteEvent')->name('event.ajax.delete');
 Route::post('/ajax/updateEvent', 'EventController@ajaxUpdateEvent')->name('event.ajax.update');
 Route::post('/ajax/createEvent', 'EventController@ajaxCreateEvent')->name('event.ajax.create');
+Route::get('/testNotification', function()
+{
+   return view('communityadmin.community.notification');
+});
 Route::get('/eventC', function() // testing
 {
     echo Auth::id();
@@ -79,7 +83,7 @@ Route::get('/eventC', function() // testing
 
 Route::get('/testEvent', function()
 {
-
+    event(new \App\Events\StudentNotification('You have been approved by the moderator to join this community!! Have fun and enjoy', '9057573')); // push notification after disapprove or approve to the specific student.
 //    $event = new Event();
 //    echo $event->id;
 //    echo Carbon::now()->toDateString('Y-m-d');
@@ -88,18 +92,18 @@ Route::get('/testEvent', function()
 //    dd($tz);
 //    $event->name = 'dd';
 //    echo join("" , $event->getDirty('name'));
-        $ymd = Carbon::createFromFormat('Y-m-d H:i:s', '2020-07-04 18:45:00');
-        echo $ymd;
-
-//        return response()->json([$ymd], 200);
-        $da = Carbon::createFromFormat('Y-m-d H:i:s', '2020-07-04 19:45:00')->subSeconds(1);
-        $sDate = Carbon::createFromFormat('Y-m-d', substr($ymd, 0, 10));
-        $formatted = $sDate->year . '-'. ($sDate->month < 10 ? '0'. $sDate->month: $sDate->month) . '-'. $sDate->day;
-    echo Event::where('venue_id', 2)
-        ->whereBetween('start_time', [$ymd, $da])
-        ->where('end_time' , '>=', $ymd)
-        ->where('start_time', 'like', $formatted.'%')->where('end_time', 'like', $formatted. '%')->where('active', 1)
-        ->exists() ? "true" : "false";
+//        $ymd = Carbon::createFromFormat('Y-m-d H:i:s', '2020-07-04 18:45:00');
+//        echo $ymd;
+//
+////        return response()->json([$ymd], 200);
+//        $da = Carbon::createFromFormat('Y-m-d H:i:s', '2020-07-04 19:45:00')->subSeconds(1);
+//        $sDate = Carbon::createFromFormat('Y-m-d', substr($ymd, 0, 10));
+//        $formatted = $sDate->year . '-'. ($sDate->month < 10 ? '0'. $sDate->month: $sDate->month) . '-'. $sDate->day;
+//    echo Event::where('venue_id', 2)
+//        ->whereBetween('start_time', [$ymd, $da])
+//        ->where('end_time' , '>=', $ymd)
+//        ->where('start_time', 'like', $formatted.'%')->where('end_time', 'like', $formatted. '%')->where('active', 1)
+//        ->exists() ? "true" : "false";
 //   $event = Event::where('venue_id', 1)->where('id', '!=' , '5')
 //       ->whereBetween('start_time', [$ymd, $da])
 //       ->where('end_time' , '>=', $ymd)
@@ -110,4 +114,11 @@ Route::get('/testEvent', function()
 //   {
 //       echo $events;
 //   }
+});
+
+Route::get('/testCommunity', function()
+{
+    echo Auth::user()->student_id;
+    echo Auth::user()->roles->first->name->name;
+//        event(new \App\Events\CommunityNotification('yoyohoooo', 'computer-science-society'));
 });

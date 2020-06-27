@@ -56,16 +56,16 @@
                     </h3>
                 </div>
                 @can('user.create')
-                <div class="kt-portlet__head-toolbar">
-                    <div class="kt-portlet__head-wrapper">
-                        <div class="kt-portlet__head-actions">
-                            <a href="{{ route('users.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
-                                <i class="la la-plus"></i>
-                                New Record
-                            </a>
+                    <div class="kt-portlet__head-toolbar">
+                        <div class="kt-portlet__head-wrapper">
+                            <div class="kt-portlet__head-actions">
+                                <a href="{{ route('users.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
+                                    <i class="la la-plus"></i>
+                                    New Record
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
                 @endcan
             </div>
             <div class="kt-portlet__body">
@@ -125,60 +125,60 @@
         </div>
     </div>
     @can('user.delete')
-    <!--begin::Modal-->
-    <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete permanently?</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>The record and all its associated data will deleted.</p>
-                </div>
-                <div class="modal-footer">
-                    <form method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-danger">Confirm Delete</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--end::Modal-->
-
-    <!--begin::Modal-->
-    <div class="modal fade" id="kt_modal_fetch_id_server" tabindex="-1" role="dialog"
-         aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete permanently?</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="kt-scrollable" data-scrollbar-shown="true" data-scrollable="true" data-height="200">
-                        <ul class="kt-datatable_selected_ids"></ul>
+        <!--begin::Modal-->
+        <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete permanently?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>The record and all its associated data will deleted.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <form method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                        </form>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <form method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-danger">Confirm Delete</button>
-                    </form>
+            </div>
+        </div>
+        <!--end::Modal-->
+
+        <!--begin::Modal-->
+        <div class="modal fade" id="kt_modal_fetch_id_server" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete permanently?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="kt-scrollable" data-scrollbar-shown="true" data-scrollable="true" data-height="200">
+                            <ul class="kt-datatable_selected_ids"></ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <form method="POST">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!--end::Modal-->
+        <!--end::Modal-->
     @endcan
 @endsection
 

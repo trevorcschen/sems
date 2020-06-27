@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.2.5",
+        "ext-intl": "*",
         "cloudinary/cloudinary_php": "dev-master",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
@@ -17,9 +18,9 @@
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
+        "pusher/pusher-php-server": "^4.1",
         "spatie/laravel-permission": "^3.11",
-        "yajra/laravel-datatables-oracle": "^9.10",
-        "ext-intl": "*"
+        "yajra/laravel-datatables-oracle": "^9.10"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
