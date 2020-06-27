@@ -239,6 +239,7 @@ class CommunityController extends Controller
     }
         $count = Event::where('community_id', $id)->where('start_time' ,'>=', Carbon::now()->toDateString('Y-m-d'))->get();
         $community = Community::where('id', $id)->first();
+        Session::flash('communityID', $community->id);
         return view('communityadmin.community.group', compact('events','community'))->with('count', $count->count());
     }
 

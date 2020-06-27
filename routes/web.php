@@ -2,6 +2,7 @@
 
 use App\Event;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,25 +49,27 @@ Route::get('/commi/{id}','CommunityController@communityPage')->name('commi.commu
 Route::post('/ajax/updateCom', 'CommunityController@aJaxUpdateCom')->name('commi.ajax.update.community');
 Route::post('/ajax/deleteEvent', 'EventController@ajaxDeleteEvent')->name('event.ajax.delete');
 Route::post('/ajax/updateEvent', 'EventController@ajaxUpdateEvent')->name('event.ajax.update');
+Route::post('/ajax/createEvent', 'EventController@ajaxCreateEvent')->name('event.ajax.create');
 Route::get('/eventC', function() // testing
 {
-    $length = 50;
-    $word1 = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZabcedefghiklmnopqrstxyz'),1,$length);
-    $word2 = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZabcedefghiklmnopqrstxyz'),1,10);
-    $alpha =  new \App\Event();
-    $alpha->name = $word2;
-    $alpha->description = $word1;
-    $alpha->start_time = date('Y-m-d H:i:s', strtotime(now()));
-    $alpha->end_time = date('Y-m-d H:i:s' ,strtotime("+ 7 day"));
-    $alpha->max_participants = rand(20,50);
-    $alpha->fee = 0.0;
-    $alpha->community_id = 1;
-    $alpha->venue_id = 1;
-    $alpha->user_id = 2;
-    $alpha->image_URL = "";
-    $alpha->created_at = now();
-    echo $alpha;
-    $alpha->save();
+    echo Auth::id();
+//    $length = 50;
+//    $word1 = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZabcedefghiklmnopqrstxyz'),1,$length);
+//    $word2 = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZabcedefghiklmnopqrstxyz'),1,10);
+//    $alpha =  new \App\Event();
+//    $alpha->name = $word2;
+//    $alpha->description = $word1;
+//    $alpha->start_time = date('Y-m-d H:i:s', strtotime(now()));
+//    $alpha->end_time = date('Y-m-d H:i:s' ,strtotime("+ 7 day"));
+//    $alpha->max_participants = rand(20,50);
+//    $alpha->fee = 0.0;
+//    $alpha->community_id = 1;
+//    $alpha->venue_id = 1;
+//    $alpha->user_id = 2;
+//    $alpha->image_URL = "";
+//    $alpha->created_at = now();
+//    echo $alpha;
+//    $alpha->save();
 //   for($i = 0;$i<15;$i++)
 //{
 //
@@ -75,17 +78,27 @@ Route::get('/eventC', function() // testing
 
 Route::get('/testEvent', function()
 {
-    echo Carbon::now()->toDateString('Y-m-d');
+
+//    $event = new Event();
+//    echo $event->id;
+//    echo Carbon::now()->toDateString('Y-m-d');
 //    $date = new DateTime(null);
 //    $tz = $date->getTimezone();//    $event = Event::where('id', 2)->first();
 //    dd($tz);
 //    $event->name = 'dd';
 //    echo join("" , $event->getDirty('name'));
-//        $ymd = Carbon::createFromFormat('Y-m-d H:i:s', '2020-06-27 16:00:00');
-//        $da = Carbon::createFromFormat('Y-m-d H:i:s', '2020-06-27 18:00:00')->subSeconds(1);
-//        $sDate = Carbon::createFromFormat('Y-m-d', substr($ymd, 0, 10));
-//        $formatted = $sDate->year . '-'. ($sDate->month < 10 ? '0'. $sDate->month: $sDate->month) . '-'. $sDate->day;
+        $ymd = Carbon::createFromFormat('Y-m-d H:i:s', '2020-07-04 18:45:00');
+        echo $ymd;
 
+//        return response()->json([$ymd], 200);
+        $da = Carbon::createFromFormat('Y-m-d H:i:s', '2020-07-04 19:45:00')->subSeconds(1);
+        $sDate = Carbon::createFromFormat('Y-m-d', substr($ymd, 0, 10));
+        $formatted = $sDate->year . '-'. ($sDate->month < 10 ? '0'. $sDate->month: $sDate->month) . '-'. $sDate->day;
+    echo Event::where('venue_id', 2)
+        ->whereBetween('start_time', [$ymd, $da])
+        ->where('end_time' , '>=', $ymd)
+        ->where('start_time', 'like', $formatted.'%')->where('end_time', 'like', $formatted. '%')->where('active', 1)
+        ->exists() ? "true" : "false";
 //   $event = Event::where('venue_id', 1)->where('id', '!=' , '5')
 //       ->whereBetween('start_time', [$ymd, $da])
 //       ->where('end_time' , '>=', $ymd)

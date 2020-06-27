@@ -279,10 +279,10 @@
                                         <div class="form-group">
                                             <label for="message-text" class="col-form-label">Event Start Date:</label>
                                             <div class="input-group">
-                                                <input type='text' class="form-control" id='datetimepicker4' autocomplete="off" />
-                                                <span class="input-group-text">
+                                                <input type='text' class="form-control" id='datetimepicker4' autocomplete="off" readonly />
+                                                <label class="input-group-text" for="datetimepicker4">
                                                             <span class="glyphicon glyphicon-calendar"></span>
-                                                        </span>
+                                                        </label>
                                             </div>
                                             <div class="invalid-feedback">
                                                 Please provide an appropriate starting date of event
@@ -293,10 +293,10 @@
                                             <label for="message-text" class="col-form-label">Event End Date:</label>
                                         <div class="input-group">
 
-                                        <input type='text' class="form-control" id='datetimepicker3' autocomplete="off" />
-                                        <span class="input-group-text">
+                                        <input type='text' class="form-control" id='datetimepicker3' autocomplete="off" readonly />
+                                        <label class="input-group-text" for="datetimepicker3">
                                                             <span class="glyphicon glyphicon-calendar"></span>
-                                                        </span>
+                                                        </label>
                                         </div>
                                         <div class="invalid-feedback">
                                             Please provide an appropriate ending date of event
@@ -455,8 +455,128 @@
 
             $(document).on('click', "button.eventCreate", function(e)
             {
-                console.log('d')
-            })
+                const validationCode = ["Please provide an appropriate ending date of event", "Please change the ending date of event in which after start date", "The event only occur for a single day. Please change em"];
+                for(var i = 0 ; i< document.querySelectorAll(".invalid-feedback").length; i++)
+                {
+                    document.querySelectorAll(".invalid-feedback")[i].style.display = 'none';
+
+                }
+                document.querySelector('.alert-ajax').style.display = 'none';
+
+                var eventName = document.getElementById('recipient-name');
+                var eventDescription = document.querySelector('textarea[name="event-description"]');
+                var eventDate1 = document.querySelector('input[id="datetimepicker4"]');
+                var eventDate2 = document.querySelector('input[id="datetimepicker3"]');
+                var eventFee = document.querySelector('input[id="fee"]');
+                var eventMembers = document.querySelector('input[id="max_members"]');
+                var selectElement = document.querySelector('select[id="venue"]');
+                var imageURL = document.getElementById("preview");
+
+                if(eventName.value === null || eventName.value === '')
+                {
+                    document.querySelectorAll(".invalid-feedback")[0].style.display = 'block';
+                }
+                if(eventDescription.value === null || eventDescription.value === '')
+                {
+                    document.querySelectorAll(".invalid-feedback")[1].style.display = 'block';
+                }
+                if(eventDate1.value === '' || eventDate1.value === null)
+                {
+                    document.querySelectorAll(".invalid-feedback")[2].style.display = 'block';
+                }
+
+                if(eventFee.value <0 ||eventFee.value === '')
+                {
+                    document.querySelectorAll(".invalid-feedback")[4].style.display = 'block';
+
+                }
+                if(eventMembers.value<=0 ||eventMembers.value === '')
+                {
+                    document.querySelectorAll(".invalid-feedback")[5].style.display = 'block';
+                }
+                if(selectElement.options[selectElement.selectedIndex].value === '' || selectElement.options[selectElement.selectedIndex].value === null)
+                {
+                    document.querySelectorAll(".invalid-feedback")[6].style.display = 'block';
+                }
+                if(!imageURL.src.includes('base64'))
+                {
+                    document.querySelectorAll(".invalid-feedback")[7].style.display = 'block';
+                }
+                if(eventDate2.value === '' || eventDate2.value === null)
+                {
+                    document.querySelectorAll(".invalid-feedback")[3].style.display = 'block';
+                    document.querySelectorAll(".invalid-feedback")[3].textContent =  validationCode[0];
+                    return;
+                }
+                if(moment(eventDate2.value).isSameOrBefore(eventDate1.value))
+                {
+                    document.querySelectorAll(".invalid-feedback")[3].style.display = 'block';
+                    document.querySelectorAll(".invalid-feedback")[3].textContent =  validationCode[1];
+                }
+                if(! moment(eventDate2.value.substring(0,10)).isSame(eventDate1.value.substring(0,10)))
+                {
+                    document.querySelectorAll(".invalid-feedback")[3].style.display = 'block';
+                    document.querySelectorAll(".invalid-feedback")[3].textContent =  validationCode[2];
+                }
+
+                var anyError = false;
+                _.forEach(document.querySelectorAll(".invalid-feedback"), (item, index) =>
+                {
+                    (item.computedStyleMap().get('display').value === 'block') ? anyError = true : null
+                });
+                if(anyError)
+                {
+                    return;
+                }
+
+                console.log('errorless ')
+                $.ajax(
+                    {
+                        url: "{{route('event.ajax.create')}}",
+                        type: "POST",
+                        data:
+                            {
+                                description : eventDescription.value,
+                                name: eventName.value,
+                                venueID: selectElement.options[selectElement.selectedIndex].value ,
+                                startDate: eventDate1.value,
+                                endDate: eventDate2.value,
+                                max_participants: eventMembers.value,
+                                fees: eventFee.value,
+                                communityID : "{{Session::get('communityID')}}",
+                                base64URL : imageURL.src,
+
+                            },
+                        dataType: 'json',
+                        headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                        success: function (data, text, xhr) {
+
+                            console.log(data)
+                            // if(data.status === "1")
+                            // {
+                            //     if(data.errorFound)
+                            //     {
+                            //         document.querySelector('.alert-ajax').style.display = 'block';
+                            //         document.querySelector('.alert-ajax').textContent = 'ERROR!! Please select other venue or time';
+                            //         return;
+                            //     }
+                                location.reload()
+                            //
+                            // }
+                            // else
+                            // {
+                            //     console.log('false');
+                            //     document.querySelector('.alert-ajax').style.display = 'block';
+                            //     document.querySelector('.alert-ajax').textContent = 'ERROR!! No Columns have been changed';
+                            // }
+
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+
+                        }
+                    });
+
+            });
 
             $(document).on('click', "button.eventUpdate", function(e)
             {
@@ -608,7 +728,10 @@
             });
             $('#datetimepicker3, #datetimepicker4').datetimepicker(      {
                 // startDate: new Date(),
-                format : "yyyy-mm-dd hh:ii:ss",
+                autoclose: true,
+                disableTouchKeyboard : true,
+                keyboardNavigation : false,
+                format : "yyyy-mm-dd hh:ii",
                 minuteStep : 15
             });
 
