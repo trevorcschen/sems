@@ -46,6 +46,7 @@ Route::delete('/communities/destroy/many/{ids}', 'CommunityController@destroyMan
 Route::resource('communities', 'CommunityController');
 
 Route::get('/commi/{id}','CommunityController@communityPage')->name('commi.community');
+Route::get('/commi/{id}/past', 'CommunityController@pastEventList')->name('commi.past.event');
 Route::post('/ajax/updateCom', 'CommunityController@aJaxUpdateCom')->name('commi.ajax.update.community');
 Route::post('/ajax/deleteEvent', 'EventController@ajaxDeleteEvent')->name('event.ajax.delete');
 Route::post('/ajax/updateEvent', 'EventController@ajaxUpdateEvent')->name('event.ajax.update');

@@ -123,6 +123,14 @@
                 @endcan
             </div>
             <div class="kt-portlet__body">
+                <ul class="nav">
+                    <li class="nav-item ">
+                        <a class="nav-link {{$ongoing ? 'disabled' : 'active'}}" href="{{route('commi.community', $community->id)}}">On-going Events</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link {{$past ? 'disabled' : 'active'}}" href="{{route('commi.past.event', $community->id)}}">Past History Events</a>
+                    </li>
+                </ul>
               <div class="flex-container" style="display: flex;justify-content: center">
                   <div class="flex-event-container" style="flex: 8;margin: 30px;padding: 10px">
                       <div class="sub-flex" style="display: flex;flex-wrap: wrap">

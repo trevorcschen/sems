@@ -235,12 +235,31 @@ class CommunityController extends Controller
         foreach ($events as $event)
     {
         $event->current_participants = rand(0, $event->max_participants);
+//        $event->current_participants = $event->users->count();
+
         $event->percentage = round($event->current_participants / $event->max_participants * 100, 0);
+//        echo $event->users->count();
+
     }
-        $count = Event::where('community_id', $id)->where('start_time' ,'>=', Carbon::now()->toDateString('Y-m-d'))->get();
+        $count = Event::where('community_id', $id)->where('active', 1)->where('start_time' ,'>=', Carbon::now()->toDateString('Y-m-d'))->get();
         $community = Community::where('id', $id)->first();
         Session::flash('communityID', $community->id);
-        return view('communityadmin.community.group', compact('events','community'))->with('count', $count->count());
+        return view('communityadmin.community.group', compact('events','community'))->with('count', $count->count())->with('past', false)->with('ongoing', true);
+    }
+
+    public function pastEventList($id)
+    {
+        $events = Event::where('community_id', $id)->where('active', 1)->where('start_time' ,'<', Carbon::now()->toDateString('Y-m-d'))->paginate(12);
+        foreach ($events as $event)
+        {
+            $event->current_participants = rand(0, $event->max_participants);
+//        $event->current_participants = $event->users->count();
+            $event->percentage = round($event->current_participants / $event->max_participants * 100, 0);
+        }
+        $count = Event::where('community_id', $id)->where('start_time' ,'<', Carbon::now()->toDateString('Y-m-d'))->get();
+        $community = Community::where('id', $id)->first();
+        Session::flash('communityID', $community->id);
+        return view('communityadmin.community.group', compact('events','community'))->with('count', $count->count())->with('past', true)->with('ongoing', false);
     }
 
     public function aJaxUpdateCom(Request $request)
