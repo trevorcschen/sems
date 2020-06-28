@@ -28,6 +28,8 @@
         }
     };
 </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 <script src="https://js.pusher.com/6.0/pusher.min.js"></script>
 
 <script >
@@ -43,19 +45,8 @@
         cluster: 'ap1'
     });
 
-    var channels = null;
-    // if(Math.floor(Math.random() * 2) === 0)
-    // {
-    //     console.log('user type 0 ')
-    channels = std.map(channelName => pusher.subscribe(channelName));
+    var channels = std.map(channelName => pusher.subscribe(channelName));
 
-    // }
-    // else
-    // {
-    //     console.log('user type 1')
-    //     channels = ['student-channel_9054329', 'community-channel_club-freedom'].map(channelName => pusher.subscribe(channelName));
-    //
-    // }
 
     for (const channel of channels)
     {
@@ -90,11 +81,38 @@
             $(".toast").toast({delay:3000})
 
             document.querySelector('.badge-notify').textContent = parseInt(document.querySelector('.badge-notify').textContent) +1
+            document.querySelector('.badge-notify').style.display = 'block'
+
         })
     }
-    {{--const com = {!! json_encode($communities) !!};--}}
-    {{--for (comf of com)--}}
-    {{--{--}}
-    {{--    console.log(comf)--}}
-    {{--}--}}
+
+</script>
+
+<script>
+
+    function unmarkedNotification()
+    {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "{{ route('notification.ajax.unmarked')}}", true);
+
+        xhttp.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.querySelector('.badge-notify').textContent = 0;
+                document.querySelector('.badge-notify').style.display = 'none';
+                console.log('function done')
+            }
+        };
+
+        xhttp.send();
+    }
+        document.querySelector('.notification_item_icon').addEventListener('click', function()
+        {
+            if(parseInt(document.querySelector('.badge-notify').textContent) !== 0)
+            {
+                unmarkedNotification()
+            }
+        })
+
 </script>

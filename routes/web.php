@@ -1,9 +1,14 @@
 <?php
 
 use App\Event;
+use App\Notifications\PeopleNotification;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
+use Ramsey\Uuid\Uuid;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +56,13 @@ Route::post('/ajax/updateCom', 'CommunityController@aJaxUpdateCom')->name('commi
 Route::post('/ajax/deleteEvent', 'EventController@ajaxDeleteEvent')->name('event.ajax.delete');
 Route::post('/ajax/updateEvent', 'EventController@ajaxUpdateEvent')->name('event.ajax.update');
 Route::post('/ajax/createEvent', 'EventController@ajaxCreateEvent')->name('event.ajax.create');
+Route::post('/ajax/unmarkedNotification', function(Request $request)
+{
+    $user = App\User::where('id', Auth::user()->id)->first();
+    $user->unreadNotifications->markAsRead();
+
+    return response()->json(['status' => 1,], 200);
+})->name('notification.ajax.unmarked');
 Route::get('/testNotification', function()
 {
    return view('communityadmin.community.notification');
@@ -83,7 +95,7 @@ Route::get('/eventC', function() // testing
 
 Route::get('/testEvent', function()
 {
-    event(new \App\Events\StudentNotification('You have been approved by the moderator to join this community!! Have fun and enjoy', '9057573')); // push notification after disapprove or approve to the specific student.
+//    event(new \App\Events\StudentNotification('A community request', '9057573')); // push notification after disapprove or approve to the specific student.
 //    $event = new Event();
 //    echo $event->id;
 //    echo Carbon::now()->toDateString('Y-m-d');
@@ -121,4 +133,91 @@ Route::get('/testCommunity', function()
     echo Auth::user()->student_id;
     echo Auth::user()->roles->first->name->name;
 //        event(new \App\Events\CommunityNotification('yoyohoooo', 'computer-science-society'));
+});
+
+Route::get('/sendRequestFromStudent', function() // request to join community or event .. search for the id either event id or community id that user wants to join.
+{
+   $community = \App\Community::where('id', 2)->first();
+   echo $community->admin->student_id;
+    event(new \App\Events\StudentNotification('A community request  sent from Trevor', $community->admin->student_id)); // push notification after disapprove or approve to the specific student.
+
+});
+
+Route::get('/notificationFromAdmin', function() // i m the community admin of the ID 2, i will send the notifications to all who are the members of this community
+{
+
+    // setup the channels subscription for the non-admin. example ; students who joined  the community
+//    $students = \App\User::where('id', 4)->first();
+//    $student_channels = array_map(function($string)
+//    {
+//        return str_replace(" ", "-", strtolower($string));
+//    }, array_column(json_decode($students->communities, true), 'name'));
+//    print_r($student_channels);
+
+    // admin channels.
+//    $communities = \App\Community::where('user_id', 2)->get();
+//    $community_channels = array_map(function($string)
+//    {
+//        return str_replace(" ", "-", strtolower($string));
+//    }, array_column(json_decode($communities, true), 'name'));
+//
+//    print_r($community_channels);
+    event(new \App\Events\StudentNotification('A community request  sent from Trevor', '9057573')); // push notification after disapprove or approve to the specific student.
+
+    event(new \App\Events\CommunityNotification('Approval Good', 'computer-science-society'));
+});
+
+function string_snake_case($string)
+{
+
+    return str_replace(" ", "-", strtolower($string));
+}
+
+//Route::get('/changeDetails', function()
+//{
+////    $event = Event::where('id', 28)->first();
+////
+////   $user= App\User::where('id', 6)->first();
+////   $user->name = 'dsadsa';
+////   $user->password = Hash::make('123456');
+////   echo join(", ", $user->getChanges());
+////   $user->save();
+//
+//    $event = Event::all();
+//    foreach ($event as $events)
+//    {
+//        do
+//        {
+//            $uuid1 = substr(Uuid::uuid1(), 0 ,10);
+//            $eventTag= Event::where('eventTag', $uuid1)->first();
+//        }
+//        while(!empty($eventTag));
+//        $events->eventTag= $uuid1;
+//        $events->save();
+//
+//    }
+//
+//});
+
+function generate_random_tag()
+{
+    do
+    {
+        $uuid1 = substr(Uuid::uuid1(), 0 ,10);
+        $eventTag= Event::where('eventTag', $uuid1)->first();
+    }
+    while(!empty($user_code));
+    echo $uuid1;
+}
+
+Route::get('/testN', function()
+{
+    $user = App\User::all();
+    $community = new stdClass();
+    $community->message = "Machine Learning Society has just organized a new event.";
+    $community->request = 1;
+    $community->action = 1; // 0 -> no action given 1 -> action given 2 -> action performed
+    Notification::send($user, new PeopleNotification($community));
+//    $user->notify(new PeopleNotification($community));
+
 });

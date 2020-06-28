@@ -36,15 +36,12 @@ class ViewServiceProvider extends ServiceProvider
                 $view->with('communities', $communities);
 
             }
-//            $authID = Auth::user()->id;
-//            $communities = Community::where('user_id', $authID)->get();
-//            $view->with('authAPIKEY', Auth::user()->student_id);
+
         });
 
         View::composer('includes.globalconfig', function($view)
         {
             $authID = Auth::user()->id;
-//            $communities = Community::where('user_id', $authID)->get();
             if(Auth::user()->roles->first->name->name == 'student')
             {
                 $students = \App\User::where('id', $authID)->first();
@@ -62,7 +59,7 @@ class ViewServiceProvider extends ServiceProvider
                         }, array_column(json_decode($communities, true), 'name'));
             }
 
-            $view->with('authAPIKEY', Auth::user()->student_id)->with('student_channels', $channels);
+            $view->with('authAPIKEY', Auth::user()->student_id)->with('student_channels', $channels??[]);
         });
     }
 }
