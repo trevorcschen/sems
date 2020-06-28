@@ -60,26 +60,40 @@
                 '                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>\n' +
                 '                </div>\n' +
                 '                <div class="toast-body">\n' +
-                '                    <div><span>' + data.message + '.</span><br/> <label>Check it out !!.</label> <br/>  <a href="#">Click here!</a></div>\n' +
+                '                    <div><span>' + data.message + '.</span><br/> <label>Check it out !!. Notification will take effect after u refreshed the page</label> <br/> ' +
+                // ' <a href="#">Click here!</a>' +
+                '</div>\n' +
                 '                </div>\n' +
                 '            </div>');
 
-            $('.kt-notification').prepend(' <a href="#" class="kt-notification__item kt-notification__item--read">\n' +
-                '                                        <div class="kt-notification__item-icon">\n' +
-                '                                            <i class="flaticon2-safe kt-font-primary"></i>\n' +
-                '                                        </div>\n' +
-                '                                        <div class="kt-notification__item-details">\n' +
-                '                                            <div class="kt-notification__item-title">\n' +
-                '                                                New Items\n' +data.message+
-                '                                            </div>\n' +
-                '                                            <div class="kt-notification__item-time">\n' +
-                '                                                19 hrs ago\n' +
-                '                                            </div>\n' +
-                '                                        </div>\n' +
-                '                                    </a>')
+            let tempNot = {!! json_encode(auth()->user()->notifications()->latest()->first()) !!};
+            let url =  tempNot.data['routing'] === 'user' ? '{{ route("users.show", ':ids') }}' : '{{route("commi.community", ":ids")}}';
+            url = url.replace(':ids', tempNot.data['routingID']);
+            console.log(url);
+            let dd = `<a href="${tempNot.data['permit'] === 1 ? url : `javascript:void(0)`}" class="kt-notification__item " id="${tempNot.id}">` +
+                     `<div class="kt-notification__item-icon"><i class="flaticon2-safe kt-font-primary"></i></div>`+
+                     `<div class="kt-notification__item-details">`+
+                     `<div class="kt-notification__item-title">  ${tempNot.data['data']}</div>`+
+                     `<div class="kt-notification__item-time"> ${moment(tempNot.updated_at).fromNow()}</div>`;
+            tempNot.data['action'] === 1 ? dd+='<div class="actionNotification" style="display: flex;flex-direction: row;justify-content: space-around;margin-top: 5px" id="'+tempNot.id +'">'+
+                '<button type="button" class="btn btn-decline" style="background: rgba(255, 0, 0, 0.08);color: red;">Decline</button>'+
+                ' <button type="button" class="btn btn-accept" style="background-color: rgba(153, 255, 160, 0.5);color: green;">Accept</button></div>' : null;
+            dd+= `</div></a>`;
+
+
+            // let newNotification = '<a href="" class="kt-notification__item " id="'+tempNot.id+'">\n' +
+            //     '<div class="kt-notification__item-icon"><i class="flaticon2-safe kt-font-primary"></i></div>\n' +
+            //     '<div class="kt-notification__item-details">\n' +
+            //     '<div class="kt-notification__item-title">' + tempNot.data['data']+ '</div>' +
+            //     '<div class="kt-notification__item-time">' + moment(tempNot.updated_at).fromNow() + '</div>';
+            // tempNot.data['action'] === 1 ? newNotification+='<div class="actionNotification" style="display: flex;flex-direction: row;justify-content: space-around;margin-top: 5px" id="'+tempNot.id +'">'+
+            //     '<button type="button" class="btn btn-decline" style="background: rgba(255, 0, 0, 0.08);color: red;">Decline</button>'+
+            //     ' <button type="button" class="btn btn-accept" style="background-color: rgba(153, 255, 160, 0.5);color: green;">Accept</button></div>' : null;
+            // newNotification+='</div></a>';
+
+            $('.kt-notification').prepend(dd);
 
             $(".toast").toast({delay:3000})
-
             document.querySelector('.badge-notify').textContent = parseInt(document.querySelector('.badge-notify').textContent) +1
             document.querySelector('.badge-notify').style.display = 'block'
 
@@ -107,12 +121,74 @@
 
         xhttp.send();
     }
-        document.querySelector('.notification_item_icon').addEventListener('click', function()
+
+    function readNotification(id)
+    {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "{{ route('notification.ajax.unmarked')}}", true);
+        var data = new FormData();
+        data.append('id', id);
+
+        xhttp.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.querySelector('.badge-notify').textContent = 0;
+                document.querySelector('.badge-notify').style.display = 'none';
+                console.log('function done')
+                console.log(this.response)
+            }
+        };
+
+        xhttp.send(data);
+    }
+
+    function responseRequest(id, responseText)
+    {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "{{ route('notification.ajax.reply')}}", true);
+        var data = new FormData();
+        data.append('id', id);
+        data.append('answer', responseText)
+
+        xhttp.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log('function done')
+                console.log(this.response)
+                location.reload()
+            }
+        };
+        xhttp.send(data);
+    }
+    // [...document.querySelectorAll('.kt-notification__item')].map((item) =>
+    //     item.addEventListener('click',function(e)
+    //     {
+    //         console.log('click'+ this.id)
+    //         readNotification(this.id)
+    //     }))
+
+    document.querySelector('.notification_item_icon').addEventListener('click', function()
         {
+            // console.log(document.querySelectorAll('.kt-notification__item'));
             if(parseInt(document.querySelector('.badge-notify').textContent) !== 0)
             {
+                console.log('d')
+                document.querySelector('.badge-notify').textContent = 0;
+                document.querySelector('.badge-notify').style.display = 'none';
+                // readNotification()
                 unmarkedNotification()
+                    // [...document.querySelectorAll('.kt-notification__item')].map((item) => (item.classList).contains('kt-notification__item--read') === true ? null : item.classList.add('kt-notification__item--read'))
+
             }
         })
+
+
+    $(".actionNotification").on('click', function(e)
+    {
+        console.log(this.id)
+        e.target.className.includes('btn-accept') ? responseRequest(this.id, 'accept') : responseRequest(this.id, 'decline')
+    })
 
 </script>

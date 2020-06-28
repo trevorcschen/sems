@@ -19,6 +19,9 @@
     Try publishing an event to channel <code>my-channel</code>
     with event name <code>my-event</code>.
 </p>
+<div class="kt-container">
+
+</div>
 {{--<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">--}}
 {{--    <div class="toast-header">--}}
 {{--        <strong class="mr-auto">Bootstrap</strong>--}}
@@ -67,7 +70,7 @@
         channel.bind('form-submitted', function(data)
         {
             // alert(JSON.stringify(data.message));
-            $('body').append('<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">\n' +
+            $('body').append('<div class="toast show fade" role="alert" data-autohide="true" aria-live="assertive" aria-atomic="true">\n' +
                 '    <div class="toast-header">\n' +
                 '        <strong class="mr-auto">Bootstrap </strong>\n' +
                 '        <small>Now</small>\n' +
@@ -79,13 +82,12 @@
                 '        Hello, world! This is a toast message.\n' +
                 '    </div>\n' +
                 '</div>');
-            setTimeout(function()
-            {
-                $('.toast').remove();
-            }, 3000);
-            $('.toast').toast({delay: 3000})
-
-            $('.toast').toast('show')
+            // setTimeout(function()
+            // {
+            //     $('.toast').remove();
+            // }, 3000);
+            // $('.toast').toast({autohide : false})
+            // $('.toast').toast('show')
 
         })
     }

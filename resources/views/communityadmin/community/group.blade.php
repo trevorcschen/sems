@@ -457,13 +457,21 @@
 {{--        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>--}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
 
 
     <script type="text/javascript">
 
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
+
+            $(".card-header").on('click', function(e)
+            {
+                console.log($(this).data("id"))
+                let url = '{{route('event.show', ':ids')}}';
+                url = url.replace(':ids', $(this).data("id"));
+                location.href = url;
+            });
 
             $(document).on('click', "button.eventCreate", function(e)
             {
@@ -573,8 +581,7 @@
                                     document.querySelector('.alert-ajax').textContent = 'ERROR!! Please select other venue or time';
                                     return;
                                 }
-                                // location.reload()
-
+                                location.reload()
                             }
                             // else
                             // {
@@ -695,10 +702,7 @@
             });
 
 
-            $(".card-header").on('click', function(e)
-            {
-                console.log($(this).data("id"))
-            });
+
             $('.js-data-example-ajax').select2({
                 placeholder : 'Venue',
                 width: '200px',
@@ -952,7 +956,7 @@
                                 if(data.status === "1")
                                 {
                                     console.log(data)
-                                    // location.reload()
+                                    location.reload()
 
                                 }
                                 else

@@ -85,7 +85,8 @@
                         <div class="tab-pane active show" id="topbar_notifications_notifications" role="tabpanel">
                             <div class="kt-notification kt-margin-t-10 kt-margin-b-10 kt-scroll" data-scroll="true" data-height="300" data-mobile-height="200">
                                 @foreach(auth()->user()->notifications as $notification)
-                                    <a href="" class="kt-notification__item {{$notification->read_at == null ? null : 'kt-notification__item--read'}}">
+                                    <a href="{{ $notification->data['permit'] == 1 ? ($notification->data['routing'] == 'user' ?route('users.show', $notification->data['routingID']) : route('commi.community',$notification->data['routingID'])) : 'javascript:void(0)' }}" class="kt-notification__item {{$notification->read_at == null ? null : 'kt-notification__item--read'}}" id="{{$notification->id}}">
+{{--                                    <a href="javascript:void(0)" class="kt-notification__item {{$notification->read_at == null ? null : 'kt-notification__item--read'}}" id="{{$notification->id}}">--}}
                                                                             <div class="kt-notification__item-icon">
                                                                                 <i class="flaticon2-safe kt-font-primary"></i>
                                                                             </div>
@@ -96,12 +97,12 @@
                                                                                 </div>
 
                                                                                 <div class="kt-notification__item-time">
-                                                                                    19 hrs ago
+                                                                                    {{\Carbon\Carbon::parse($notification->updated_at)->diffForHumans()}}
                                                                                 </div>
-                                                                                @if($notification->data['request'] == 1)
-                                                                                <div style="display: flex;flex-direction: row;justify-content: space-around;margin-top: 5px">
-                                                                                    <button type="button" class="btn" style="background: rgba(255, 0, 0, 0.08);color: red;">Decline</button>
-                                                                                    <button type="button" class="btn" style="background-color: rgba(153, 255, 160, 0.5);color: green;">Accept</button>
+                                                                                @if($notification->data['action'] == 1)
+                                                                                <div class="actionNotification" style="display: flex;flex-direction: row;justify-content: space-around;margin-top: 5px" id="{{$notification->id}}">
+                                                                                    <button type="button" class="btn btn-decline" style="background: rgba(255, 0, 0, 0.08);color: red;">Decline</button>
+                                                                                    <button type="button" class="btn btn-accept" style="background-color: rgba(153, 255, 160, 0.5);color: green;">Accept</button>
                                                                                 </div>
                                                                                     @endif
                                                                             </div>

@@ -59,7 +59,11 @@ class PeopleNotification extends Notification
             //
             'data' => $this->user->message,
             'request' => $this->user->request,
-            'action' => $this->user->action
+            'action' => $this->user->action,
+            'routing' => $this->user->routing,
+            'routingID' => $this->user->routingID,
+            'group' => $this->user->group,
+            'permit' => $this->user->permit
         ];
     }
 }

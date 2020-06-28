@@ -56,13 +56,34 @@ Route::post('/ajax/updateCom', 'CommunityController@aJaxUpdateCom')->name('commi
 Route::post('/ajax/deleteEvent', 'EventController@ajaxDeleteEvent')->name('event.ajax.delete');
 Route::post('/ajax/updateEvent', 'EventController@ajaxUpdateEvent')->name('event.ajax.update');
 Route::post('/ajax/createEvent', 'EventController@ajaxCreateEvent')->name('event.ajax.create');
+Route::get('/event/{id}', 'EventController@show')->name('event.show');
 Route::post('/ajax/unmarkedNotification', function(Request $request)
 {
     $user = App\User::where('id', Auth::user()->id)->first();
     $user->unreadNotifications->markAsRead();
+//    auth()->user()->unreadNotifications->where('id', $request->get('id'))->markAsRead();
 
-    return response()->json(['status' => 1,], 200);
+    return response()->json(['status' => 1, $request->get('id')], 200);
 })->name('notification.ajax.unmarked');
+Route::post('/ajax/replyRequest', function(Request $request)
+{
+    $da = auth()->user()->notifications()->where('id', $request->get('id'))->get()->map(function($item) use($request)
+    {
+        $aw = new stdClass();
+        $aw->data = 'Your request to join '. $item->data['group']. ' has been '.$request->get('answer').'.';
+        $aw->group = $item->data['group'];
+        $aw->request = $item->data['request'];
+        $aw->action = 2;
+        $aw->routing = $item->data['routing'];
+        $aw->routingID = $item->data['routingID'];
+        $aw->permit = $request->get('answer') == 'accept' ? 1 : 0;
+        $item->data = ($aw);
+        return $item;
+    });
+    auth()->user()->notifications()->where('id', $request->get('id'))->update(['data' => $da[0]->data]);
+    return response()->json(['status' => 1, $request->get('id'), $request->get('answer')], 200);
+})->name('notification.ajax.reply');
+
 Route::get('/testNotification', function()
 {
    return view('communityadmin.community.notification');
@@ -95,37 +116,13 @@ Route::get('/eventC', function() // testing
 
 Route::get('/testEvent', function()
 {
-//    event(new \App\Events\StudentNotification('A community request', '9057573')); // push notification after disapprove or approve to the specific student.
-//    $event = new Event();
-//    echo $event->id;
-//    echo Carbon::now()->toDateString('Y-m-d');
-//    $date = new DateTime(null);
-//    $tz = $date->getTimezone();//    $event = Event::where('id', 2)->first();
-//    dd($tz);
-//    $event->name = 'dd';
-//    echo join("" , $event->getDirty('name'));
-//        $ymd = Carbon::createFromFormat('Y-m-d H:i:s', '2020-07-04 18:45:00');
-//        echo $ymd;
+//    $da = auth()->user()->notifications()->latest()->first();
+//    print_r(json_encode($da));
+//    $communities = \App\Community::where('id', 1)->first();
 //
-////        return response()->json([$ymd], 200);
-//        $da = Carbon::createFromFormat('Y-m-d H:i:s', '2020-07-04 19:45:00')->subSeconds(1);
-//        $sDate = Carbon::createFromFormat('Y-m-d', substr($ymd, 0, 10));
-//        $formatted = $sDate->year . '-'. ($sDate->month < 10 ? '0'. $sDate->month: $sDate->month) . '-'. $sDate->day;
-//    echo Event::where('venue_id', 2)
-//        ->whereBetween('start_time', [$ymd, $da])
-//        ->where('end_time' , '>=', $ymd)
-//        ->where('start_time', 'like', $formatted.'%')->where('end_time', 'like', $formatted. '%')->where('active', 1)
-//        ->exists() ? "true" : "false";
-//   $event = Event::where('venue_id', 1)->where('id', '!=' , '5')
-//       ->whereBetween('start_time', [$ymd, $da])
-//       ->where('end_time' , '>=', $ymd)
-//       ->where('start_time', 'like', $formatted.'%')->where('end_time', 'like', $formatted. '%')
-//       ->exists() ? "true" :"false";
-//   echo $event;
-//   foreach($event as $events)
-//   {
-//       echo $events;
-//   }
+//        echo $communities->users;
+        $event = Event::where('id', 28)->first();
+        echo $event->community->name;
 });
 
 Route::get('/testCommunity', function()
@@ -145,23 +142,6 @@ Route::get('/sendRequestFromStudent', function() // request to join community or
 
 Route::get('/notificationFromAdmin', function() // i m the community admin of the ID 2, i will send the notifications to all who are the members of this community
 {
-
-    // setup the channels subscription for the non-admin. example ; students who joined  the community
-//    $students = \App\User::where('id', 4)->first();
-//    $student_channels = array_map(function($string)
-//    {
-//        return str_replace(" ", "-", strtolower($string));
-//    }, array_column(json_decode($students->communities, true), 'name'));
-//    print_r($student_channels);
-
-    // admin channels.
-//    $communities = \App\Community::where('user_id', 2)->get();
-//    $community_channels = array_map(function($string)
-//    {
-//        return str_replace(" ", "-", strtolower($string));
-//    }, array_column(json_decode($communities, true), 'name'));
-//
-//    print_r($community_channels);
     event(new \App\Events\StudentNotification('A community request  sent from Trevor', '9057573')); // push notification after disapprove or approve to the specific student.
 
     event(new \App\Events\CommunityNotification('Approval Good', 'computer-science-society'));
@@ -214,10 +194,16 @@ Route::get('/testN', function()
 {
     $user = App\User::all();
     $community = new stdClass();
-    $community->message = "Machine Learning Society has just organized a new event.";
+    $community->message = "Trevor requested to join the community ; Machine Learning Society";
     $community->request = 1;
     $community->action = 1; // 0 -> no action given 1 -> action given 2 -> action performed
+    $community->routing = 'commi'; // user and commi
+    $community->routingID = '1';
+    $community->group = 'Machine Learning Society';
+    $community->permit = 0; // to view the notification redirect
     Notification::send($user, new PeopleNotification($community));
 //    $user->notify(new PeopleNotification($community));
+
+
 
 });

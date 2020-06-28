@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Community;
 use App\Event;
+use App\Notifications\PeopleNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use JD\Cloudder\Facades\Cloudder;
+use stdClass;
 
 class CommunityController extends Controller
 {
@@ -271,7 +274,7 @@ class CommunityController extends Controller
             @list(, $type) = explode('/', $type);
             @list(, $file_data) = explode(',', $file_data);
             $newFileName = mt_rand().time() . '.' . $type;
-//            Storage::put('images/community/'. $request->get('id').'/'.$newFileName, base64_decode($file_data)); // store img locally
+            Storage::put('images/community/'. $request->get('id').'/'.$newFileName, base64_decode($file_data)); // store img locally
             $community = Community::where('id' , $request->get('id'))->first();
             $community->description = $request->get('description');
             $community->fee = (double) $request->get('fees');
@@ -279,7 +282,8 @@ class CommunityController extends Controller
             if($community->isDirty())
             {
                 $community->logo_path = $newFileName;
-//                $community->update();
+                $community->update();
+                $this->sendNotification($community);
                 return response()->json(['status'=> '1', 'messaged' => 'received', 'isDirty' => 'true'], 200);
 
             }
@@ -288,9 +292,9 @@ class CommunityController extends Controller
 //                Cloudder::upload($base64_image, null);
 //                $pId = Cloudder::getPublicId();
 //                $imageURL = Cloudder::show($pId, ["width" => 500, "height"=>500]);
-
+                $this->sendNotification($community);
                 $community->logo_path = $newFileName;
-//                $community->update();
+                $community->update();
                 return response()->json(['status'=> '1', 'messaged' => 'received', 'isDirty' => 'false'], 200);
             }
         }
@@ -304,7 +308,7 @@ class CommunityController extends Controller
             {
                 $community->update();
                 Session::flash('message', "Customization on Community Details worked perfectly !!.");
-
+                $this->sendNotification($community);
                 return response()->json(['status'=> '1', 'messaged' => 'received', 'isDirty' => 'true', $community->getDirty()], 200);
 
             }
@@ -316,6 +320,21 @@ class CommunityController extends Controller
         }
 
 
+    }
+
+    public function sendNotification(Community $cM)
+    {
+        // from community master
+        $community = new stdClass();
+        $community->message = $cM->name ." just updated their policy and community details";
+        $community->request = 0;
+        $community->action = 0; // 0 -> no action given 1 -> action given 2 -> action performed
+        $community->routing = 'commi'; // user and commi
+        $community->routingID = '1';
+        $community->group = $cM->name;
+        $community->permit = 1; // to view the notification redirect
+        Notification::send($cM->users, new PeopleNotification($community));
+        event(new \App\Events\CommunityNotification($cM->name ." just updated their policy and community details", str_replace(" ", "-", strtolower($cM->name))));
     }
 
 }
