@@ -138,11 +138,13 @@
                           @foreach($events as $event)
                           <div class="card text-white bg-primary mb-3 cardEvents" style="max-width: 350px;display: flex;flex-direction: row;margin: 0px 5px 0px 5px;">
                               <div class="card-header" style="background-color: #ff673d;padding: 10px 15px 10px 15px;max-width: 150px" data-id="{{$event->id}}" data-toggle="tooltip" title="Click the panel to view the event's detail" >
-{{--                                  <h5 class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white">Community Admin</h5>--}}
-                                  <h5>Organized By
-                                      <span class="kt-badge kt-badge--inline kt-badge--pill" style="background-color: rgba(83, 161, 243, 0.92);font-weight: lighter;margin-top:10px">Computer Science Societies</span>
-                                      <span class="badge badge-pill badge" style="background-color:#3dc8ff;color: white"></span>
-                                  </h5>
+                                  <span class="card-title badge badge-pill badge-secondary" style="background-color:#f33dff;color: white" title="Event Tag">Tag#{{$event->eventTag }}</span>
+
+                                  {{--                                  <h5 class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white">Community Admin</h5>--}}
+{{--                                  <h5>Organized By--}}
+{{--                                      <span class="kt-badge kt-badge--inline kt-badge--pill" style="background-color: rgba(83, 161, 243, 0.92);font-weight: lighter;margin-top:10px">Computer Science Societies</span>--}}
+{{--                                      <span class="badge badge-pill badge" style="background-color:#3dc8ff;color: white"></span>--}}
+{{--                                  </h5>--}}
                                   <img src="https://image.flaticon.com/icons/svg/2971/2971373.svg" style="height: 64px;width: 64px;margin: 15px"/>
 {{--                                  <a href="#" onclick="return false;" style="color:white" title="Dued at 2020-02-01">--}}
 {{--                                      <i class="flaticon-calendar" style="padding-right: 10px"></i>--}}
@@ -169,7 +171,8 @@
                                             @endif
                                                   <span class="percentageFont">{{$event->percentage}}%</span>
                                               </div>
-                                          <p class="card-text" style="padding: 10px 10px 0px 10px;">{{$event->current_participants}}/{{$event->max_participants}} Participants</p>
+                                          <p class="card-text" >{{$event->current_participants}}/{{$event->max_participants}} Participants</p>
+{{--                                                      style="padding: 10px 10px 0px 10px;"--}}
                                       </div>
 
                                       <div class="card-body card-back">
@@ -181,13 +184,16 @@
                                                   <svg class="bi bi-three-dots-vertical" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="color: black;font-size: 16px;margin-right: 5px">
                                                       <path fill-rule="evenodd" d="M9.5 13a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clip-rule="evenodd"/>
                                                   </svg>
-                                                  <div class="dropdown-menu option-bar">
-                                                      <span class="dropdown-item" href="javascript:void(0)">Action</span>
-                                                      <div class="dropdown-divider"></div>
-                                                      <a class="dropdown-item" data-toggle="modal" data-target="#exampleModal" data-is ="true" data-val="{{$event}}" data-venue="{{$event->venue->name}}" href="javascript:void(0)">Update Event's details</a>
-                                                      <div class="dropdown-divider"></div>
-                                                      <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#deleteModal" data-del-id ="{{$event->id}}">Update Event's Status</a>
-                                                  </div>
+                                                  @if($ongoing)
+                                                      <div class="dropdown-menu option-bar">
+                                                          <span class="dropdown-item" href="javascript:void(0)">Action</span>
+                                                          <div class="dropdown-divider"></div>
+                                                          <a class="dropdown-item" data-toggle="modal" data-target="#exampleModal" data-is ="true" data-val="{{$event}}" data-venue="{{$event->venue->name}}" href="javascript:void(0)">Update Event's details</a>
+                                                          <div class="dropdown-divider"></div>
+                                                          <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#deleteModal" data-del-id ="{{$event->id}}">Update Event's Status</a>
+                                                      </div>
+                                                      @endif
+
                                               </div>
 
                                           </div>
@@ -252,7 +258,6 @@
 
               </div>
 
-
             </div>
                 <!-- Modal Event -->
                 <div class="modal fade" id="exampleModal"  role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -279,7 +284,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="message-text" class="col-form-label">Event Description:</label>
-                                        <textarea class="form-control" id="event-description" name="event-description"></textarea>
+                                        <textarea class="form-control" id="event-description" name="event-description" maxlength="150"></textarea>
                                         <div class="invalid-feedback">
                                             Please provide an event description
                                         </div>
@@ -381,7 +386,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="message-text" class="col-form-label">Community Description:</label>
-                                        <textarea class="form-control" id="message-text" name="community_description">{{$community->description}}</textarea>
+                                        <textarea class="form-control" id="message-text" name="community_description" maxlength="255">{{$community->description}}</textarea>
                                     </div>
 
                                     <div class="form-group">
@@ -452,13 +457,12 @@
 {{--        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>--}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
 
 
     <script type="text/javascript">
 
         $(document).ready(function(){
-
             $('[data-toggle="tooltip"]').tooltip();
 
             $(document).on('click', "button.eventCreate", function(e)
@@ -538,6 +542,7 @@
                 }
 
                 console.log('errorless ')
+                console.log({{Session::get('communityID')}})
                 $.ajax(
                     {
                         url: "{{route('event.ajax.create')}}",
@@ -560,17 +565,17 @@
                         success: function (data, text, xhr) {
 
                             console.log(data)
-                            // if(data.status === "1")
-                            // {
-                            //     if(data.errorFound)
-                            //     {
-                            //         document.querySelector('.alert-ajax').style.display = 'block';
-                            //         document.querySelector('.alert-ajax').textContent = 'ERROR!! Please select other venue or time';
-                            //         return;
-                            //     }
-                                location.reload()
-                            //
-                            // }
+                            if(data.status === "1")
+                            {
+                                if(data.errorFound)
+                                {
+                                    document.querySelector('.alert-ajax').style.display = 'block';
+                                    document.querySelector('.alert-ajax').textContent = 'ERROR!! Please select other venue or time';
+                                    return;
+                                }
+                                // location.reload()
+
+                            }
                             // else
                             // {
                             //     console.log('false');

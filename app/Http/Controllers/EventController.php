@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Ramsey\Uuid\Uuid;
 
 class EventController extends Controller
 {
@@ -18,6 +19,7 @@ class EventController extends Controller
         $event->active = 0;
         $event->update();
         Session::flash('message', "Event Tag of ".$event->name . " has been cancelled due to specific reasons");
+        event(new \App\Events\CommunityNotification('The Moderator has just deleted the event of <b>'. $event->name. '</b>', str_replace(" ", "-", strtolower($event->community->name))));
         return response()->json(['isDelte' => true , $request->get('id')], 200);
     }
 
@@ -66,7 +68,7 @@ class EventController extends Controller
                 $event->image_URL = $newFileName;
                 $event->update();
                 Session::flash('message', "Customization on Event Details worked perfectly; Image changed and other columns !!.");
-
+                event(new \App\Events\CommunityNotification('The Moderator has just updated the event image and event details of <b>'. $event->eventTag. '</b>', str_replace(" ", "-", strtolower($event->community->name))));
                 return response()->json(['status'=> '1', 'messaged' => 'changed on Image' . $msgP, 'isDirty' => 'true'], 200);
 
             }
@@ -75,7 +77,7 @@ class EventController extends Controller
                 $event->image_URL = $newFileName;
                 $event->update();
                 Session::flash('message', "Customization on Event Details worked perfectly; Image changed !!.");
-
+                event(new \App\Events\CommunityNotification('The Moderator has just updated the event logo of <b>'. $event->eventTag. '</b>', str_replace(" ", "-", strtolower($event->community->name))));
                 return response()->json(['status'=> '1', 'messaged' => 'changed on Image ' . $msgP, 'isDirty' => 'false'], 200);
             }
         }
@@ -85,6 +87,8 @@ class EventController extends Controller
             {
                 $event->update();
                 Session::flash('message', "Customization on Event Details worked perfectly; Columns :  !!.");
+                event(new \App\Events\CommunityNotification('The Moderator has just updated the event details of <b>'. $event->eventTag. '</b>', str_replace(" ", "-", strtolower($event->community->name))));
+
                 return response()->json(['status'=> '1', 'messaged' => 'received no image '. $msgP, 'isDirty' => 'true', 'axa' =>$event->getDirty()], 200);
 
             }
@@ -108,6 +112,12 @@ class EventController extends Controller
         $event->fee = number_format($request->get('fees'), 2);
         $event->community_id = $request->get('communityID');
         $event->user_id = Auth::id();
+        do
+        {
+            $uuid1 = substr(Uuid::uuid1(), 0 ,10);
+            $eventTag= Event::where('eventTag', $uuid1)->first();
+        }        while(!empty($eventTag));
+        $event->eventTag = $uuid1;
         $ymd = Carbon::createFromFormat('Y-m-d H:i', $request->get('startDate'));
         $da = Carbon::createFromFormat('Y-m-d H:i', $request->get('endDate'))->subSeconds(1);
         $sDate = Carbon::createFromFormat('Y-m-d', substr($ymd, 0, 10));
@@ -120,9 +130,6 @@ class EventController extends Controller
         {
                 return response()->json(['status' => "1", 'message' => 'Please select other venue or time', 'errorFound' => true], 200);
         }
-//
-        if($request->get('isNewImage') == "true")
-        {
             $base64_image = $request->get('base64URL');
             @list($type, $file_data) = explode(';', $base64_image);
             @list(, $type) = explode('/', $type);
@@ -134,8 +141,9 @@ class EventController extends Controller
             $event->save();
             Storage::put('images/event/'.$newFileName, base64_decode($file_data)); // store img locally
             Session::flash('message', "Added a new event !!.");
+            $channelDescription = 'The Moderator has just organized a new event ; <b>'. $event->name . '</b>, with tag of <b>'.$event->eventTag. '</b> and it is dued by <b>' . substr(Carbon::createFromFormat('Y-m-d', substr($ymd, 0, 10))->subDays(1), 0,10) . '</b>';
+            event(new \App\Events\CommunityNotification($channelDescription, str_replace(" ", "-", strtolower($event->community->name))));
             return response()->json(['status'=> '1', $ymd, $da,  $formatted, $request->get('startDate')], 200);
-        }
-//        return response()->json(['status' => 1,'message' => 'No crashing timeslot', 'errorFound' => false, $event], 200);
+
     }
 }

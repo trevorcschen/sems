@@ -28,5 +28,23 @@
     <link href="{{ asset('assets/css/skins/aside/dark.css') }}" rel="stylesheet" type="text/css" />
 
     <!--end::Layout Skins -->
-    <link rel="shortcut icon" href="{{ asset('assets/media/logos/favicon.ico') }}" />
+    <link rel="shortcut icon" href="{{ asset('assets/media/logos/favicon.ico') }}" />\
+    <style>
+        .badge-notify
+        {
+            background: red;
+            position: relative;
+            top: -14px;
+            left: -8px;
+            padding: 4px;
+        }
+        .toast-top-right
+        {
+            z-index: 999;
+            position: fixed;
+            top:12px;
+            right:12px;
+        }
+    </style>
+
 </head>
