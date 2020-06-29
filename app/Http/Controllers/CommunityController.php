@@ -326,11 +326,11 @@ class CommunityController extends Controller
     {
         // from community master
         $community = new stdClass();
-        $community->message = $cM->name ." just updated their policy and community details";
+        $community->message = strip_tags($cM->name) ." just updated their policy and community details";
         $community->request = 0;
         $community->action = 0; // 0 -> no action given 1 -> action given 2 -> action performed
         $community->routing = 'commi'; // user and commi
-        $community->routingID = '1';
+        $community->routingID = $cM->id;
         $community->group = $cM->name;
         $community->permit = 1; // to view the notification redirect
         Notification::send($cM->users, new PeopleNotification($community));

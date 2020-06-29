@@ -84,6 +84,13 @@ Route::post('/ajax/replyRequest', function(Request $request)
     return response()->json(['status' => 1, $request->get('id'), $request->get('answer')], 200);
 })->name('notification.ajax.reply');
 
+
+Route::post('/ajax/latestNotification', function(Request $request)
+{
+   return response()->json(['status' => 1, 'data' => auth()->user()->notifications()->latest()->first()], 200);
+})->name('notification.ajax.latest');
+
+
 Route::get('/testNotification', function()
 {
    return view('communityadmin.community.notification');
@@ -134,17 +141,37 @@ Route::get('/testCommunity', function()
 
 Route::get('/sendRequestFromStudent', function() // request to join community or event .. search for the id either event id or community id that user wants to join.
 {
-   $community = \App\Community::where('id', 2)->first();
+   $community = \App\Community::where('id', 1)->first();
    echo $community->admin->student_id;
-    event(new \App\Events\StudentNotification('A community request  sent from Trevor', $community->admin->student_id)); // push notification after disapprove or approve to the specific student.
+//    $user = \App\User::where('id', auth()->user()->id)->first();
+    $communityA = new stdClass();
+    $communityA->message = "Trevor requested to join the community ; Computer Science Society";
+    $communityA->request = 1;
+    $communityA->action = 1; // 0 -> no action given 1 -> action given 2 -> action performed
+    $communityA->routing = 'user'; // user and commi
+    $communityA->routingID = '1';
+    $communityA->group = 'Machine Learning Society';
+    $communityA->permit = 0; // to view the notification redirect
+    Notification::send($community->admin, new PeopleNotification($communityA));
+    event(new \App\Events\StudentNotification($communityA->message, $community->admin->student_id)); // push notification after disapprove or approve to the specific student.
+
 
 });
 
 Route::get('/notificationFromAdmin', function() // i m the community admin of the ID 2, i will send the notifications to all who are the members of this community
 {
     event(new \App\Events\StudentNotification('A community request  sent from Trevor', '9057573')); // push notification after disapprove or approve to the specific student.
-
-    event(new \App\Events\CommunityNotification('Approval Good', 'computer-science-society'));
+//    event(new \App\Events\CommunityNotification('Approval Good', 'computer-science-society'));
+    $user = \App\User::where('id', auth()->user()->id)->first();
+    $community = new stdClass();
+    $community->message = "Trevor requested to join the community ; Computer Science Society";
+    $community->request = 1;
+    $community->action = 1; // 0 -> no action given 1 -> action given 2 -> action performed
+    $community->routing = 'user'; // user and commi
+    $community->routingID = '1';
+    $community->group = 'Machine Learning Society';
+    $community->permit = 0; // to view the notification redirect
+    Notification::send($user, new PeopleNotification($community));
 });
 
 function string_snake_case($string)

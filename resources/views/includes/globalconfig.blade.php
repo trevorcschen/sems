@@ -39,7 +39,7 @@
         const std = {!! json_encode($student_channels) !!};
         std.push(`student-channel_${authAPI}`);
         console.log(std)
-        Pusher.logToConsole = true;
+        // Pusher.logToConsole = true;
 
     var pusher = new Pusher('e204c5a4177ff320ec30', {
         cluster: 'ap1'
@@ -66,19 +66,22 @@
                 '                </div>\n' +
                 '            </div>');
 
-            let tempNot = {!! json_encode(auth()->user()->notifications()->latest()->first()) !!};
-            let url =  tempNot.data['routing'] === 'user' ? '{{ route("users.show", ':ids') }}' : '{{route("commi.community", ":ids")}}';
-            url = url.replace(':ids', tempNot.data['routingID']);
-            console.log(url);
-            let dd = `<a href="${tempNot.data['permit'] === 1 ? url : `javascript:void(0)`}" class="kt-notification__item " id="${tempNot.id}">` +
-                     `<div class="kt-notification__item-icon"><i class="flaticon2-safe kt-font-primary"></i></div>`+
-                     `<div class="kt-notification__item-details">`+
-                     `<div class="kt-notification__item-title">  ${tempNot.data['data']}</div>`+
-                     `<div class="kt-notification__item-time"> ${moment(tempNot.updated_at).fromNow()}</div>`;
-            tempNot.data['action'] === 1 ? dd+='<div class="actionNotification" style="display: flex;flex-direction: row;justify-content: space-around;margin-top: 5px" id="'+tempNot.id +'">'+
-                '<button type="button" class="btn btn-decline" style="background: rgba(255, 0, 0, 0.08);color: red;">Decline</button>'+
-                ' <button type="button" class="btn btn-accept" style="background-color: rgba(153, 255, 160, 0.5);color: green;">Accept</button></div>' : null;
-            dd+= `</div></a>`;
+            {{--let tempNot = {!! json_encode(auth()->user()->notifications()->latest()->first()) !!};--}}
+            retrieveLatestNotification();
+           //  console.log(tempNot)
+            {{--console.log(tempNot);--}}
+            {{--let url =  tempNot.data['routing'] === 'user' ? '{{ route("users.show", ':ids') }}' : '{{route("commi.community", ":ids")}}';--}}
+            {{--url = url.replace(':ids', tempNot.data['routingID']);--}}
+            {{--console.log(url);--}}
+            {{--let dd = `<a href="${tempNot.data['permit'] === 1 ? url : `javascript:void(0)`}" class="kt-notification__item " id="${tempNot.id}">` +--}}
+            {{--         `<div class="kt-notification__item-icon"><i class="flaticon2-safe kt-font-primary"></i></div>`+--}}
+            {{--         `<div class="kt-notification__item-details">`+--}}
+            {{--         `<div class="kt-notification__item-title">  ${tempNot.data['data']}</div>`+--}}
+            {{--         `<div class="kt-notification__item-time"> ${moment(tempNot.updated_at).fromNow()}</div>`;--}}
+            {{--tempNot.data['action'] === 1 ? dd+='<div class="actionNotification" style="display: flex;flex-direction: row;justify-content: space-around;margin-top: 5px" id="'+tempNot.id +'">'+--}}
+            {{--    '<button type="button" class="btn btn-decline" style="background: rgba(255, 0, 0, 0.08);color: red;">Decline</button>'+--}}
+            {{--    ' <button type="button" class="btn btn-accept" style="background-color: rgba(153, 255, 160, 0.5);color: green;">Accept</button></div>' : null;--}}
+            {{--dd+= `</div></a>`;--}}
 
 
             // let newNotification = '<a href="" class="kt-notification__item " id="'+tempNot.id+'">\n' +
@@ -91,13 +94,49 @@
             //     ' <button type="button" class="btn btn-accept" style="background-color: rgba(153, 255, 160, 0.5);color: green;">Accept</button></div>' : null;
             // newNotification+='</div></a>';
 
-            $('.kt-notification').prepend(dd);
+            // $('.kt-notification').prepend(dd);
 
             $(".toast").toast({delay:3000})
             document.querySelector('.badge-notify').textContent = parseInt(document.querySelector('.badge-notify').textContent) +1
             document.querySelector('.badge-notify').style.display = 'block'
 
         })
+    }
+
+    function retrieveLatestNotification()
+    {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "{{ route('notification.ajax.latest')}}", true);
+        xhttp.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log('function done')
+                let tempNot = JSON.parse(this.response).data
+                appendNewHTML(tempNot);
+            }
+        };
+        xhttp.send();
+
+    }
+
+    function appendNewHTML(tempNot)
+    {
+
+        let url =  tempNot.data['routing'] === 'user' ? '{{ route("users.show", ':ids') }}' : '{{route("commi.community", ":ids")}}';
+        url = url.replace(':ids', tempNot.data['routingID']);
+        console.log(url);
+        let dd = `<a href="${tempNot.data['permit'] === 1 ? url : `javascript:void(0)`}" class="kt-notification__item " id="${tempNot.id}">` +
+            `<div class="kt-notification__item-icon"><i class="flaticon2-safe kt-font-primary"></i></div>`+
+            `<div class="kt-notification__item-details">`+
+            `<div class="kt-notification__item-title">  ${tempNot.data['data']}</div>`+
+            `<div class="kt-notification__item-time"> ${moment(tempNot.updated_at).fromNow()}</div>`;
+        tempNot.data['action'] === 1 ? dd+='<div class="actionNotification" style="display: flex;flex-direction: row;justify-content: space-around;margin-top: 5px" id="'+tempNot.id +'">'+
+            '<button type="button" class="btn btn-decline" style="background: rgba(255, 0, 0, 0.08);color: red;">Decline</button>'+
+            ' <button type="button" class="btn btn-accept" style="background-color: rgba(153, 255, 160, 0.5);color: green;">Accept</button></div>' : null;
+        dd+= `</div></a>`;
+        $('.kt-notification').prepend(dd);
+
     }
 
 </script>

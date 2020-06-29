@@ -159,7 +159,7 @@
                                   <div class="card-inner">
                                       <div class="card-body card-front">
                                           <h3 class="card-title" style="text-align: center">{{$event->name}}</h3>
-                                          <p class="card-text" style="padding: 10px">{{$event->description}}</p>
+                                          <p class="card-text" style="">{{$event->description}}</p>
                                         @if($event->percentage == 100)
                                               <div class="progress md-progress" style="height: 10px;margin-top: 10px;width:90%;">
                                                   <div class="progress-bar"  role="progressbar" style= "width: {{$event->percentage}}%; height: 10px;rgba(112, 188, 255, 1);color: black;font-size: 14px" aria-valuenow="{{$event->percentage}}" aria-valuemin="0" aria-valuemax="100"></div>
@@ -566,7 +566,6 @@
                                 fees: eventFee.value,
                                 communityID : "{{Session::get('communityID')}}",
                                 base64URL : imageURL.src,
-
                             },
                         dataType: 'json',
                         headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},

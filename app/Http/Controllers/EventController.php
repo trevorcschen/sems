@@ -30,7 +30,7 @@ class EventController extends Controller
     {
         $event = Event::where('id', $request->get('id'))->first();
         $event->active = 0;
-        $event->update();
+//        $event->update();
         Session::flash('message', "Event Tag of ".$event->name . " has been cancelled due to specific reasons");
         $channelDescription = 'The Moderator('.$event->community->name.') has just deleted the event of <b>'. $event->name. '</b>';
         $this->sendNotification($event, $channelDescription);
@@ -170,11 +170,11 @@ class EventController extends Controller
     public function sendNotification(Event $event, $channelDescription)
     {
         $community = new stdClass();
-        $community->message = $channelDescription;
+        $community->message = strip_tags($channelDescription);
         $community->request = 0;
         $community->action = 0; // 0 -> no action given 1 -> action given 2 -> action performed
         $community->routing = 'commi'; // user and commi
-        $community->routingID = '1';
+        $community->routingID = $event->community->id;
         $community->group = $event->community->name;
         $community->permit = 1; // to view the notification redirect
         Notification::send($event->community->users, new PeopleNotification($community));
