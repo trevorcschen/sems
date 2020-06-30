@@ -332,6 +332,8 @@ class CommunityController extends Controller
         $community->routing = 'commi'; // user and commi
         $community->routingID = $cM->id;
         $community->group = $cM->name;
+        $community->groupID = $cM->id;
+        $community->type0 = 'commi';
         $community->permit = 1; // to view the notification redirect
         Notification::send($cM->users, new PeopleNotification($community));
         event(new \App\Events\CommunityNotification($cM->name ." just updated their policy and community details", str_replace(" ", "-", strtolower($cM->name))));
