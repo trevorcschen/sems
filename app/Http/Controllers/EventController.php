@@ -21,8 +21,30 @@ class EventController extends Controller
         $event = Event::where('id', $eventID)->first();
         $event->current_participants = rand(0, $event->max_participants);
         $event->percentage = round($event->current_participants / $event->max_participants * 100, 0);
+        $isCommunity = false;
 
-        return view('communityadmin.event.show', compact('event', 'event'));
+//        echo auth()->user()->events()->name;
+        foreach (auth()->user()->communities as $community)
+        {
+            if($community->id == $event->community->id)
+            {
+                $isCommunity = true;
+            }
+        }
+        if($event->community->user_id == auth()->user()->id)
+        {
+            $isCommunity = true;
+        }
+
+        if($isCommunity)
+        {
+            return view('communityadmin.event.show', compact('event', 'event'));
+        }
+        else
+        {
+            return response()->view('errors.404', [], 404);
+        }
+
     }
 
 
