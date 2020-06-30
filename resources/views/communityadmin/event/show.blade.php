@@ -20,7 +20,11 @@
                 <!--begin:: Widgets/Applications/User/Profile3-->
                 <div class="kt-portlet kt-portlet--height-fluid">
                     <div class="kt-portlet__body">
+                        <div class="kt-portlet kt-portlet--last kt-portlet--head-lg kt-portlet--responsive-mobile"
+                             id="kt_page_portlet">
+
                         <div class="kt-widget kt-widget--user-profile-3">
+
                             <div class="kt-widget__top">
 {{--                                @if($event->image_URL)--}}
 {{--                                    <div class="kt-widget__media kt-hidden-">--}}
@@ -80,6 +84,19 @@
                                         </div>
                                     </div>
                                 </div>
+                                @can('event.join')
+                                    @if(auth()->user()->getRoleNames()[0] == 'student')
+                                <div class="kt-portlet__head-toolbar">
+                                    <div class="btn-group">
+                                        <a href="" type="button" class="btn btn-brand"
+                                           id="save-btn">
+                                            <i class="la la-edit"></i>
+                                            <span class="kt-hidden-mobile">Join</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                        @endif
+                                    @endcan
                             </div>
                             <div class="kt-widget__bottom">
                                 <div class="kt-widget__item">
