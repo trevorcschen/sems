@@ -5,9 +5,15 @@ namespace App\Http\Controllers;
 use App\Community;
 use App\Event;
 use App\User;
+use App\Notifications\PeopleNotification;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use JD\Cloudder\Facades\Cloudder;
+use stdClass;
 
 class CommunityController extends Controller
 {
@@ -245,19 +251,114 @@ class CommunityController extends Controller
     // Trevor Module
     public function communityPage($id)
     {
-        $events = Event::where('community_id', $id)->paginate(12);
+        $events = Event::where('community_id', $id)->where('active', 1)->where('start_time' ,'>=', Carbon::now()->toDateString('Y-m-d'))->paginate(12);
         foreach ($events as $event)
     {
         $event->current_participants = rand(0, $event->max_participants);
+//        $event->current_participants = $event->users->count();
+
         $event->percentage = round($event->current_participants / $event->max_participants * 100, 0);
+//        echo $event->users->count();
+
     }
-//        foreach ($events as $event)
-//        {
-//            echo $event;
-//        }
-        $count = Event::where('community_id', $id)->get();
+        $count = Event::where('community_id', $id)->where('active', 1)->where('start_time' ,'>=', Carbon::now()->toDateString('Y-m-d'))->get();
         $community = Community::where('id', $id)->first();
-//        echo $id;
-        return view('communityadmin.community.group', compact('events','community'))->with('count', $count->count());
+        Session::flash('communityID', $community->id);
+        return view('communityadmin.community.group', compact('events','community'))->with('count', $count->count())->with('past', false)->with('ongoing', true);
     }
+
+    public function communityMembers(Community $community)
+    {
+       return view('communityadmin.community.members', compact('community'));
+    }
+
+    public function pastEventList($id)
+    {
+        $events = Event::where('community_id', $id)->where('active', 1)->where('start_time' ,'<', Carbon::now()->toDateString('Y-m-d'))->paginate(12);
+        foreach ($events as $event)
+        {
+            $event->current_participants = rand(0, $event->max_participants);
+//        $event->current_participants = $event->users->count();
+            $event->percentage = round($event->current_participants / $event->max_participants * 100, 0);
+        }
+        $count = Event::where('community_id', $id)->where('start_time' ,'<', Carbon::now()->toDateString('Y-m-d'))->get();
+        $community = Community::where('id', $id)->first();
+        Session::flash('communityID', $community->id);
+        return view('communityadmin.community.group', compact('events','community'))->with('count', $count->count())->with('past', true)->with('ongoing', false);
+    }
+
+    public function aJaxUpdateCom(Request $request)
+    {
+        if($request->get('isNewImage') == "true")
+        {
+            $base64_image = $request->get('base64URL');
+            @list($type, $file_data) = explode(';', $base64_image);
+            @list(, $type) = explode('/', $type);
+            @list(, $file_data) = explode(',', $file_data);
+            $newFileName = mt_rand().time() . '.' . $type;
+            Storage::put('images/community/'. $request->get('id').'/'.$newFileName, base64_decode($file_data)); // store img locally
+            $community = Community::where('id' , $request->get('id'))->first();
+            $community->description = $request->get('description');
+            $community->fee = (double) $request->get('fees');
+            $community->max_members = $request->get('max_mem');
+            if($community->isDirty())
+            {
+                $community->logo_path = $newFileName;
+                $community->update();
+                $this->sendNotification($community);
+                return response()->json(['status'=> '1', 'messaged' => 'received', 'isDirty' => 'true'], 200);
+
+            }
+            else
+            {
+//                Cloudder::upload($base64_image, null);
+//                $pId = Cloudder::getPublicId();
+//                $imageURL = Cloudder::show($pId, ["width" => 500, "height"=>500]);
+                $this->sendNotification($community);
+                $community->logo_path = $newFileName;
+                $community->update();
+                return response()->json(['status'=> '1', 'messaged' => 'received', 'isDirty' => 'false'], 200);
+            }
+        }
+        else
+        {
+            $community = Community::where('id' , $request->get('id'))->first();
+            $community->description = $request->get('description');
+            $community->fee = (double) $request->get('fees');
+            $community->max_members = $request->get('max_mem');
+            if($community->isDirty())
+            {
+                $community->update();
+                Session::flash('message', "Customization on Community Details worked perfectly !!.");
+                $this->sendNotification($community);
+                return response()->json(['status'=> '1', 'messaged' => 'received', 'isDirty' => 'true', $community->getDirty()], 200);
+
+            }
+            else
+            {
+                return response()->json(['status'=> '0', 'messaged' => 'received but nothing else changed', ], 200);
+
+            }
+        }
+
+
+    }
+
+    public function sendNotification(Community $cM)
+    {
+        // from community master
+        $community = new stdClass();
+        $community->message = strip_tags($cM->name) ." just updated their policy and community details";
+        $community->request = 0;
+        $community->action = 0; // 0 -> no action given 1 -> action given 2 -> action performed
+        $community->routing = 'commi'; // user and commi
+        $community->routingID = $cM->id;
+        $community->group = $cM->name;
+        $community->groupID = $cM->id;
+        $community->type0 = 'commi';
+        $community->permit = 1; // to view the notification redirect
+        Notification::send($cM->users, new PeopleNotification($community));
+        event(new \App\Events\CommunityNotification($cM->name ." just updated their policy and community details", str_replace(" ", "-", strtolower($cM->name))));
+    }
+
 }

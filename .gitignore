@@ -10,3 +10,6 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+resources/views/communityadmin/community/upload.blade.php
+resources/views/communityadmin/community/notification.blade.php
+resources/views/communityadmin/community/notification.blade.php

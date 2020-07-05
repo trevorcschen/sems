@@ -1,0 +1,65 @@
+.block,
+.card {
+    background: #fff;
+    border-width: 0;
+    border-radius: .25rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+    margin-bottom: 1.5rem
+}
+
+.avatar {
+    position: relative;
+    line-height: 1;
+    border-radius: 500px;
+    white-space: nowrap;
+    font-weight: 700;
+    border-radius: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    border-radius: 500px;
+    box-shadow: 0 5px 10px 0 rgba(50, 50, 50, .15)
+}
+
+.avatar img {
+    border-radius: inherit;
+    width: 100%
+}
+
+.gd-info {
+    color: #fff;
+    border: none;
+    background: #14bae4 linear-gradient(45deg, #14bae4, #14e4a6)
+}
+
+.w-48 {
+    width: 48px !important;
+    height: 48px !important
+}
+
+.list-item{
+    display: flex;
+    padding-bottom: 10px;
+}
+
+.flex
+{
+    padding: 0 0px 0px 10px;
+}
+
+.list-row
+{
+    width: 100%;
+    padding: 2% 0 0 20%
+}
+
+.card
+{
+    max-width: 300px;
+    margin-left: auto;
+}

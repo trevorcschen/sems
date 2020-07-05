@@ -53,11 +53,11 @@
                         <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">Communities</span></span></li>
                         <li class="kt-menu__item " aria-haspopup="true"><a href="{{ route('communities.index') }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Community List</span></a></li>
                         @can('community.show')
-                            @isset($communities)
+                            @if(Auth::user()->roles->first->name->name == 'community-admin')
                                 @foreach($communities as $community)
                                     <li class="kt-menu__item " aria-haspopup="true"><a href="{{ route('commi.community', $community->id) }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">{{$community->name}}</span></a></li>
                                 @endforeach
-                            @endisset
+                            @endif
                         @endcan
                         @can('community.create')
                             <li class="kt-menu__item " aria-haspopup="true"><a href="{{ route('communities.create') }}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Create New Community</span></a></li>
@@ -89,3 +89,4 @@
         </ul>
     </div>
 </div>
+
