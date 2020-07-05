@@ -51,6 +51,7 @@ Route::delete('/communities/destroy/many/{ids}', 'CommunityController@destroyMan
 Route::resource('communities', 'CommunityController');
 
 Route::get('/commi/{id}','CommunityController@communityPage')->name('commi.community');
+Route::get('/commi/{community}/members', 'CommunityController@communityMembers')->name('commi.members');
 Route::get('/commi/{id}/past', 'CommunityController@pastEventList')->name('commi.past.event');
 Route::post('/ajax/updateCom', 'CommunityController@aJaxUpdateCom')->name('commi.ajax.update.community');
 Route::post('/ajax/deleteEvent', 'EventController@ajaxDeleteEvent')->name('event.ajax.delete');
@@ -84,11 +85,14 @@ Route::post('/ajax/replyRequest', function(Request $request)
     $aw->type0 = $da[0]->data['type0'];
     $aw->permit = $request->get('answer') == 'accept' ? 1 : 0;
 
+    $targetedID->users()->sync($user);
     //send the notification to the user based on the notification object and student's details ; channel via student id
-    event(new \App\Events\StudentNotification($da[0]->data['data'], $user->student_id)); // push notification after disapprove or approve to the specific student.
+    event(new \App\Events\StudentNotification($aw->message, $user->student_id)); // push notification after disapprove or approve to the specific student.
     Notification::send($user, new PeopleNotification($aw));
     // delete the notification,
     auth()->user()->notifications()->where('id', $request->get('id'))->delete(); // delete the request as performed the action; accept or reject
+    $targetedID->users()->sync($user);
+
 
     return response()->json(['status' => 1, $request->get('id'), $request->get('answer'), $user, $aw], 200);
 })->name('notification.ajax.reply');
@@ -112,7 +116,8 @@ Route::get('/sendRequestFromStudent', function() // request to join community or
 
 function sendNotification()
 {
-    $community = \App\Community::where('id', 1)->first();
+//    $community = \App\Event::where('id', 52)->first();
+    $community = \App\Community::where('id', 3)->first();
     $notification = new stdClass();
     $notification->message = auth()->user()->name ." requested to join the community ;" . $community->name; // first param ; auth name and second param; community or event name
     $notification->request = 1; // only request is 1  // otherwise 0
@@ -169,61 +174,8 @@ Route::get('/testN', function()
 
 Route::get('/debugMode', function()
 {
-//    $da = auth()->user()->notifications()->where('id', '5f652679-602d-4d54-9f87-81fd71abf38f')->get()->map(function($item)
-//    {
-//        $aw = new stdClass();
-//        $aw->data = 'Your request to join '. $item->data['group']. ' has been approved.';
-//        $aw->request = 0; //$item->data['request'];
-//        $aw->action = 0; //2;
-//        $aw->routing = $item->data['routing'];
-//        $aw->routingID = $item->data['routingID'];
-//        $aw->group = $item->data['group'];
-//        $aw->groupID = 3;
-//        $aw->type0 = 'commi';
-//        $aw->permit = 'accept' == 'accept' ? 1 : 0;
-//        $item->data = ($aw);
-//        return $item;
-//    });
-//
-////    dd($da);
-//
-//    // delete the notification, send the notification to the user via routingID
-//    $user = \App\User::where('id', $da[0]->data['routingID'])->first();
-//    $targetedID = $da[0]->data['type0'] == 'event' ? Event::where('id', $da[0]->data['groupID'])->first() : \App\Community::where('id', $da[0]->data['groupID'])->first();
-////    dd($da);
-//
-//    $answer = 'accept';
-//
-//    $aw = new stdClass();
-//    $aw->message = 'Your request to join '. $da[0]->data['group']. ' has been '.$answer.'.';
-//    $aw->request = 0; //$item->data['request'];
-//    $aw->action = 0; //2;
-//    $aw->routing = $da[0]->data['type0'] == 'event' ? 'event' : 'commi';
-//    $aw->routingID = $targetedID->id;
-//    $aw->group = $da[0]->data['group'];
-//    $aw->groupID = $da[0]->data['groupID'];
-//    $aw->type0 = $da[0]->data['type0'];
-//    $aw->permit = $answer == 'accept' ? 1 : 0;
-////    dd($targetedID);
-//
-//    event(new \App\Events\StudentNotification($da[0]->data['data'], $user->student_id)); // push notification after disapprove or approve to the specific student.
-//    Notification::send($user, new PeopleNotification($aw));
-
-
-
-
-
-//    event(new \App\Events\StudentNotification($da[0]->data['data'], $user->student_id)); // push notification after disapprove or approve to the specific student.
-//////    auth()->user()->notifications()->where('id', $request->get('id'))->delete(); // delete the request as performed the action; accept or reject
-////
-//    $aw = new stdClass();
-//    $aw->data = $da[0]->data['data'];
-//    $aw->request = 0; //$item->data['request'];
-//    $aw->action = 0; //2;
-//    $aw->routing = $da[0]->data['routing'];
-//    $aw->routingID = $da[0]->data['routingID'];
-//    $aw->group = $da[0]->data['group'];
-//    $aw->permit = 'accept' == 'accept' ? 1 : 0;
-////
-//    Notification::send($user, new PeopleNotification($aw));
+//        $event = Event::where('id', 51)->first();
+//        $event->users()->sync(auth()->user());
+        $community = \App\Community::where('id', 2)->first();
+        $community->users()->sync(auth()->user());
 });

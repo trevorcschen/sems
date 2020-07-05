@@ -9,7 +9,15 @@
 
 @section('pagevendorsstyles')
     <link href="{{ asset('assets/plugins/viewerjs/viewer.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('assets/css/lists.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
+<style>
+    .borderList
+    {
+        margin-top: 50px;
+        border-top: 1px groove rgba(103, 102, 102, 0.19);
+    }
+</style>
 
 @section('content')
     <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
@@ -129,6 +137,22 @@
                             </div>
                         </div>
                     </div>
+                        <div class="row borderList">
+                            <div class="col-sm-9">
+                                <div class="list list-row block">
+                                    @foreach($event->users as $user)
+                                        <div class="list-item">
+                                            <div><a href="{{route('users.show', $user->id)}}" data-abc="true"><span class="w-48 avatar gd-info">{{$user->name_acronym}}</span></a></div>
+                                            <div class="flex"> <a href="{{route('users.show', $user->id)}}" class="item-author text-color" data-abc="true">{{$user->name}}</a>
+                                                <div class="item-except text-muted text-sm h-1x">{{$user->email}}</div>
+                                                <div class="item-except text-muted text-sm h-1x">{{$user->biography}}</div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
+                                </div>
+                            </div>
+                        </div>
                 </div>
 
                 <!--end:: Widgets/Applications/User/Profile3-->

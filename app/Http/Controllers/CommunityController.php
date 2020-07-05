@@ -250,6 +250,11 @@ class CommunityController extends Controller
         return view('communityadmin.community.group', compact('events','community'))->with('count', $count->count())->with('past', false)->with('ongoing', true);
     }
 
+    public function communityMembers(Community $community)
+    {
+       return view('communityadmin.community.members', compact('community'));
+    }
+
     public function pastEventList($id)
     {
         $events = Event::where('community_id', $id)->where('active', 1)->where('start_time' ,'<', Carbon::now()->toDateString('Y-m-d'))->paginate(12);
