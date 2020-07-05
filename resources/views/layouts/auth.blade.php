@@ -13,7 +13,7 @@
 <!-- end:: Page -->
 
 <!-- begin::Global Config(global config for global JS sciprts) -->
-@include('includes.globalconfig')
+{{--@include('includes.globalconfig')--}}
 <!-- end::Global Config -->
 
 <!--begin::Global Theme Bundle(used by all pages) -->

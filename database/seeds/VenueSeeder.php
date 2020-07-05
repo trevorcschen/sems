@@ -20,5 +20,9 @@ class VenueSeeder extends Seeder
             'active' => true,
             'venue_image_path' => null,
         ]);
+
+        for ($x = 0; $x <= 20; $x++) {
+            factory(Venue::class)->create();
+        }
     }
 }

@@ -57,5 +57,20 @@ class UserSeeder extends Seeder
         ]);
 
         $user->syncRoles('student');
+
+        for ($x = 0; $x <= 20; $x++) {
+            $user = factory(User::class)->create();
+            $user->syncRoles('super-admin');
+        }
+
+        for ($x = 0; $x <= 20; $x++) {
+            $user = factory(User::class)->create();
+            $user->syncRoles('community-admin');
+        }
+
+        for ($x = 0; $x <= 100; $x++) {
+            $user = factory(User::class)->create();
+            $user->syncRoles('student');
+        }
     }
 }

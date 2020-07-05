@@ -42,16 +42,11 @@
                     <div class="kt-head kt-head--skin-dark kt-head--fit-x kt-head--fit-b" style="background-image: url({{ asset('assets/media/misc/bg-1.jpg') }})">
                         <h3 class="kt-head__title">
                             Notifications
-                            &nbsp;
-                            <span class="btn btn-success btn-sm btn-bold btn-font-md">23 new</span>
-                        </h3>
+                            &nbsp;</h3>
                         <ul class="nav nav-tabs nav-tabs-line nav-tabs-bold nav-tabs-line-3x nav-tabs-line-success kt-notification-item-padding-x" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active show" data-toggle="tab" href="#topbar_notifications_notifications" role="tab" aria-selected="true">Communities</a>
+                                <a class="nav-link active show" data-toggle="tab" href="#topbar_notifications_notifications" role="tab" aria-selected="true">New Notifications</a>
                             </li>
-{{--                            <li class="nav-item">--}}
-{{--                                <a class="nav-link" data-toggle="tab" href="#topbar_notifications_events" role="tab" aria-selected="false">Events</a>--}}
-{{--                            </li>--}}
                         </ul>
                     </div>
 
@@ -69,7 +64,6 @@
                                                                             <div class="kt-notification__item-details">
                                                                                 <div class="kt-notification__item-title">
                                                                                     {{$notification->data['data']}}
-{{--                                                                                    {{json_encode($notification->data)}}--}}
                                                                                 </div>
 
                                                                                 <div class="kt-notification__item-time">
@@ -86,80 +80,8 @@
                                         @endif
                                     </div>
                                     @endforeach
-
-{{--                                @foreach($communities as $community)--}}
-{{--                                    <a href="#" class="kt-notification__item kt-notification__item--read">--}}
-{{--                                        <div class="kt-notification__item-icon">--}}
-{{--                                            <i class="flaticon2-safe kt-font-primary"></i>--}}
-{{--                                        </div>--}}
-{{--                                        <div class="kt-notification__item-details">--}}
-{{--                                            <div class="kt-notification__item-title">--}}
-{{--                                                Company meeting canceled--}}
-{{--                                            </div>--}}
-{{--                                            <div class="kt-notification__item-time">--}}
-{{--                                                19 hrs ago--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                    </a>--}}
-{{--                                    @endforeach--}}
-{{--                                <a href="#" class="kt-notification__item kt-notification__item--read">--}}
-{{--                                    <div class="kt-notification__item-icon">--}}
-{{--                                        <i class="flaticon2-safe kt-font-primary"></i>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="kt-notification__item-details">--}}
-{{--                                        <div class="kt-notification__item-title">--}}
-{{--                                            Company meeting canceled--}}
-{{--                                        </div>--}}
-{{--                                        <div class="kt-notification__item-time">--}}
-{{--                                            19 hrs ago--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </a>--}}
-{{--                                <a href="#" class="kt-notification__item">--}}
-{{--                                    <div class="kt-notification__item-icon">--}}
-{{--                                        <i class="flaticon-security kt-font-warning"></i>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="kt-notification__item-details">--}}
-{{--                                        <div class="kt-notification__item-title">--}}
-{{--                                            New customer comment recieved--}}
-{{--                                        </div>--}}
-{{--                                        <div class="kt-notification__item-time">--}}
-{{--                                            2 days ago--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </a>--}}
                             </div>
                         </div>
-{{--                        <div class="tab-pane" id="topbar_notifications_events" role="tabpanel">--}}
-{{--                            <div class="kt-notification kt-margin-t-10 kt-margin-b-10 kt-scroll" data-scroll="true" data-height="300" data-mobile-height="200">--}}
-{{--                                <a href="#" class="kt-notification__item">--}}
-{{--                                    <div class="kt-notification__item-icon">--}}
-{{--                                        <i class="flaticon2-psd kt-font-success"></i>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="kt-notification__item-details">--}}
-{{--                                        <div class="kt-notification__item-title">--}}
-{{--                                            New report has been received--}}
-{{--                                        </div>--}}
-{{--                                        <div class="kt-notification__item-time">--}}
-{{--                                            23 hrs ago--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </a>--}}
-{{--                                <a href="#" class="kt-notification__item">--}}
-{{--                                    <div class="kt-notification__item-icon">--}}
-{{--                                        <i class="flaticon2-pie-chart kt-font-success"></i>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="kt-notification__item-details">--}}
-{{--                                        <div class="kt-notification__item-title">--}}
-{{--                                            New customer is registered--}}
-{{--                                        </div>--}}
-{{--                                        <div class="kt-notification__item-time">--}}
-{{--                                            3 days ago--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </a>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
                     </div>
                 </form>
             </div>

@@ -314,8 +314,9 @@
                             },
                         },
                     ],
-                    initComplete: function () {
+                    drawCallback: function () {
                         var thisTable = this;
+                        $('.filter').remove();
                         var rowFilter = $('<tr class="filter"></tr>').appendTo($(table.table().header()));
 
                         this.api().columns().every(function () {

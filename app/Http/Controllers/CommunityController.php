@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use JD\Cloudder\Facades\Cloudder;
 use stdClass;
 
 class CommunityController extends Controller
@@ -39,9 +38,12 @@ class CommunityController extends Controller
      */
     public function index()
     {
-//        if (Auth::user()->hasRole('super-admin')) {
+        if (Auth::user()->hasRole('super-admin')) {
             return response()->view('superadmin.communities.index');
-//        }
+        } elseif (Auth::user()->hasRole('student')) {
+            return response()->view('superadmin.communities.index');
+        }
+
     }
 
     /**
@@ -219,8 +221,8 @@ class CommunityController extends Controller
 
             $communities = Community::all();
 
-            if ($request->input('columns.4.search.value')) {
-                $fromTo = explode(" - ", $request->input('columns.4.search.value'));
+            if ($request->input('columns.6.search.value')) {
+                $fromTo = explode(" - ", $request->input('columns.6.search.value'));
                 $communities = Community::whereBetween('created_at', [$fromTo[0], $fromTo[1]]);
             }
 
@@ -252,15 +254,14 @@ class CommunityController extends Controller
     public function communityPage($id)
     {
         $events = Event::where('community_id', $id)->where('active', 1)->where('start_time' ,'>=', Carbon::now()->toDateString('Y-m-d'))->paginate(12);
-        foreach ($events as $event)
-    {
+        foreach ($events as $event) {
         $event->current_participants = rand(0, $event->max_participants);
 //        $event->current_participants = $event->users->count();
 
         $event->percentage = round($event->current_participants / $event->max_participants * 100, 0);
 //        echo $event->users->count();
+        }
 
-    }
         $count = Event::where('community_id', $id)->where('active', 1)->where('start_time' ,'>=', Carbon::now()->toDateString('Y-m-d'))->get();
         $community = Community::where('id', $id)->first();
         Session::flash('communityID', $community->id);
@@ -275,8 +276,7 @@ class CommunityController extends Controller
     public function pastEventList($id)
     {
         $events = Event::where('community_id', $id)->where('active', 1)->where('start_time' ,'<', Carbon::now()->toDateString('Y-m-d'))->paginate(12);
-        foreach ($events as $event)
-        {
+        foreach ($events as $event) {
             $event->current_participants = rand(0, $event->max_participants);
 //        $event->current_participants = $event->users->count();
             $event->percentage = round($event->current_participants / $event->max_participants * 100, 0);
@@ -289,8 +289,7 @@ class CommunityController extends Controller
 
     public function aJaxUpdateCom(Request $request)
     {
-        if($request->get('isNewImage') == "true")
-        {
+        if($request->get('isNewImage') == "true") {
             $base64_image = $request->get('base64URL');
             @list($type, $file_data) = explode(';', $base64_image);
             @list(, $type) = explode('/', $type);
@@ -301,43 +300,31 @@ class CommunityController extends Controller
             $community->description = $request->get('description');
             $community->fee = (double) $request->get('fees');
             $community->max_members = $request->get('max_mem');
-            if($community->isDirty())
-            {
+            if($community->isDirty()) {
                 $community->logo_path = $newFileName;
                 $community->update();
                 $this->sendNotification($community);
                 return response()->json(['status'=> '1', 'messaged' => 'received', 'isDirty' => 'true'], 200);
 
-            }
-            else
-            {
-//                Cloudder::upload($base64_image, null);
-//                $pId = Cloudder::getPublicId();
-//                $imageURL = Cloudder::show($pId, ["width" => 500, "height"=>500]);
+            } else {
                 $this->sendNotification($community);
                 $community->logo_path = $newFileName;
                 $community->update();
                 return response()->json(['status'=> '1', 'messaged' => 'received', 'isDirty' => 'false'], 200);
             }
-        }
-        else
-        {
+        } else {
             $community = Community::where('id' , $request->get('id'))->first();
             $community->description = $request->get('description');
             $community->fee = (double) $request->get('fees');
             $community->max_members = $request->get('max_mem');
-            if($community->isDirty())
-            {
+            if($community->isDirty()) {
                 $community->update();
                 Session::flash('message', "Customization on Community Details worked perfectly !!.");
                 $this->sendNotification($community);
                 return response()->json(['status'=> '1', 'messaged' => 'received', 'isDirty' => 'true', $community->getDirty()], 200);
 
-            }
-            else
-            {
+            } else {
                 return response()->json(['status'=> '0', 'messaged' => 'received but nothing else changed', ], 200);
-
             }
         }
 

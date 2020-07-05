@@ -235,7 +235,7 @@
 
                                   <div class="community-details-container" style="margin-left: 10px;margin-top: 5px">
                                       <p class="card-text">{{$community->admin->name}}</p>
-                                      <a href="{{route('commi.members', $community)}}" class="card-text">50/{{$community->max_members}} Members</a>
+                                      <a href="{{route('commi.members', $community)}}" class="card-text">{{ number_format($community->users->count()) }}/{{$community->max_members}} Members</a>
                                   </div>
                               </div>
                           </div>

@@ -32,7 +32,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 <script src="https://js.pusher.com/6.0/pusher.min.js"></script>
 
-<script >
+<script>
 
         const authAPI = {!! json_encode($authAPIKEY) !!}
         console.log(authAPI)
