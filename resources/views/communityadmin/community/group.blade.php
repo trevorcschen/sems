@@ -139,19 +139,8 @@
                           <div class="card text-white bg-primary mb-3 cardEvents" style="max-width: 350px;display: flex;flex-direction: row;margin: 0px 5px 0px 5px;">
                               <div class="card-header" style="background-color: #ff673d;padding: 10px 15px 10px 15px;max-width: 150px" data-id="{{$event->id}}" data-toggle="tooltip" title="Click the panel to view the event's detail" >
                                   <span class="card-title badge badge-pill badge-secondary" style="background-color:#f33dff;color: white" title="Event Tag">Tag#{{$event->eventTag }}</span>
-
-                                  {{--                                  <h5 class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white">Community Admin</h5>--}}
-{{--                                  <h5>Organized By--}}
-{{--                                      <span class="kt-badge kt-badge--inline kt-badge--pill" style="background-color: rgba(83, 161, 243, 0.92);font-weight: lighter;margin-top:10px">Computer Science Societies</span>--}}
-{{--                                      <span class="badge badge-pill badge" style="background-color:#3dc8ff;color: white"></span>--}}
-{{--                                  </h5>--}}
                                   <img src="https://image.flaticon.com/icons/svg/2971/2971373.svg" style="height: 64px;width: 64px;margin: 15px"/>
-{{--                                  <a href="#" onclick="return false;" style="color:white" title="Dued at 2020-02-01">--}}
-{{--                                      <i class="flaticon-calendar" style="padding-right: 10px"></i>--}}
-{{--                                      <span class="badge badge-pill badge-secondary" style="background-color:#3dc8ff    ;color: white"> 2020-02-01 23:59:59</span>--}}
-{{--                                  </a>--}}
-{{----}}
-                                  <p class="card-text">Dued  at
+                                  <p class="card-text">Due  at
                                   <span class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white"> {{date('Y-m-d',(strtotime ( '-1 day' , strtotime ( $event->start_time) ) )) }}</span>
                                   </p>
                               </div>
@@ -208,11 +197,6 @@
                                           <div>
                                               <h6>To</h6><h5 class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white;padding: 5px;margin: 5px;">{{date( 'd-m-Y, D ,h:i a', strtotime($event->end_time))}}</h5></div>
                                           <span>Venue <h5 class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white;padding: 5px;margin: 5px;">{{$event->venue->name}}</h5></span>
-
-                                          <div style="display: flex;padding: 10px;">
-                                              <button type="button" class="btn-primary btn-sm">Interested</button>
-                                              <button type="button" class="btn btn-brand btn-elevate btn-icon-sm">Join</button>
-                                          </div>
                                       </div>
 
                                       </div>

@@ -53,7 +53,15 @@
                                                 <i class="flaticon2-correct text-danger" title="Inactive"></i>
                                             @endif
                                         </a>
-
+                                        @hasrole('student')
+                                            <div class="kt-widget__action">
+                                                @if(!$event->users->contains(Auth::user()->id))
+                                                    <button type="button" class="btn btn-brand btn-sm btn-upper" data-toggle="modal" data-target="#modal-join" data-id="{{ $event->id }}"><i class="la la-plus"></i>Join</button>&nbsp;
+                                                @else
+                                                    <button type="button" class="btn btn-brand btn-sm btn-upper" disabled><i class="la la-plus"></i>Joined</button>&nbsp;
+                                                @endif
+                                            </div>
+                                        @endhasrole
                                     </div>
                                     <div class="kt-widget__subhead">
                                         <a href="#" onclick="return false;" title="Created at {{ $event->created_at->format('l, F j, Y h:i:s A') }}"><i class="flaticon-calendar"></i>{{ $event->created_at->format('F j, Y') }}</a>
@@ -92,19 +100,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                @can('event.join')
-                                    @if(auth()->user()->getRoleNames()[0] == 'student')
-                                <div class="kt-portlet__head-toolbar">
-                                    <div class="btn-group">
-                                        <a href="" type="button" class="btn btn-brand"
-                                           id="save-btn">
-                                            <i class="la la-edit"></i>
-                                            <span class="kt-hidden-mobile">Join</span>
-                                        </a>
-                                    </div>
-                                </div>
-                                        @endif
-                                    @endcan
                             </div>
                             <div class="kt-widget__bottom">
                                 <div class="kt-widget__item">
@@ -163,24 +158,20 @@
     </div>
 
     <!--begin::Modal-->
-    <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="modal-join" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete permanently?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm Join?</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     </button>
-                </div>
-                <div class="modal-body">
-                    <p>The record and all its associated data will deleted.</p>
                 </div>
                 <div class="modal-footer">
                     <form method="POST">
                         @csrf
-                        @method('DELETE')
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                        <button type="submit" class="btn btn-brand">Confirm Join</button>
                     </form>
                 </div>
             </div>
@@ -195,14 +186,14 @@
 @endsection
 
 @section('pagescripts')
-{{--    <script>--}}
-{{--        var $image = $('#profile_image');--}}
-{{--        $image.viewer();--}}
+    <script>
+        var $image = $('#profile_image');
+        $image.viewer();
 
-{{--        $('#modal-delete').on('show.bs.modal', function (e) {--}}
-{{--            var url = '{{ route("users.destroy", ':id') }}';--}}
-{{--            url = url.replace(':id', $(e.relatedTarget).data('id'));--}}
-{{--            $(this).find('form').attr('action', url);--}}
-{{--        });--}}
-{{--    </script>--}}
+        $('#modal-join').on('show.bs.modal', function (e) {
+            var url = '{{ route("event.join", ':id') }}';
+            url = url.replace(':id', $(e.relatedTarget).data('id'));
+            $(this).find('form').attr('action', url);
+        });
+    </script>
 @endsection

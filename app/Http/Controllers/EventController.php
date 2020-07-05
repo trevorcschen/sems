@@ -19,7 +19,7 @@ class EventController extends Controller
     public function show($eventID)
     {
         $event = Event::where('id', $eventID)->first();
-        $event->current_participants = rand(0, $event->max_participants);
+        $event->current_participants = $event->users->count();
         $event->percentage = round($event->current_participants / $event->max_participants * 100, 0);
         $isCommunity = false;
 
@@ -204,5 +204,11 @@ class EventController extends Controller
         $community->permit = 1; // to view the notification redirect
         Notification::send($event->community->users, new PeopleNotification($community));
         event(new \App\Events\CommunityNotification($channelDescription, str_replace(" ", "-", strtolower($event->community->name))));
+    }
+
+    public function join(Event $event)
+    {
+        $event->users()->attach(Auth::user()->id);
+        return redirect()->route('event.show', $event)->withSuccess('Event <strong>' . $event->name . '</strong> joined successfully.');
     }
 }

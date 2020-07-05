@@ -13,6 +13,22 @@
 
 @section('content')
     <div class="kt-container  kt-container--fluid  kt-grid__item kt-grid__item--fluid">
+        @if (session('success'))
+            <div class="alert alert-success fade show" role="alert">
+                <div class="alert-icon"><i class="flaticon2-checkmark"></i></div>
+                <div class="alert-text">
+                    <strong>
+                        Well done!
+                    </strong>
+                    {!! session('success') !!}
+                </div>
+                <div class="alert-close">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true"><i class="la la-close"></i></span>
+                    </button>
+                </div>
+            </div>
+        @endif
 
         <!--Begin::Section-->
         <div class="row">
@@ -43,8 +59,11 @@
                                             @endif
                                         </a>
                                         <div class="kt-widget__action">
-                                            <button type="button" class="btn btn-label-danger btn-sm btn-upper" data-toggle="modal" data-target="#modal-delete" data-id="{{ $community->id }}"><i class="la la-trash"></i>Delete</button>&nbsp;
-                                            <a href="{{ route('communities.edit', $community) }}" class="btn btn-brand btn-sm btn-upper"><i class="la la-edit"></i>Edit</a>
+                                            @if(!$community->users->contains(Auth::user()->id))
+                                                <button type="button" class="btn btn-brand btn-sm btn-upper" data-toggle="modal" data-target="#modal-join" data-id="{{ $community->id }}"><i class="la la-plus"></i>Join</button>&nbsp;
+                                            @else
+                                                <button type="button" class="btn btn-brand btn-sm btn-upper" disabled><i class="la la-plus"></i>Joined</button>&nbsp;
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="kt-widget__subhead">
@@ -122,24 +141,20 @@
     </div>
 
     <!--begin::Modal-->
-    <div class="modal fade" id="modal-delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="modal-join" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete permanently?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Confirm Join?</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     </button>
-                </div>
-                <div class="modal-body">
-                    <p>The record and all its associated data will deleted.</p>
                 </div>
                 <div class="modal-footer">
                     <form method="POST">
                         @csrf
-                        @method('DELETE')
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                        <button type="submit" class="btn btn-brand">Confirm Join</button>
                     </form>
                 </div>
             </div>
@@ -158,8 +173,8 @@
         var $image = $('#community_logo');
         $image.viewer();
 
-        $('#modal-delete').on('show.bs.modal', function (e) {
-            var url = '{{ route("communities.destroy", ':id') }}';
+        $('#modal-join').on('show.bs.modal', function (e) {
+            var url = '{{ route("communities.join", ':id') }}';
             url = url.replace(':id', $(e.relatedTarget).data('id'));
             $(this).find('form').attr('action', url);
         });

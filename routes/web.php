@@ -50,6 +50,7 @@ Route::resource('venues', 'VenueController');;
 
 Route::post('/ajax/communities', 'CommunityController@ajaxIndex')->name('ajax.communities.index');
 Route::delete('/communities/destroy/many/{ids}', 'CommunityController@destroyMany')->name('communities.destroyMany');
+Route::post('/communities/join/{community}', 'CommunityController@join')->name('communities.join');;
 Route::resource('communities', 'CommunityController');
 
 Route::get('/commi/{id}','CommunityController@communityPage')->name('commi.community');
@@ -59,7 +60,9 @@ Route::post('/ajax/updateCom', 'CommunityController@aJaxUpdateCom')->name('commi
 Route::post('/ajax/deleteEvent', 'EventController@ajaxDeleteEvent')->name('event.ajax.delete');
 Route::post('/ajax/updateEvent', 'EventController@ajaxUpdateEvent')->name('event.ajax.update');
 Route::post('/ajax/createEvent', 'EventController@ajaxCreateEvent')->name('event.ajax.create');
+Route::post('/event/join/{event}', 'EventController@join')->name('event.join');
 Route::get('/event/{id}', 'EventController@show')->name('event.show');
+
 Route::post('/ajax/unmarkedNotification', function(Request $request)
 {
     $user = App\User::where('id', Auth::user()->id)->first();
@@ -68,6 +71,7 @@ Route::post('/ajax/unmarkedNotification', function(Request $request)
 
     return response()->json(['status' => 1, $request->get('id')], 200);
 })->name('notification.ajax.unmarked');
+
 Route::post('/ajax/replyRequest', function(Request $request)
 {
     $da = auth()->user()->notifications()->where('id', $request->get('id'))->get();

@@ -34,9 +34,12 @@ class ViewServiceProvider extends ServiceProvider
                 $authID = Auth::user()->id;
                 $communities = Community::where('user_id', $authID)->get();
                 $view->with('communities', $communities);
-
+            } elseif (Auth::user()->roles->first->name->name == 'student')
+            {
+                $authID = Auth::user()->id;
+                $communities = Auth::user()->communities;
+                $view->with('communities', $communities);
             }
-
         });
 
         View::composer('includes.globalconfig', function($view)

@@ -41,9 +41,8 @@ class CommunityController extends Controller
         if (Auth::user()->hasRole('super-admin')) {
             return response()->view('superadmin.communities.index');
         } elseif (Auth::user()->hasRole('student')) {
-            return response()->view('superadmin.communities.index');
+            return response()->view('student.communities.index');
         }
-
     }
 
     /**
@@ -109,7 +108,11 @@ class CommunityController extends Controller
             $i++;
         }
 
-        return response()->view('superadmin.communities.show', compact('community', 'acronym'));
+        if (Auth::user()->hasRole('super-admin')) {
+            return response()->view('superadmin.communities.show', compact('community', 'acronym'));
+        } elseif (Auth::user()->hasRole('student')) {
+            return response()->view('student.communities.show', compact('community', 'acronym'));
+        }
     }
 
     /**
@@ -250,16 +253,20 @@ class CommunityController extends Controller
         }
     }
 
+    public function join(Community $community)
+    {
+        $community->users()->attach(Auth::user()->id);
+        return redirect()->route('communities.show', $community)->withSuccess('Community <strong>' . $community->name . '</strong> joined successfully.');
+    }
+
     // Trevor Module
     public function communityPage($id)
     {
         $events = Event::where('community_id', $id)->where('active', 1)->where('start_time' ,'>=', Carbon::now()->toDateString('Y-m-d'))->paginate(12);
         foreach ($events as $event) {
-        $event->current_participants = rand(0, $event->max_participants);
-//        $event->current_participants = $event->users->count();
+        $event->current_participants = $event->users->count();
 
         $event->percentage = round($event->current_participants / $event->max_participants * 100, 0);
-//        echo $event->users->count();
         }
 
         $count = Event::where('community_id', $id)->where('active', 1)->where('start_time' ,'>=', Carbon::now()->toDateString('Y-m-d'))->get();
@@ -277,8 +284,7 @@ class CommunityController extends Controller
     {
         $events = Event::where('community_id', $id)->where('active', 1)->where('start_time' ,'<', Carbon::now()->toDateString('Y-m-d'))->paginate(12);
         foreach ($events as $event) {
-            $event->current_participants = rand(0, $event->max_participants);
-//        $event->current_participants = $event->users->count();
+            $event->current_participants = $event->users->count();
             $event->percentage = round($event->current_participants / $event->max_participants * 100, 0);
         }
         $count = Event::where('community_id', $id)->where('start_time' ,'<', Carbon::now()->toDateString('Y-m-d'))->get();

@@ -94,7 +94,6 @@
                 <table class="table table-striped- table-bordered table-hover table-checkable" id="community_table">
                     <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Name</th>
                         <th>Description</th>
                         <th>Fee (RM)</th>
@@ -107,7 +106,6 @@
                     </thead>
                     <tfoot>
                     <tr>
-                        <th>ID</th>
                         <th>Name</th>
                         <th>Description</th>
                         <th>Fee (RM)</th>
@@ -215,9 +213,8 @@
                         headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
                     },
                     columns: [
-                        {data: 'id', width: '1%'},
-                        {data: 'name'},
-                        {data: 'description', width: '43%'},
+                        {data: 'name', width: '20%'},
+                        {data: 'description', width: '30%'},
                         {data: 'fee'},
                         {data: 'max_members', width: '1%'},
                         {data: 'admin'},
@@ -225,27 +222,7 @@
                         {data: 'active',  width: '8%'},
                         {data: 'id', responsivePriority: -1, width: '10%'},
                     ],
-                    order: [[1, "desc"]],
-                    headerCallback: function (thead, data, start, end, display) {
-                        thead.getElementsByTagName('th')[0].innerHTML = '\
-                    <label class="kt-checkbox kt-checkbox--single kt-checkbox--solid">\
-                        <input type="checkbox" value="" class="kt-group-checkable">\
-                        <span></span>\
-                    </label>';
-                    },
                     columnDefs: [
-                        {
-                            targets: 0,
-                            className: 'dt-right',
-                            orderable: false,
-                            render: function (data, type, full, meta) {
-                                return '\
-                        <label class="kt-checkbox kt-checkbox--single kt-checkbox--solid">\
-                            <input type="checkbox" value="' + data + '" class="kt-checkable">\
-                            <span></span>\
-                        </label>';
-                            },
-                        },
                         {
                             targets: -1,
                             title: 'Actions',
@@ -256,29 +233,19 @@
                                 editURL = editURL.replace(':data', data);
                                 showURL = showURL.replace(':data', data);
 
-                                return '\
-                                    <span class="dropdown">\
-                                        <a href="#" class="btn btn-sm btn-clean btn-icon btn-icon-md" data-toggle="dropdown" aria-expanded="true">\
-                                          <i class="la la-ellipsis-h"></i>\
-                                        </a>\
-                                        <div class="dropdown-menu dropdown-menu-right">\
-                                            <a class="dropdown-item" href="' + editURL + '"><i class="la la-edit"></i> Edit</a>\
-                                            <button class="dropdown-item" data-toggle="modal" data-target="#modal-delete" data-id="' + data + '"><i class="la la-trash"></i> Delete</button>\
-                                        </div>\
-                                    </span>\
-                                    <a href="' + showURL + '" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">\
+                                return '\<a href="' + showURL + '" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="View">\
                                       <i class="la la-search"></i>\
                                     </a>';
                             },
                         },
                         {
-                            targets: 2,
+                            targets: 1,
                             render: function (data, type, full, meta) {
                                 return data.length > 200 ? data.substr(0, 200) +' …' : data;
                             },
                         },
                         {
-                            targets: 7,
+                            targets: 6,
                             render: function (data, type, full, meta) {
                                 var status = {
                                     0: {'title': 'Inactive', 'class': ' kt-badge--danger'},
