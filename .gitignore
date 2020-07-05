@@ -13,3 +13,7 @@ yarn-error.log
 resources/views/communityadmin/community/upload.blade.php
 resources/views/communityadmin/community/notification.blade.php
 resources/views/communityadmin/community/notification.blade.php
+database/factories/CommunityFactory.php
+database/factories/UserFactory.php
+database/factories/VenueFactory.php
+database/factories/UserFactory.php
