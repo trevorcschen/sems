@@ -30,9 +30,11 @@ class CommunityController extends Controller
      */
     public function index()
     {
-//        if (Auth::user()->hasRole('super-admin')) {
+       if (Auth::user()->hasRole('super-admin')) {
             return response()->view('superadmin.communities.index');
-//        }
+       }elseif (Auth::user()->hasRole('student')) {
+           return response()->view('student.communities.index');
+       }
     }
 
     /**
@@ -95,7 +97,11 @@ class CommunityController extends Controller
             $i++;
         }
 
-        return response()->view('superadmin.communities.show', compact('community', 'acronym'));
+        if (Auth::user()->hasRole('super-admin')) {
+            return response()->view('superadmin.communities.show', compact('community', 'acronym'));
+        } elseif (Auth::user()->hasRole('student')) {
+            return response()->view('student.communities.show', compact('community', 'acronym'));
+        }
     }
 
     /**
@@ -222,5 +228,11 @@ class CommunityController extends Controller
 
             return response()->json($communities, $status=200, $headers=[], $options=JSON_PRETTY_PRINT);
         }
+    }
+    
+    public function join(Community $community)
+    {
+        $community->users()->attach(Auth::user()->id);
+        return redirect()->route('communities.show', $community)->withSuccess('Community <strong>' . $community->name . '</strong> joined successfully.');
     }
 }
