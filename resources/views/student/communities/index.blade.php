@@ -208,7 +208,7 @@
                             pageSize: 'A4',
                         }, 'print'],
                     ajax: {
-                        url: '{{ route('ajax.communities.index') }}',
+                        url: '{{ route('ajax.public.communities.index') }}',
                         type: "POST",
                         headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'},
                     },

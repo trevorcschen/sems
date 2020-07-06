@@ -12,7 +12,7 @@ class CommunitySeeder extends Seeder
      */
     public function run()
     {
-        Community::create([
+        $community = Community::create([
             'name' => 'Computer Science Society',
             'description' => 'Computer Science Society is a fun society',
             'fee' => 25.60,
@@ -21,6 +21,8 @@ class CommunitySeeder extends Seeder
             'active' => true,
             'user_id' => 2,
         ]);
+
+//        $community->users()->attach(3); // student
 
         factory(Community::class, 10)->create([
             'active' => true,

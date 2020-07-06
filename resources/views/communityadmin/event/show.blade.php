@@ -87,7 +87,7 @@
                                                 <div class="progress-bar kt-bg-success" role="progressbar" title="{{$event->percentage}}%" style="width: {{$event->percentage}}%" aria-valuenow="{{$event->percentage}}" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                             <div class="kt-widget__stats">
-                                                100%
+                                                {{ $event->percentage }}%
                                             </div>
                                         </div>
                                     </div>

@@ -40,7 +40,7 @@ class CommunityController extends Controller
     {
         if (Auth::user()->hasRole('super-admin')) {
             return response()->view('superadmin.communities.index');
-        } elseif (Auth::user()->hasRole('student')) {
+        } elseif (Auth::user()->hasAnyRole(['community-admin', 'student'])) {
             return response()->view('student.communities.index');
         }
     }
@@ -110,7 +110,7 @@ class CommunityController extends Controller
 
         if (Auth::user()->hasRole('super-admin')) {
             return response()->view('superadmin.communities.show', compact('community', 'acronym'));
-        } elseif (Auth::user()->hasRole('student')) {
+        } elseif (Auth::user()->hasAnyRole(['community-admin', 'student'])) {
             return response()->view('student.communities.show', compact('community', 'acronym'));
         }
     }
@@ -222,11 +222,33 @@ class CommunityController extends Controller
     {
         if ($request->ajax()) {
 
-            $communities = Community::all();
+            $communities = Community::where('active', true);
 
             if ($request->input('columns.6.search.value')) {
                 $fromTo = explode(" - ", $request->input('columns.6.search.value'));
-                $communities = Community::whereBetween('created_at', [$fromTo[0], $fromTo[1]]);
+                $communities = Community::where('active', true)->whereBetween('created_at', [$fromTo[0].' 00:00:00', $fromTo[1].' 23:59:59']);
+            }
+
+            return datatables()->of($communities)
+                ->addColumn('admin', function ($community) {
+                    return $community->admin->name;
+                })
+                ->editColumn('created_at', function ($community) {
+                    return $community->created_at->format('Y-m-d');
+                })
+                ->toJson();
+        }
+    }
+
+    public function ajaxIndexPublic(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $communities = Community::where('active', true);
+
+            if ($request->input('columns.5.search.value')) {
+                $fromTo = explode(" - ", $request->input('columns.5.search.value'));
+                $communities = Community::where('active', true)->whereBetween('created_at', [$fromTo[0].' 00:00:00', $fromTo[1].' 23:59:59']);
             }
 
             return datatables()->of($communities)

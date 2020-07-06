@@ -59,11 +59,13 @@
                                             @endif
                                         </a>
                                         <div class="kt-widget__action">
-                                            @if(!$community->users->contains(Auth::user()->id))
-                                                <button type="button" class="btn btn-brand btn-sm btn-upper" data-toggle="modal" data-target="#modal-join" data-id="{{ $community->id }}"><i class="la la-plus"></i>Join</button>&nbsp;
-                                            @else
-                                                <button type="button" class="btn btn-brand btn-sm btn-upper" disabled><i class="la la-plus"></i>Joined</button>&nbsp;
-                                            @endif
+                                            @role('student')
+                                                @if(!$community->users->contains(Auth::user()->id))
+                                                    <button type="button" class="btn btn-brand btn-sm btn-upper" data-toggle="modal" data-target="#modal-join" data-id="{{ $community->id }}"><i class="la la-plus"></i>Join</button>&nbsp;
+                                                @else
+                                                    <button type="button" class="btn btn-brand btn-sm btn-upper" disabled><i class="la la-plus"></i>Joined</button>&nbsp;
+                                                @endif
+                                            @endrole
                                         </div>
                                     </div>
                                     <div class="kt-widget__subhead">

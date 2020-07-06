@@ -1,5 +1,7 @@
 <?php
 
+use App\Event;
+use App\User;
 use Illuminate\Database\Seeder;
 
 class EventSeeder extends Seeder
@@ -11,11 +13,22 @@ class EventSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Event::class, 1)->create()->each(function ($event)
+        factory(Event::class, 1)->create()->each(function ($event)
         {
-            $user = factory(App\User::class)->create();
+            $user = factory(User::class)->create();
             $user->syncRoles('student');
-            $event->users()->sync($user);
+            $event->users()->attach($user);
+        });
+
+        factory(Event::class, 10)->create([
+            'community_id' => 1,
+            'venue_id' => 2,
+            'user_id' => 2,
+
+        ])->each(function ($event) {
+            $user = factory(User::class)->create();
+            $user->syncRoles('student');
+            $event->users()->attach($user);
         });
     }
 }

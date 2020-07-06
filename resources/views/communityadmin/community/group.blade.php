@@ -165,15 +165,12 @@
                                       </div>
 
                                       <div class="card-body card-back">
+                                          @if($ongoing && $event->user->id === Auth::user()->id)
                                           <div style="display: flex;flex-direction: column">
-{{--                                              <div style="padding: 0px 24px 0px 24px">--}}
-{{--                                                  <span style="text-align: center;width: 10px">{{$event->name}}dsadsaadsasddas</span>--}}
-{{--                                              </div>--}}
                                               <div class="action-bar" style="right: 1px">
                                                   <svg class="bi bi-three-dots-vertical" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="color: black;font-size: 16px;margin-right: 5px">
                                                       <path fill-rule="evenodd" d="M9.5 13a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0-5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clip-rule="evenodd"/>
                                                   </svg>
-                                                  @if($ongoing)
                                                       <div class="dropdown-menu option-bar">
                                                           <span class="dropdown-item" href="javascript:void(0)">Action</span>
                                                           <div class="dropdown-divider"></div>
@@ -181,14 +178,10 @@
                                                           <div class="dropdown-divider"></div>
                                                           <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#deleteModal" data-del-id ="{{$event->id}}">Update Event's Status</a>
                                                       </div>
-                                                      @endif
-
                                               </div>
-
                                           </div>
-
-
-                                                                           @if($event->fee == 0.0)
+                                          @endif
+                                          @if($event->fee == 0.0)
                                               <h5 class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white;padding: 5px;margin: 5px;margin-top: 20px">Free of Charge (FOC)</h5>
                                           @else
                                               <span>Fee <h5 class="card-title badge badge-pill badge-secondary" style="background-color:#3dc8ff;color: white;padding: 5px;margin: 5px;">RM {{number_format($event->fee, 2)}}</h5> </span> <br/>

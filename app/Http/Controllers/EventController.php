@@ -53,8 +53,8 @@ class EventController extends Controller
         $event = Event::where('id', $request->get('id'))->first();
         $event->active = 0;
 //        $event->update();
-        Session::flash('message', "Event Tag of ".$event->name . " has been cancelled due to specific reasons");
-        $channelDescription = 'The Moderator('.$event->community->name.') has just deleted the event of <b>'. $event->name. '</b>';
+        Session::flash('message', "Event ".$event->name . " has been cancelled due to specific reasons");
+        $channelDescription = 'The Moderator ('.$event->community->name.') has just deleted the event <b>'. $event->name. '</b>';
         $this->sendNotification($event, $channelDescription);
 //        event(new \App\Events\CommunityNotification('The Moderator has just deleted the event of <b>'. $event->name. '</b>', str_replace(" ", "-", strtolower($event->community->name))));
         return response()->json(['isDelte' => true , $request->get('id')], 200);
@@ -105,7 +105,7 @@ class EventController extends Controller
                 $event->image_URL = $newFileName;
                 $event->update();
                 Session::flash('message', "Customization on Event Details worked perfectly; Image changed and other columns !!.");
-                $channelDescription ='The Moderator('.$event->community->name.') has just updated the event image and event details of <b>'. $event->eventTag. '</b>';
+                $channelDescription ='The Moderator ('.$event->community->name.') has just updated the event image and event details of <b>'. $event->name. '</b>';
                 $this->sendNotification($event, $channelDescription);
 //                event(new \App\Events\CommunityNotification('The Moderator has just updated the event image and event details of <b>'. $event->eventTag. '</b>', str_replace(" ", "-", strtolower($event->community->name))));
                 return response()->json(['status'=> '1', 'messaged' => 'changed on Image' . $msgP, 'isDirty' => 'true'], 200);
@@ -116,7 +116,7 @@ class EventController extends Controller
                 $event->image_URL = $newFileName;
                 $event->update();
                 Session::flash('message', "Customization on Event Details worked perfectly; Image changed !!.");
-                $channelDescription ='The Moderator('.$event->community->name.') has just updated the event logo of <b>'. $event->eventTag. '</b>';
+                $channelDescription ='The Moderator ('.$event->community->name.') has just updated the event logo of <b>'. $event->name. '</b>';
                 $this->sendNotification($event, $channelDescription);
 //                event(new \App\Events\CommunityNotification('The Moderator has just updated the event logo of <b>'. $event->eventTag. '</b>', str_replace(" ", "-", strtolower($event->community->name))));
                 return response()->json(['status'=> '1', 'messaged' => 'changed on Image ' . $msgP, 'isDirty' => 'false'], 200);
@@ -127,9 +127,9 @@ class EventController extends Controller
             if($event->isDirty())
             {
                 $event->update();
-                Session::flash('message', "Customization on Event Details worked perfectly; Columns :  !!.");
+                Session::flash('message', "Customization on Event Details worked perfectly!!.");
 //                event(new \App\Events\CommunityNotification('The Moderator has just updated the event details of <b>'. $event->eventTag. '</b>', str_replace(" ", "-", strtolower($event->community->name))));
-                $channelDescription = 'The Moderator('.$event->community->name.') has just updated the event details of <b>'. $event->eventTag. '</b>';
+                $channelDescription = 'The Moderator ('.$event->community->name.') has just updated the event details of <b>'. $event->name. '</b>';
                 $this->sendNotification($event, $channelDescription);
                 return response()->json(['status'=> '1', 'messaged' => 'received no image '. $msgP, 'isDirty' => 'true', 'axa' =>$event->getDirty()], 200);
 
@@ -183,7 +183,7 @@ class EventController extends Controller
             $event->save();
             Storage::put('images/event/'.$newFileName, base64_decode($file_data)); // store img locally
             Session::flash('message', "Added a new event !!.");
-            $channelDescription = 'The Moderator('. $event->community->name.')has just organized a new event ; <b>'. $event->name . '</b>, with tag of <b>'.$event->eventTag. '</b> and it is dued by <b>' . substr(Carbon::createFromFormat('Y-m-d', substr($ymd, 0, 10))->subDays(1), 0,10) . '</b>';
+            $channelDescription = 'The Moderator ('. $event->community->name.') has just organized a new event ; <b>'. $event->name . '</b>, with tag of <b>'.$event->eventTag. '</b> and it is due by <b>' . substr(Carbon::createFromFormat('Y-m-d', substr($ymd, 0, 10))->subDays(1), 0,10) . '</b>';
             $this->sendNotification($event, $channelDescription);
             return response()->json(['status'=> '1', $ymd, $da,  $formatted, $request->get('startDate')], 200);
 
@@ -192,18 +192,20 @@ class EventController extends Controller
     public function sendNotification(Event $event, $channelDescription)
     {
         // previously was putting community attributes but now changed to event
-        $community = new stdClass();
-        $community->message = strip_tags($channelDescription);
-        $community->request = 0;
-        $community->action = 0; // 0 -> no action given 1 -> action given 2 -> action performed
-        $community->routing = 'event'; // user and commi
-        $community->routingID = $event->id;
-        $community->group = $event->name;
-        $community->groupID = $event->id;
-        $community->type0 = 'event';
-        $community->permit = 1; // to view the notification redirect
-        Notification::send($event->community->users, new PeopleNotification($community));
-        event(new \App\Events\CommunityNotification($channelDescription, str_replace(" ", "-", strtolower($event->community->name))));
+//        $community = new stdClass();
+//        $community->message = strip_tags($channelDescription);
+//        $community->request = 0;
+//        $community->action = 0; // 0 -> no action given 1 -> action given 2 -> action performed
+//        $community->routing = 'event'; // user and commi
+//        $community->routingID = $event->id;
+//        $community->group = $event->name;
+//        $community->groupID = $event->id;
+//        $community->type0 = 'event';
+//        $community->permit = 1; // to view the notification redirect
+//        Notification::send($event->community->users, new PeopleNotification($community));
+//        event(new \App\Events\CommunityNotification($channelDescription, str_replace(" ", "-", strtolower($event->community->name))));
+        event(new \App\Events\CommunityNotification('dfdfdsfsdf', 'community-channel_computer-science-society'));
+//        event(new \App\Events\CommunityNotification('dfdfdsfsdf', str_replace(" ", "-", strtolower($event->community->name))));
     }
 
     public function join(Event $event)

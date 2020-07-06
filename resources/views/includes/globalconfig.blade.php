@@ -39,7 +39,7 @@
         const std = {!! json_encode($student_channels) !!};
         std.push(`student-channel_${authAPI}`);
         console.log(std)
-        // Pusher.logToConsole = true;
+        Pusher.logToConsole = true;
 
     var pusher = new Pusher('e204c5a4177ff320ec30', {
         cluster: 'ap1'
@@ -52,7 +52,7 @@
     {
         channel.bind('form-submitted', function(data)
         {
-            // alert(JSON.stringify(data.message));
+            alert('dfdfdfdf');
             $('.toast-container').append('<div class="toast fade show"  aria-live="assertive" aria-atomic="true">\n' +
                 '                <div class="toast-header">\n' +
                 '                    <strong class="mr-auto"><i class="fa fa-globe"></i>Notification</strong>\n' +

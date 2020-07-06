@@ -2,21 +2,21 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Model;
-use App\User;
+use App\Community;
+use App\Event;
 use App\Venue;
 use Faker\Generator as Faker;
 
-$factory->define(\App\Event::class, function (Faker $faker) {
+$factory->define(Event::class, function (Faker $faker) {
 
     $start_date = $faker->dateTimeBetween('+0 days', '+1 month');
     $start_date_clone = clone $start_date;
     $end_date = $faker->dateTimeBetween($start_date, $start_date_clone->modify('+5 hours'));
     $venue = factory(Venue::class)->create();
-    $community = factory(\App\Community::class)->create();
+    $community = factory(Community::class)->create();
     return [
-        'name' => $faker->sentence,
-        'description' => $faker->text($maxNbChars = 200),
+        'name' => $faker->company,
+        'description' => $faker->text($maxNbChars = 150),
         'start_time' => $start_date,
         'end_time' => $end_date,
         'image_URL' => 'd' ,
