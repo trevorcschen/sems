@@ -40,5 +40,6 @@ Route::resource('venues', 'VenueController');;
 
 Route::post('/ajax/communities', 'CommunityController@ajaxIndex')->name('ajax.communities.index');
 Route::delete('/communities/destroy/many/{ids}', 'CommunityController@destroyMany')->name('communities.destroyMany');
+Route::post('/communities/join/{community}', 'CommunityController@join')->name('communities.join');;
 Route::resource('communities', 'CommunityController');
 
