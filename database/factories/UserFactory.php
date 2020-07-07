@@ -30,6 +30,7 @@ $factory->define(User::class, function (Faker $faker) {
         'active' => $faker->boolean,
         'email_verified_at' => now(),
         'remember_token' => Str::random(10),
+        'created_at' => $faker->dateTimeBetween('-1 month', '+1 month'),
     ];
 });
 
