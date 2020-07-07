@@ -189,6 +189,12 @@ class VenueController extends Controller
     {
         if ($request->ajax()) {
             return datatables()->of(Venue::all())
+                ->editColumn('active', function ($venue) {
+                    return $venue->active ? '1' : '0';
+                })
+                ->editColumn('air_conditioned', function ($venue) {
+                    return $venue->air_conditioned ? '1' : '0';
+                })
                 ->toJson();
         }
     }

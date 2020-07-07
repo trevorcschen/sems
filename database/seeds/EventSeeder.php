@@ -20,15 +20,20 @@ class EventSeeder extends Seeder
             $event->users()->attach($user);
         });
 
-        factory(Event::class, 10)->create([
+        factory(Event::class, 20)->create([
             'community_id' => 1,
             'venue_id' => 2,
             'user_id' => 2,
-
         ])->each(function ($event) {
             $user = factory(User::class)->create();
             $user->syncRoles('student');
-            $event->users()->attach($user);
+            $event->users()->attach([$user->id, 3]);
         });
+
+        factory(Event::class, 3)->create([
+            'community_id' => 1,
+            'venue_id' => 2,
+            'user_id' => 2,
+        ]);
     }
 }

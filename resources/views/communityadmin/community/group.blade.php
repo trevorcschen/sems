@@ -869,13 +869,10 @@
                 $(this).find(".modal-body").find("#fee").attr('disabled', 'true');
                 $(this).find(".modal-body").find("#max_members").attr('disabled', 'true');
                 $(this).find('.modal-footer').find('.btn-primary').addClass('eventUpdate');
-
-
-
+                $(this).find('.modal-footer').find('.btn-primary').html('UPDATE');
 
                 // $(this).find(".modal-body").find("#venue").val('dsa');
                 // $(this).find(".modal-body").find("#venue").html('<option></option>')
-
             });
             var substringTest = function (str) {
                 return str.substring(str.lastIndexOf('\\')+1);

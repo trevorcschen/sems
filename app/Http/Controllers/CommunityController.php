@@ -233,6 +233,9 @@ class CommunityController extends Controller
                 ->addColumn('admin', function ($community) {
                     return $community->admin->name;
                 })
+                ->editColumn('active', function ($community) {
+                    return $community->active ? '1' : '0';
+                })
                 ->editColumn('created_at', function ($community) {
                     return $community->created_at->format('Y-m-d');
                 })
@@ -254,6 +257,9 @@ class CommunityController extends Controller
             return datatables()->of($communities)
                 ->addColumn('admin', function ($community) {
                     return $community->admin->name;
+                })
+                ->editColumn('active', function ($community) {
+                    return $community->active ? '1' : '0';
                 })
                 ->editColumn('created_at', function ($community) {
                     return $community->created_at->format('Y-m-d');

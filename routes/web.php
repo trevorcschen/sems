@@ -1,6 +1,7 @@
 <?php
 
 use App\Event;
+use App\Events\CommunityNotification;
 use App\Notifications\PeopleNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -123,21 +124,23 @@ Route::get('/sendRequestFromStudent', function() // request to join community or
 
 function sendNotification()
 {
-//    $community = \App\Event::where('id', 52)->first();
-    $community = \App\Community::where('id', 3)->first();
-    $notification = new stdClass();
-    $notification->message = auth()->user()->name ." requested to join the community ;" . $community->name; // first param ; auth name and second param; community or event name
-    $notification->request = 1; // only request is 1  // otherwise 0
-    $notification->action = 1; // 0 -> no action given 1 -> action given 2 -> action performed
-    $notification->routing = 'user'; // user and commi // if request, put it user otherwise put it, commi.
-    $notification->routingID = auth()->user()->id; // put the userid or community id so that the user can navigate to view page;
-    $notification->group = $community->name; // the community name or event name
-    $notification->groupID = $community->id; // the community name or event name
-    $notification->type0 = 'community'; // the community name or event name
-    $notification->permit = 1; // to view the notification redirect // only permit value be 1 if it is a request, otherwise put it 0
-    Notification::send($community->admin, new PeopleNotification($notification));
-    event(new \App\Events\StudentNotification($notification->message, $community->admin->student_id)); // push notification after disapprove or approve to the specific student.
+    event(new CommunityNotification('ghfghfghfgh', 'community-channel_computer-science-society'));
+    event(new CommunityNotification('ghfghfghfgh', 'student-channel_P18213452'));
 
+//    $community = \App\Event::where('id', 52)->first();
+//    $community = \App\Community::where('id', 3)->first();
+//    $notification = new stdClass();
+//    $notification->message = auth()->user()->name ." requested to join the community ;" . $community->name; // first param ; auth name and second param; community or event name
+//    $notification->request = 1; // only request is 1  // otherwise 0
+//    $notification->action = 1; // 0 -> no action given 1 -> action given 2 -> action performed
+//    $notification->routing = 'user'; // user and commi // if request, put it user otherwise put it, commi.
+//    $notification->routingID = auth()->user()->id; // put the userid or community id so that the user can navigate to view page;
+//    $notification->group = $community->name; // the community name or event name
+//    $notification->groupID = $community->id; // the community name or event name
+//    $notification->type0 = 'community'; // the community name or event name
+//    $notification->permit = 1; // to view the notification redirect // only permit value be 1 if it is a request, otherwise put it 0
+//    Notification::send($community->admin, new PeopleNotification($notification));
+//    event(new \App\Events\StudentNotification($notification->message, $community->admin->student_id)); // push notification after disapprove or approve to the specific student.
 }
 
 Route::get('/notificationFromAdmin', function() // i m the community admin of the ID 2, i will send the notifications to all who are the members of this community

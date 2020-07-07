@@ -81,7 +81,7 @@
                                                 <div class="progress-bar kt-bg-success" role="progressbar" style="width: {{ $user->active_rate }}%;" aria-valuenow="{{ $user->active_rate }}" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                             <div class="kt-widget__stats">
-                                                {{ $user->active_rate }}%
+                                                {{ number_format($user->active_rate, 2, '.', ',')}}%
                                             </div>
                                         </div>
                                     </div>

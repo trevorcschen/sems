@@ -52,7 +52,6 @@
     {
         channel.bind('form-submitted', function(data)
         {
-            alert('dfdfdfdf');
             $('.toast-container').append('<div class="toast fade show"  aria-live="assertive" aria-atomic="true">\n' +
                 '                <div class="toast-header">\n' +
                 '                    <strong class="mr-auto"><i class="fa fa-globe"></i>Notification</strong>\n' +
@@ -67,9 +66,9 @@
                 '            </div>');
 
             retrieveLatestNotification();
-            $(".toast").toast({delay:3000})
-            document.querySelector('.badge-notify').textContent = parseInt(document.querySelector('.badge-notify').textContent) +1
-            document.querySelector('.badge-notify').style.display = 'block'
+            $(".toast").toast();
+            document.querySelector('.badge-notify').textContent = parseInt(document.querySelector('.badge-notify').textContent) +1;
+            document.querySelector('.badge-notify').style.display = 'block';
 
         })
     }
@@ -82,8 +81,8 @@
 
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                console.log('function done')
-                let tempNot = JSON.parse(this.response).data
+                console.log('function done');
+                let tempNot = JSON.parse(this.response).data;
                 appendNewHTML(tempNot);
             }
         };
@@ -93,19 +92,9 @@
 
     function appendNewHTML(tempNot)
     {
-
         let url =  tempNot.data['routing'] === 'user' ? '{{ route("users.show", ':ids') }}' : (tempNot.data['routing'] === 'commi' ? '{{route("commi.community", ":ids")}}':'{{route("event.show", ":ids")}}' );
         url = url.replace(':ids', tempNot.data['routingID']);
-        console.log(url)
-        // let dd = `<a href="${tempNot.data['permit'] === 1 ? url : `javascript:void(0)`}" class="kt-notification__item " id="${tempNot.id}">` +
-        //     `<div class="kt-notification__item-icon"><i class="flaticon2-safe kt-font-primary"></i></div>`+
-        //     `<div class="kt-notification__item-details">`+
-        //     `<div class="kt-notification__item-title">  ${tempNot.data['data']}</div>`+
-        //     `<div class="kt-notification__item-time"> ${moment(tempNot.updated_at).fromNow()}</div>`;
-        // tempNot.data['action'] === 1 ? dd+='<div class="actionNotification" style="display: flex;flex-direction: row;justify-content: space-around;margin-top: 5px" id="'+tempNot.id +'">'+
-        //     '<button type="button" class="btn btn-decline" style="background: rgba(255, 0, 0, 0.08);color: red;">Decline</button>'+
-        //     ' <button type="button" class="btn btn-accept" style="background-color: rgba(153, 255, 160, 0.5);color: green;">Accept</button></div>' : null;
-        // dd+= `</div></a>`;
+        console.log(url);
         let dd = `<div><a href="${tempNot.data['permit'] === 1 ? url : `javascript:void(0)`}" class="kt-notification__item " id="${tempNot.id}">` +
             `<div class="kt-notification__item-icon"><i class="flaticon2-safe kt-font-primary"></i></div>`+
             `<div class="kt-notification__item-details">`+
@@ -163,23 +152,6 @@
 
     function responseRequest(id, responseText)
     {
-        {{--var xhttp = new XMLHttpRequest();--}}
-        {{--xhttp.open("POST", "{{ route('notification.ajax.reply')}}", true);--}}
-        {{--var data = new FormData();--}}
-        {{--data.append('id', id);--}}
-        {{--data.append('answer', responseText)--}}
-
-        {{--xhttp.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');--}}
-
-        {{--xhttp.onreadystatechange = function() {--}}
-        {{--    if (this.readyState == 4 && this.status == 200) {--}}
-        {{--        console.log('function done')--}}
-        {{--        console.log(this.response)--}}
-        {{--        // location.reload()--}}
-        {{--    }--}}
-        {{--};--}}
-        {{--xhttp.send(data);--}}
-
         $.ajax(
             {
                 url: "{{route('notification.ajax.reply')}}",
@@ -198,9 +170,6 @@
                         console.log(jqXHR.responseText)
                 }
             });
-
-
-
 
     }
     // [...document.querySelectorAll('.kt-notification__item')].map((item) =>

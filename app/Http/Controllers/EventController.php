@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Event;
+use App\Events\CommunityNotification;
 use App\Notifications\PeopleNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -132,7 +133,6 @@ class EventController extends Controller
                 $channelDescription = 'The Moderator ('.$event->community->name.') has just updated the event details of <b>'. $event->name. '</b>';
                 $this->sendNotification($event, $channelDescription);
                 return response()->json(['status'=> '1', 'messaged' => 'received no image '. $msgP, 'isDirty' => 'true', 'axa' =>$event->getDirty()], 200);
-
             }
             else
             {
@@ -192,20 +192,18 @@ class EventController extends Controller
     public function sendNotification(Event $event, $channelDescription)
     {
         // previously was putting community attributes but now changed to event
-//        $community = new stdClass();
-//        $community->message = strip_tags($channelDescription);
-//        $community->request = 0;
-//        $community->action = 0; // 0 -> no action given 1 -> action given 2 -> action performed
-//        $community->routing = 'event'; // user and commi
-//        $community->routingID = $event->id;
-//        $community->group = $event->name;
-//        $community->groupID = $event->id;
-//        $community->type0 = 'event';
-//        $community->permit = 1; // to view the notification redirect
-//        Notification::send($event->community->users, new PeopleNotification($community));
-//        event(new \App\Events\CommunityNotification($channelDescription, str_replace(" ", "-", strtolower($event->community->name))));
-        event(new \App\Events\CommunityNotification('dfdfdsfsdf', 'community-channel_computer-science-society'));
-//        event(new \App\Events\CommunityNotification('dfdfdsfsdf', str_replace(" ", "-", strtolower($event->community->name))));
+        $community = new stdClass();
+        $community->message = strip_tags($channelDescription);
+        $community->request = 0;
+        $community->action = 0; // 0 -> no action given 1 -> action given 2 -> action performed
+        $community->routing = 'event'; // user and commi
+        $community->routingID = $event->id;
+        $community->group = $event->name;
+        $community->groupID = $event->id;
+        $community->type0 = 'event';
+        $community->permit = 1; // to view the notification redirect
+        Notification::send($event->community->users, new PeopleNotification($community));
+        event(new CommunityNotification($channelDescription, str_replace(" ", "-", strtolower($event->community->name))));
     }
 
     public function join(Event $event)

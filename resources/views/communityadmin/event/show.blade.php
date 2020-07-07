@@ -69,11 +69,11 @@
                                     </div>
                                     <div class="kt-widget__subhead">
                                         <a href="#" onclick="return false;" title="User Role"><i class="flaticon-user-ok"></i>Event Organizer</a>
-                                        <a href="#" onclick="return false;" title="Student ID"><i class=" flaticon-profile-1"></i>{{$event->community->admin->student_id}}</a>
+                                        <a href="#" onclick="return false;" title="Student ID"><i class=" flaticon-profile-1"></i>{{$event->user->student_id}}</a>
                                     </div>
                                     <div class="kt-widget__subhead">
-                                        <a href="#" onclick="return false;" title="Email"><i class="flaticon2-new-email"></i>{{$event->community->admin->email}}</a>
-                                        <a href="#" onclick="return false;" title="Phone Number"><i class="flaticon2-phone"></i>{{$event->community->admin->phone_number}}</a>
+                                        <a href="#" onclick="return false;" title="Email"><i class="flaticon2-new-email"></i>{{$event->user->email}}</a>
+                                        <a href="#" onclick="return false;" title="Phone Number"><i class="flaticon2-phone"></i>{{$event->user->phone_number}}</a>
                                     </div>
                                     <div class="kt-widget__info">
                                         <div class="kt-widget__desc" style="width: 100px;overflow-wrap: break-word;" title="Event Description">

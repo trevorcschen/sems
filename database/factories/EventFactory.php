@@ -9,7 +9,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Event::class, function (Faker $faker) {
 
-    $start_date = $faker->dateTimeBetween('+0 days', '+1 month');
+    $start_date = $faker->dateTimeBetween('-1 month', '+1 month');
     $start_date_clone = clone $start_date;
     $end_date = $faker->dateTimeBetween($start_date, $start_date_clone->modify('+5 hours'));
     $venue = factory(Venue::class)->create();
@@ -25,7 +25,8 @@ $factory->define(Event::class, function (Faker $faker) {
         'community_id' => $community->id,
         'venue_id' => $venue->id,
         'user_id' => $community->admin->id,
-        'active' => true,
+        'active' => $faker->boolean,
         'eventTag' => substr($faker->uuid ,0,10),
+        'created_at' => $faker->dateTimeBetween('-1 month', '+1 month'),
     ];
 });

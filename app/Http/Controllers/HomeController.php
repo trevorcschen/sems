@@ -44,6 +44,19 @@ class HomeController extends Controller
                 "venueCount" => $venueCount,
             );
 
+        } elseif ($user->hasRole('community-admin')) {
+            $userId = $user->id;
+
+            $communityManagedCount = Community::where('user_id', $userId)->count();
+
+            $eventManagedCount = Event::where('user_id', $userId)->count();
+
+            $widget = array(
+                "communityCount" => $communityCount,
+                "eventCount" => $eventCount,
+                "communityManagedCount" => $communityManagedCount,
+                "eventManagedCount" => $eventManagedCount,
+            );
         } else {
             $userId = $user->id;
 

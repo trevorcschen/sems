@@ -27,7 +27,9 @@ class CommunitySeeder extends Seeder
         factory(Community::class, 10)->create([
             'active' => true,
             'user_id' => 2,
-        ]);
+        ])->each(function ($community) {
+            $community->users()->attach(3); // student
+        });
 
         for ($x = 0; $x <= 30; $x++) {
             factory(Community::class)->create();

@@ -212,6 +212,9 @@ class UserController extends Controller
         if ($request->ajax()) {
             return datatables()->of(User::all())
                 ->removeColumn('email_verified_at')
+                ->editColumn('active', function ($user) {
+                    return $user->active ? '1' : '0';
+                })
                 ->addColumn('role', function ($user) {
                     if(!empty($user->getRoleNames())) {
                         return $user->getRoleNames()[0];
