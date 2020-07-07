@@ -222,7 +222,7 @@ class CommunityController extends Controller
     {
         if ($request->ajax()) {
 
-            $communities = Community::where('active', true);
+            $communities = Community::all();
 
             if ($request->input('columns.6.search.value')) {
                 $fromTo = explode(" - ", $request->input('columns.6.search.value'));
