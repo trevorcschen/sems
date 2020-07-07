@@ -16,7 +16,7 @@ class CommunityTest extends TestCase
         $this->assertIsString($community->description);
         $this->assertIsInt($community->max_members);
         $this->assertNull($community->logo_path);
-        $this->assertTrue($community->active);
+        $this->assertIsBool($community->active);
 
         $this->assertInstanceOf(User::class, $community->admin);
     }

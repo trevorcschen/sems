@@ -30,7 +30,7 @@ class LoginTest extends TestCase
 
         $response = $this->post(route('login'), [
             'email' => $user->email,
-            'password' => 'password'
+            'password' => 'adminadminadminadmin'
         ]);
 
         $response->assertRedirect(route('home'));

@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
 $factory->define(User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
-        'email' => preg_replace('/@example\..*/', '@student.newinti.edu.my', $faker->unique()->safeEmail),
+        'email' => preg_replace('/@example\..*/', '@student.newinti.edu.my', $faker->unique()->email),
         'student_id' => $faker->bothify('P????????'),
         'ic_number' => $faker->numerify('######-##-####'),
         'phone_number' => $faker->numerify('###-#######'),

@@ -15,7 +15,7 @@ class AddColumnToEventsTable extends Migration
     {
         Schema::table('events', function (Blueprint $table) {
             //
-            $table->string('eventTag');
+            $table->string('eventTag')->nullable();
         });
     }
 
