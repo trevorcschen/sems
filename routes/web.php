@@ -117,16 +117,13 @@ Route::get('/testNotification', function()
    return view('communityadmin.community.notification');
 });
 
-Route::get('/sendRequestFromStudent', function() // request to join community or event .. search for the id either event id or community id that user wants to join.
-{
-    sendNotification();
-});
+//Route::get('/sendRequestFromStudent', function() // request to join community or event .. search for the id either event id or community id that user wants to join.
+//{
+//    sendNotification();
+//});
 
-function sendNotification()
-{
-    event(new CommunityNotification('ghfghfghfgh', 'community-channel_computer-science-society'));
-    event(new CommunityNotification('ghfghfghfgh', 'student-channel_P18213452'));
-
+//function sendNotification()
+//{
 //    $community = \App\Event::where('id', 52)->first();
 //    $community = \App\Community::where('id', 3)->first();
 //    $notification = new stdClass();
@@ -141,7 +138,7 @@ function sendNotification()
 //    $notification->permit = 1; // to view the notification redirect // only permit value be 1 if it is a request, otherwise put it 0
 //    Notification::send($community->admin, new PeopleNotification($notification));
 //    event(new \App\Events\StudentNotification($notification->message, $community->admin->student_id)); // push notification after disapprove or approve to the specific student.
-}
+//}
 
 Route::get('/notificationFromAdmin', function() // i m the community admin of the ID 2, i will send the notifications to all who are the members of this community
 {
