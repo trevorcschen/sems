@@ -157,11 +157,11 @@ Route::get('/notificationFromAdmin', function() // i m the community admin of th
 
 });
 
-function string_snake_case($string)
-{
-
-    return str_replace(" ", "-", strtolower($string));
-}
+//function string_snake_case($string)
+//{
+//
+//    return str_replace(" ", "-", strtolower($string));
+//}
 
 Route::get('/testN', function()
 {
