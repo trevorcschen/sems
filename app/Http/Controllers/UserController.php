@@ -175,6 +175,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        // check for cascade delete
+
         Storage::delete($user->profile_image_path);
         $user->delete();
 
@@ -189,6 +191,8 @@ class UserController extends Controller
      */
     public function destroyMany($ids)
     {
+
+        // check for cascade delete
         $userIds = explode(",", $ids);
 
         foreach ($userIds as $userId) {
